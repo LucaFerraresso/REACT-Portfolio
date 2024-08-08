@@ -7,7 +7,11 @@ const menuFooter = [
   },
   {
     name: "Contacts",
-    path: "/contacts",
+    path: "/homepage/contacts",
+  },
+  {
+    name: "About",
+    path: "/homepage/about",
   },
 ];
 
