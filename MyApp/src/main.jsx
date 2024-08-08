@@ -94,7 +94,7 @@ const router = createBrowserRouter([
         element: <NewsLetterSignUp />,
       },
       {
-        path: "/homepage/contacts",
+        path: "/contacts",
         element: <Contacts />,
       },
     ],
