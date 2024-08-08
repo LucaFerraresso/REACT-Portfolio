@@ -139,6 +139,7 @@ const ContactPage = () => {
           <input
             type="email"
             id="email"
+            autoComplete="email"
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -153,6 +154,7 @@ const ContactPage = () => {
           <input
             type="tel"
             id="phone"
+            autoComplete="tel"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
