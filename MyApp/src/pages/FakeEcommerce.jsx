@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getProducts } from "../API/getData";
 import EcommerceCard from "../components/atoms/EcommerceCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
