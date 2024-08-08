@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProducts } from "../API/getData";
+import { getProducts } from "../API/getData"; // Questa funzione ora recupera i dati da Firestore
 import EcommerceCard from "../components/atoms/EcommerceCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ const FakeEcommerce = () => {
     setLoading(true);
     try {
       const data = await getProducts();
+      console.log("fetched", data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);
