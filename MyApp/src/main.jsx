@@ -19,6 +19,7 @@ import InteractiveForm from "./pages/InteractiveCardForm.jsx";
 import TipCalculator from "./pages/TipCalculator.jsx";
 import InteractivePricingSlider from "./pages/InteractivePricingSlider.jsx";
 import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
+import Contacts from "./pages/Contacts.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
 import { Navigate } from "react-router-dom";
@@ -29,10 +30,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import firebaseConfig from "./firebaseConfig.js";
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export { db };
-//fine inizializazzione firebase/firestore
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: "/exercise/newslettersignup",
         element: <NewsLetterSignUp />,
+      },
+      {
+        path: "/contacts",
+        element: <Contacts />,
       },
     ],
   },
