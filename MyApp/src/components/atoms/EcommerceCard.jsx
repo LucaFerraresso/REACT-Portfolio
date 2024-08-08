@@ -43,7 +43,7 @@ const EcommerceCard = ({
     >
       <Link to={`/exercise/fakeecommerce/${product.id}`}>
         <img
-          src={product.image.thumbnail}
+          src={product.image}
           alt={product.name}
           className="w-full h-48 object-cover mb-4 border border-black transition-transform duration-300 hover:scale-105"
           style={{ borderRadius: "0.5rem 0.5rem 0 0", marginBottom: "-1px" }}
@@ -55,7 +55,7 @@ const EcommerceCard = ({
         </h2>
         <p className="text-rose-500 mb-2">Category: {product.category}</p>
         <p className="text-green-600 text-xl font-bold mb-4">
-          Price: ${product.price.toFixed(2)}
+          Price: ${product.price}
         </p>
         <div className="flex items-center mb-4">
           <button

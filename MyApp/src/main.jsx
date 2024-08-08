@@ -26,6 +26,13 @@ import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //firebase online database
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import firebaseConfig from "./firebaseConfig.js";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+export { db };
+//fine inizializazzione firebase/firestore
 
 const router = createBrowserRouter([
   {

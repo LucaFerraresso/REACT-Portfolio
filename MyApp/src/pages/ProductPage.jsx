@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { useSpring, animated } from "@react-spring/web";
-import { getProducts } from "../API/getData";
+
+import { getProductsFireStore } from "../API/firestore";
 
 const customStyles = {
   content: {
@@ -36,9 +37,9 @@ const ProductPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const getProduct = async () => {
-    const response = await getProducts();
+    const response = await getProductsFireStore();
     const product = response.find((product) => product.id == id);
-    const productWithImage = { ...product, image: product.image.thumbnail };
+    const productWithImage = { ...product, image: product.image };
     setProduct(productWithImage);
     setModalIsOpen(true);
   };

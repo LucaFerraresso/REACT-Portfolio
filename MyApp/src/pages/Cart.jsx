@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../useContext/CartContext";
-import { getProducts } from "../API/getData";
+import { getProductsFireStore } from "../API/firestore.js";
+
 import EcommerceCard from "../components/atoms/EcommerceCard";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,7 +15,7 @@ const Cart = () => {
   const getItem = async () => {
     setLoading(true);
     try {
-      const response = await getProducts();
+      const response = await getProductsFireStore();
       const filteredCart = response.filter((product) =>
         Object.keys(cart).includes(product.id.toString())
       );
@@ -94,14 +95,12 @@ const Cart = () => {
         <ul className="list-disc list-inside">
           {products.map((product) => (
             <li key={product.id} className="truncate">
-              {product.title} - {cart[product.id]} x ${product.price.toFixed(2)}{" "}
-              = ${(cart[product.id] * product.price).toFixed(2)}
+              {product.title} - {cart[product.id]} x ${product.price} = $
+              {cart[product.id] * product.price}
             </li>
           ))}
         </ul>
-        <h3 className="text-lg font-bold mt-2">
-          Total Cost: ${totalCost.toFixed(2)}
-        </h3>
+        <h3 className="text-lg font-bold mt-2">Total Cost: ${totalCost}</h3>
       </div>
       <ToastContainer />
     </>

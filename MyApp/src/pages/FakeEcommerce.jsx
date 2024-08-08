@@ -5,6 +5,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { useCart } from "../useContext/CartContext";
+//firestore
+import { getProductsFireStore } from "../API/firestore";
 
 const FakeEcommerce = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +17,8 @@ const FakeEcommerce = () => {
   const getItems = async () => {
     setLoading(true);
     try {
-      const data = await getProducts();
+      const data = await getProductsFireStore();
+      console.log(data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);
