@@ -1,28 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 import { useAuth } from "../../useContext/AuthContext";
 import { toast } from "react-toastify";
 
 const Card = ({ title, description, link, backgroundImage }) => {
+  const [votes, setVotes] = useState([]); // Mantieni una lista dei voti
   const [rating, setRating] = useState(0);
   const { user } = useAuth();
+
+  // Funzione per calcolare la media dei voti
+  const calculateAverageRating = (votes) => {
+    const sum = votes.reduce((acc, vote) => acc + vote, 0);
+    return votes.length ? (sum / votes.length).toFixed(2) : 0;
+  };
 
   const handleVote = (value) => {
     if (!user) {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
-    setRating(value);
+    const newVotes = [...votes, value]; // Aggiungi il nuovo voto alla lista
+    setVotes(newVotes);
+    setRating(calculateAverageRating(newVotes)); // Aggiorna il rating con la nuova media
+    toast.success("Voto registrato con successo!");
   };
 
   const [imageProps, imageApi] = useSpring(() => ({
     transform: "scale(1)",
     config: { tension: 200, friction: 20 },
   }));
-  const setVote = () => {
-    toast.success("Voto registrato con successo!");
-  };
+
+  useEffect(() => {
+    const savedVotes = JSON.parse(localStorage.getItem(`${title}-votes`));
+    if (savedVotes) {
+      setVotes(savedVotes);
+      setRating(calculateAverageRating(savedVotes));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(`${title}-votes`, JSON.stringify(votes));
+  }, [votes]);
 
   return (
     <div className="w-[300px] h-[400px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
@@ -85,12 +104,12 @@ const Card = ({ title, description, link, backgroundImage }) => {
             >
               5
             </button>
-            {/* Aggiungi pulsanti per il voto */}
+            {/* Pulsante per ufficializzare il voto */}
             <button
-              onClick={setVote}
+              onClick={() => toast.success("Voto confermato!")}
               className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
             >
-              Vota
+              Conferma Voto
             </button>
           </div>
 
@@ -98,7 +117,6 @@ const Card = ({ title, description, link, backgroundImage }) => {
           <div className="text-gray-700 text-base mb-2">
             Punteggio attuale: {rating}
           </div>
-
           <div className="flex items-center space-x-2">
             <span
               className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
