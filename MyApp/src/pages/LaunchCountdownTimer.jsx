@@ -118,7 +118,7 @@ const CountdownTimer = () => {
         isCompleted ? "bg-light-cyan" : "bg-dark-blue"
       }`}
     >
-      <h1 className="text-lg mt-2 sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
+      <h1 className="text-lg mt-4 sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
         {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
       </h1>
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
@@ -127,7 +127,7 @@ const CountdownTimer = () => {
         <TimeBox label="Minutes" value={time.minutes} />
         <TimeBox label="Seconds" value={time.seconds} />
       </div>
-      <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="mt-4 mb-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <button
           onClick={resetTimer}
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
@@ -204,7 +204,7 @@ const CountdownTimer = () => {
         </div>
       )}
 
-      <div className="mt-10 flex space-x-4">
+      <div className="mt-4 flex space-x-4 mb-4">
         <a
           href="https://www.facebook.com"
           target="_blank"
