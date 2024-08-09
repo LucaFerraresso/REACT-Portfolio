@@ -82,7 +82,7 @@ const CountdownTimer = () => {
       days: "00",
       hours: "00",
       minutes: "00",
-      seconds: "10",
+      seconds: "00",
     });
     setIsRunning(true);
     setIsCompleted(false);
@@ -146,7 +146,9 @@ const CountdownTimer = () => {
         <div className="fixed inset-0 flex flex-row items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
             <div className="flex flex-col space-y-4">
-              <h2 className="text-xl font-bold mb-4">Imposta Timer</h2>
+              <h2 className="text-xl font-bold mb-4 text-black">
+                Imposta Timer
+              </h2>
               <input
                 type="number"
                 name="days"
