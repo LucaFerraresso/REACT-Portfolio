@@ -23,13 +23,20 @@ const Card = ({ title, description, link, backgroundImage }) => {
     const newVotes = [...votes, value]; // Aggiungi il nuovo voto alla lista
     setVotes(newVotes);
     setRating(calculateAverageRating(newVotes)); // Aggiorna il rating con la nuova media
-    toast.success("Voto registrato con successo!");
+    //toast.success("Voto registrato con successo!");
   };
 
   const [imageProps, imageApi] = useSpring(() => ({
     transform: "scale(1)",
     config: { tension: 200, friction: 20 },
   }));
+  const handleConfirmVote = () => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+    } else {
+      toast.success("Voto registrato con successo!");
+    }
+  };
 
   useEffect(() => {
     const savedVotes = JSON.parse(localStorage.getItem(`${title}-votes`));
@@ -106,7 +113,7 @@ const Card = ({ title, description, link, backgroundImage }) => {
             </button>
             {/* Pulsante per ufficializzare il voto */}
             <button
-              onClick={() => toast.success("Voto confermato!")}
+              onClick={handleConfirmVote}
               className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
             >
               Conferma Voto
