@@ -4,6 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        "dark-blue": "hsl(231, 16%, 20%)",
+        "light-pink": "hsl(347, 100%, 64%)",
+        "grayish-blue": "hsl(237, 18%, 59%)",
+        "soft-red": "hsl(345, 95%, 68%)",
+        "dark-desaturated-blue": "hsl(236, 21%, 26%)",
+        "very-dark-blue": "hsl(235, 16%, 14%)",
+        "very-dark-almost-black-blue": "hsl(234, 17%, 12%)",
         "light-cyan": "hsl(193, 38%, 86%)",
         "neon-green": "hsl(150, 100%, 66%)",
         "grayish-blue": "hsl(217, 19%, 38%)",
@@ -67,16 +74,26 @@ export default {
         sans: ["Manrope", "sans-serif"],
         spaceMono: ["Space Mono", "monospace"],
         manrope: ["Manrope", "sans-serif"],
-        roboto: ["Roboto", "sans-serif"], // Aggiunto Roboto
+        roboto: ["Roboto", "sans-serif"],
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
+      },
+      flipCard: {
+        "0%": { transform: "rotateX(0deg)" },
+        "100%": { transform: "rotateX(180deg)" },
       },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+      },
+      backgroundImage: {
+        stars:
+          "url('/Exercises/launch-countdown-timer-main/images/bg.stars.svg')",
+        hills:
+          "url('/Exercises/launch-countdown-timer-main/images/pattern-hills.svg')",
       },
     },
   },
