@@ -19,7 +19,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(""); // Imposta l'utente su null
+    setUser(null); // Imposta l'utente su null
     toast.error("Logout effettuato!"); // Toast di errore per il logout
     navigate("/login"); // Reindirizza alla pagina di login
   };
@@ -41,7 +41,7 @@ const Navbar = () => {
         ))}
         {user && ( // Mostra il pulsante di logout solo se l'utente è loggato
           <li className="text-center sm:text-left">
-            <button onClick={handleLogout} className="text-red-500">
+            <button onClick={handleLogout} className="text-red">
               Logout
             </button>
           </li>
