@@ -22,8 +22,7 @@ import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
 import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import Contacts from "./pages/Contacts.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-
+import Login from "./pages/LogInPage.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
 import { Navigate } from "react-router-dom";
@@ -111,7 +110,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LoginPage />,
+        element: <Login />,
       },
       {
         path: "*",

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -14,7 +14,7 @@ const LoginPage = () => {
       // Qui puoi implementare la logica di autenticazione
       // Ad esempio, salvare l'utente nel contesto o nello stato globale
       console.log("Login successful for", username);
-      history.push("/homepage"); // Reindirizza alla homepage dopo il login
+      navigate("/homepage"); // Reindirizza alla homepage dopo il login
     } else {
       alert("Please fill in both fields!");
     }
@@ -58,4 +58,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;
