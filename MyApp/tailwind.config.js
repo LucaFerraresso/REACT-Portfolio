@@ -78,6 +78,7 @@ export default {
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
+        flip: "flipCard 0.6s ease-in-out forwards",
       },
       flipCard: {
         "0%": { transform: "rotateX(0deg)" },
