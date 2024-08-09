@@ -14,13 +14,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-main-bg p-6">
-      <div className="hidden lg:flex lg:flex-col justify-center items-center bg-text-light-blue p-6">
-        <h1 className="text-vertical text-4xl text-gray-300 font-bold">
-          CONTATTI
-        </h1>
-      </div>
-
+    <div className="flex flex-col lg: min-h-screen bg-main-bg p-6">
       <div className="flex flex-col lg:flex-row items-center justify-center w-full lg:w-2/3 bg-white rounded-lg shadow-lg p-8">
         <div className="flex flex-col w-full lg:w-1/2 mb-8 lg:mb-0">
           <h2 className="text-2xl font-bold text-text-dark-desaturated-blue mb-4">
@@ -38,11 +32,11 @@ const ContactPage = () => {
             <p>Email: lucaferraresso96@gmail.com</p>
           </div>
           <div className="flex p-2 gap-2 justify-center space-x-4 mt-4 mb-4">
-            <LinkedInSvg className="hover:text-blue-500 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
-            <FacebookSvg className="hover:text-blue-700 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
-            <GmailSvg className="hover:text-red transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
-            <GitHubSvg className="hover:text-gray-900 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
-            <TwitterSvg className="hover:text-blue-400 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <LinkedInSvg className="border border-black rounded-full hover:text-blue-500 transition-colors duration-300 ease-in-out p-2" />
+            <FacebookSvg className="border border-black rounded-full hover:text-blue-700 transition-colors duration-300 ease-in-out p-2 " />
+            <GmailSvg className="border border-black rounded-full hover:text-red transition-colors duration-300 ease-in-out p-2 " />
+            <GitHubSvg className="border border-black rounded-full hover:text-gray-900 transition-colors duration-300 ease-in-out p-2 " />
+            <TwitterSvg className="border border-black rounded-full hover:text-blue-400 transition-colors duration-300 ease-in-out p-2 " />
           </div>
         </div>
 
@@ -132,13 +126,6 @@ const ContactPage = () => {
         </form>
       </div>
 
-      <div className="hidden lg:flex justify-center items-center lg:w-1/3">
-        <img
-          src="/public/ContactsPageFoto/myFoto.jpg"
-          alt="Profile"
-          className="w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-primary-input-border shadow-lg"
-        />
-      </div>
       <ToastContainer />
     </div>
   );
