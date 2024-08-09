@@ -23,6 +23,11 @@ const Navbar = () => {
     toast.error("Logout effettuato!"); // Toast di errore per il logout
     navigate("/homepage"); // Reindirizza alla pagina di login
   };
+  const handleClearLocalStorage = () => {
+    localStorage.clear(); // Svuota completamente il localStorage
+    toast.success("LocalStorage svuotato con successo!"); // Mostra un toast di conferma
+    navigate("/homepage"); // Reindirizza alla homepage
+  };
 
   return (
     <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
@@ -47,6 +52,11 @@ const Navbar = () => {
             <li className="text-center sm:text-left">
               <button onClick={handleLogout} className="text-red">
                 Logout
+              </button>
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleClearLocalStorage} className="text-red">
+                Clear LocalStorage
               </button>
             </li>
           </>
