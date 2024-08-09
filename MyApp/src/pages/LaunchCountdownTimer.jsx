@@ -118,7 +118,7 @@ const CountdownTimer = () => {
         isCompleted ? "bg-light-cyan" : "bg-dark-blue"
       }`}
     >
-      <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
+      <h1 className="text-lg mt-2 sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
         {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
       </h1>
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
