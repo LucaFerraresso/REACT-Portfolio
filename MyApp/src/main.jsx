@@ -22,7 +22,7 @@ import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
 import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import Contacts from "./pages/Contacts.jsx";
-import Login from "./pages/LogInPage.jsx";
+import Login from "./pages/Login.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
 import { Navigate } from "react-router-dom";
