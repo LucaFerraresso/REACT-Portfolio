@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa"; // Importa le icone social
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const CountdownTimer = () => {
-  const [time, setTime] = useState({
+  const initialState = {
     days: "00",
     hours: "00",
-    minutes: "00",
+    minutes: "01",
     seconds: "00",
+  };
+
+  const [time, setTime] = useState(initialState);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputValues, setInputValues] = useState({
+    days: "",
+    hours: "",
+    minutes: "",
+    seconds: "",
   });
-  const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
     let interval;
 
-    if (isRunning) {
+    if (isRunning && !isCompleted) {
       interval = setInterval(() => {
         const { days, hours, minutes, seconds } = time;
 
@@ -25,7 +35,7 @@ const CountdownTimer = () => {
         ) {
           clearInterval(interval);
           setIsRunning(false);
-          alert("Il timer ha raggiunto lo zero. Imposta un nuovo timer.");
+          setIsCompleted(true);
         } else {
           updateTime();
         }
@@ -33,7 +43,7 @@ const CountdownTimer = () => {
     }
 
     return () => clearInterval(interval);
-  }, [time, isRunning]);
+  }, [time, isRunning, isCompleted]);
 
   const updateTime = () => {
     const { days, hours, minutes, seconds } = time;
@@ -66,50 +76,121 @@ const CountdownTimer = () => {
     });
   };
 
-  const handleDateChange = () => {
+  const resetTimer = () => {
     setIsRunning(false);
-    setIsRunning(true);
+    setTime(initialState);
+    setIsRunning(false);
+    setIsCompleted(false);
   };
 
-  const handleInputChange = (e, unit) => {
-    setTime({ ...time, [unit]: e.target.value });
+  const handleSetTimer = () => {
+    setIsRunning(false);
+    setTime({
+      days: inputValues.days.toString().padStart(2, "0"),
+      hours: inputValues.hours.toString().padStart(2, "0"),
+      minutes: inputValues.minutes.toString().padStart(2, "0"),
+      seconds: inputValues.seconds.toString().padStart(2, "0"),
+    });
+    setIsRunning(true);
+    setIsCompleted(false);
+    setIsModalOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputValues({ ...inputValues, [name]: value });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-blue bg-cover text-white font-red-hat px-4">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen text-white font-red-hat transition-colors duration-500 ${
+        isCompleted ? "bg-light-cyan" : "bg-dark-blue"
+      }`}
+    >
       <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
-        We're launching soon
+        {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
       </h1>
       <div className="flex space-x-4 sm:space-x-8 mb-10">
-        <TimeBox
-          label="Days"
-          value={time.days}
-          onChange={(e) => handleInputChange(e, "days")}
-        />
-        <TimeBox
-          label="Hours"
-          value={time.hours}
-          onChange={(e) => handleInputChange(e, "hours")}
-        />
-        <TimeBox
-          label="Minutes"
-          value={time.minutes}
-          onChange={(e) => handleInputChange(e, "minutes")}
-        />
-        <TimeBox
-          label="Seconds"
-          value={time.seconds}
-          onChange={(e) => handleInputChange(e, "seconds")}
-        />
+        <TimeBox label="Days" value={time.days} />
+        <TimeBox label="Hours" value={time.hours} />
+        <TimeBox label="Minutes" value={time.minutes} />
+        <TimeBox label="Seconds" value={time.seconds} />
       </div>
       <div className="mt-10 flex space-x-4">
         <button
-          onClick={handleDateChange}
+          onClick={resetTimer}
+          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
+        >
+          Reset Timer
+        </button>
+        <button
+          onClick={() => setIsModalOpen(true)} // Apri la finestra modale
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
         >
           Set Timer
         </button>
       </div>
+
+      {/* Modal per impostare il timer */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Imposta Timer</h2>
+            Facebook Facebook – log in or sign up Log in to Facebook to start
+            sharing and connecting with your friends, family and people you
+            know.
+            <div className="flex flex-col space-y-4">
+              <input
+                type="number"
+                name="days"
+                placeholder="Giorni"
+                value={inputValues.days}
+                onChange={handleInputChange}
+                className="border border-gray-400 p-2 rounded"
+              />
+              <input
+                type="number"
+                name="hours"
+                placeholder="Ore"
+                value={inputValues.hours}
+                onChange={handleInputChange}
+                className="border border-gray-400 p-2 rounded"
+              />
+              <input
+                type="number"
+                name="minutes"
+                placeholder="Minuti"
+                value={inputValues.minutes}
+                onChange={handleInputChange}
+                className="border border-gray-400 p-2 rounded"
+              />
+              <input
+                type="number"
+                name="seconds"
+                placeholder="Secondi"
+                value={inputValues.seconds}
+                onChange={handleInputChange}
+                className="border border-gray-400 p-2 rounded"
+              />
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleSetTimer}
+                className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
+              >
+                Imposta
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)} // Chiudi la finestra modale
+                className="bg-gray-300 p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105 ml-2"
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mt-10 flex space-x-4">
         <a
           href="https://www.facebook.com"
@@ -136,18 +217,22 @@ const CountdownTimer = () => {
           <FaInstagram size={24} />
         </a>
       </div>
+      {isCompleted && (
+        <div className="mt-10 p-4 bg-soft-red text-dark-blue rounded-lg animate-fade-in">
+          <p className="text-center">
+            The countdown has ended. Please set a new timer.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
 
-const TimeBox = ({ label, value, onChange }) => (
-  <div className="bg-very-dark-blue p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110">
-    <input
-      type="text"
-      value={value}
-      onChange={onChange}
-      className="block text-4xl sm:text-6xl font-bold text-light-pink bg-transparent border-none text-center w-16 sm:w-24 focus:outline-none"
-    />
+const TimeBox = ({ label, value }) => (
+  <div className="p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110 bg-very-dark-blue">
+    <span className="block text-4xl sm:text-6xl font-bold text-light-pink">
+      {value}
+    </span>
     <p className="uppercase text-xs sm:text-sm mt-2 tracking-widest">{label}</p>
   </div>
 );
