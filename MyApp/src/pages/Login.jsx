@@ -16,7 +16,7 @@ const Login = () => {
       // Aggiungi validazione se necessario
       login(username); // Effettua il login e salva l'utente nel contesto
       toast.success("Login effettuato con successo!");
-      navigate("/homepage"); // Reindirizza alla homepage dopo il login
+      navigate("/homepage");
     } else {
       toast.error("Username o password non validi!");
     }

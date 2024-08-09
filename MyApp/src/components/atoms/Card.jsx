@@ -111,12 +111,12 @@ const Card = ({ title, description, link, backgroundImage }) => {
             >
               5
             </button>
-            {/* Pulsante per ufficializzare il voto */}
+
             <button
               onClick={handleConfirmVote}
               className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
             >
-              Conferma Voto
+              Vota
             </button>
           </div>
 

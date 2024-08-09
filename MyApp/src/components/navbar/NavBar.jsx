@@ -19,14 +19,14 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(null); // Imposta l'utente su null
-    toast.error("Logout effettuato!"); // Toast di errore per il logout
-    navigate("/homepage"); // Reindirizza alla pagina di login
+    logout(null);
+    toast.error("Logout effettuato!");
+    navigate("/homepage");
   };
   const handleClearLocalStorage = () => {
-    localStorage.clear(); // Svuota completamente il localStorage
-    toast.success("LocalStorage svuotato con successo!"); // Mostra un toast di conferma
-    navigate("/homepage"); // Reindirizza alla homepage
+    localStorage.clear();
+    toast.success("LocalStorage svuotato con successo!");
+    navigate("/homepage");
   };
 
   return (

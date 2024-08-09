@@ -12,12 +12,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
   const login = (username) => {
     setUser(username);
-    localStorage.setItem("user", JSON.stringify(username)); // Salva l'utente nel localStorage
+    localStorage.setItem("user", JSON.stringify(username));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user"); // Rimuove l'utente dal localStorage
+    localStorage.removeItem("user");
   };
 
   return (
