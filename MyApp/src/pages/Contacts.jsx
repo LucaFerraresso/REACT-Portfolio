@@ -14,7 +14,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="flex flex-col lg: min-h-screen bg-main-bg p-6">
+    <div className="flex flex-row justify-center items-center lg: min-h-screen bg-main-bg p-6">
       <div className="flex flex-col lg:flex-row items-center justify-center w-full lg:w-2/3 bg-white rounded-lg shadow-lg p-8">
         <div className="flex flex-col w-full lg:w-1/2 mb-8 lg:mb-0">
           <h2 className="text-2xl font-bold text-text-dark-desaturated-blue mb-4">
