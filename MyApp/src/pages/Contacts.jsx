@@ -125,7 +125,7 @@ const ContactPage = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-primary-linear-gradient hover:bg-gradient-to-r from-purple to-dark-grayish-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-300 ease-in-out"
+            className="w-full bg-purple hover:bg-gradient-to-r from-purple to-dark-grayish-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-300 ease-in-out"
           >
             Invia il messaggio
           </button>
