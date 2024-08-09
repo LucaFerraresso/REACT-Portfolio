@@ -10,7 +10,7 @@ import TwitterSvg from "../components/svg/TwitterSvg";
 const ContactPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success("Iscrizione avvenuta con successo!");
+    toast.success("Message sent successfully");
   };
 
   return (
@@ -134,7 +134,7 @@ const ContactPage = () => {
 
       <div className="hidden lg:flex justify-center items-center lg:w-1/3">
         <img
-          src="https://via.placeholder.com/200"
+          src="/public/ContactsPageFoto/myFoto/200"
           alt="Profile"
           className="w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-primary-input-border shadow-lg"
         />
