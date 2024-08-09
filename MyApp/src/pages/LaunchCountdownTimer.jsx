@@ -47,7 +47,7 @@ const CountdownTimer = () => {
       days: "00",
       hours: "00",
       minutes: "00",
-      seconds: "00",
+      seconds: "10",
     });
   };
 
@@ -79,7 +79,7 @@ const CountdownTimer = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-stars bg-cover text-white font-red-hat">
-      <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8">
+      <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-black">
         We're launching soon
       </h1>
       <div className="flex space-x-4 sm:space-x-8">
