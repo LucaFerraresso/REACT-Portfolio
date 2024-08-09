@@ -19,7 +19,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null); // Imposta l'utente su null
+    setUser("null"); // Imposta l'utente su null
     toast.error("Logout effettuato!"); // Toast di errore per il logout
     navigate("/login"); // Reindirizza alla pagina di login
   };
