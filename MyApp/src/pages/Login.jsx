@@ -7,13 +7,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { setUser } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    console.log("Login successful for", username);
-    login(username);
+    setUser(username);
     toast.success("Login successful");
     navigate("/homepage");
   };

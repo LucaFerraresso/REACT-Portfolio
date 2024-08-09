@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext"; // Importa il contesto
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
 import { toast } from "react-toastify"; // Importa la libreria toast
 
 const menulist = [
@@ -39,7 +39,7 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
-        {user && ( // Mostra il pulsante di logout e nome utente solo se l'utente è loggato
+        {user && (
           <>
             <li className="text-center sm:text-left">
               <span className="text-white">Ciao, {user.username}</span>
