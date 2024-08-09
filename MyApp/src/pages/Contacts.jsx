@@ -2,12 +2,11 @@ import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //svg logo importanti come componenti per gestire anche le loro animazioni ecc ecc
-import LinkedInSvg from "../components/svg/LinkedinSvg";
+import LinkedInSvg from "../components/svg/LinkedInSvg";
 import FacebookSvg from "../components/svg/FacebookSvg";
 import GmailSvg from "../components/svg/GmailSvg";
-import GitHubSvg from "../components/svg/GithubSvg";
+import GitHubSvg from "../components/svg/GitHubSvg";
 import TwitterSvg from "../components/svg/TwitterSvg";
-
 const ContactPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
