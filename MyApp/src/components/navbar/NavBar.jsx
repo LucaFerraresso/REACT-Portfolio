@@ -47,7 +47,7 @@ const Navbar = () => {
           </li>
         )}
       </ul>
-      {user && <div className="text-white">Benvenuto, {user.username}</div>}{" "}
+      {user && <div className="text-white">Benvenuto, {user}</div>}{" "}
       {/* Mostra il nome utente */}
     </nav>
   );
