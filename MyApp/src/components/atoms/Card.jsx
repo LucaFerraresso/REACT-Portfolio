@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
+import { useAuth } from "./AuthContext"; // Importa il contesto
 
-const Card = ({ title, description, link, backgroundImage, initialRating }) => {
-  const [rating, setRating] = useState(initialRating || 0); // Stato per il rating
-  const [votes, setVotes] = useState(0); // Stato per il numero di voti
-  const [total, setTotal] = useState(0); // Stato per la somma totale dei voti
+const Card = ({ title, description, link, backgroundImage }) => {
+  const [rating, setRating] = useState(0); // Stato per il punteggio
+  const { user } = useAuth(); // Verifica se l'utente è loggato
 
   const handleVote = (value) => {
-    setTotal((prev) => prev + value); // Aggiungi il voto
-    setVotes((prev) => prev + 1); // Incrementa il numero di voti
-    setRating(total / (votes + 1)); // Calcola la media
+    if (!user) {
+      alert("Devi effettuare il login per votare!"); // Avviso se non loggato
+      return;
+    }
+    setRating(value); // Imposta il punteggio
   };
 
   const [imageProps, imageApi] = useSpring(() => ({
@@ -48,6 +50,45 @@ const Card = ({ title, description, link, backgroundImage, initialRating }) => {
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
           <div className="flex items-center space-x-2 mb-4">
+            {/* Aggiungi pulsanti per il voto */}
+            <button
+              onClick={() => handleVote(1)}
+              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+            >
+              1
+            </button>
+            <button
+              onClick={() => handleVote(2)}
+              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+            >
+              2
+            </button>
+            <button
+              onClick={() => handleVote(3)}
+              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+            >
+              3
+            </button>
+            <button
+              onClick={() => handleVote(4)}
+              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+            >
+              4
+            </button>
+            <button
+              onClick={() => handleVote(5)}
+              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+            >
+              5
+            </button>
+          </div>
+
+          {/* Mostra il punteggio attuale */}
+          <div className="text-gray-700 text-base mb-2">
+            Punteggio attuale: {rating}
+          </div>
+
+          <div className="flex items-center space-x-2">
             <span
               className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
               style={{
@@ -76,24 +117,6 @@ const Card = ({ title, description, link, backgroundImage, initialRating }) => {
               JS
             </span>
           </div>
-
-          {/* Sezione per il Rating */}
-          <div className="flex items-center space-x-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                className="text-yellow-500"
-                onClick={() => handleVote(star)} // Gestisce il voto
-              >
-                ★
-              </button>
-            ))}
-          </div>
-          <p className="text-gray-600 mt-2">
-            {votes > 0
-              ? `Rating: ${rating.toFixed(1)} (${votes} votes)`
-              : "No votes yet"}
-          </p>
         </div>
       </div>
     </div>

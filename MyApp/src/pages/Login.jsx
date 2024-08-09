@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
 
     console.log("Login successful for", username);
-    navigate("/homepage"); // Reindirizza alla homepage dopo il login
+    login(username);
+    toast.success("Login successful");
+    navigate("/homepage");
   };
 
   return (

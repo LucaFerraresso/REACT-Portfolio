@@ -33,6 +33,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import firebaseConfig from "./firebaseConfig.js";
+import { AuthProvider } from "./useContext/AuthContext.jsx";
+//authContext
+export { AuthContext } from "./useContext/AuthContext.jsx";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -122,9 +125,11 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-    <CartProvider>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </CartProvider>
+    </AuthProvider>
   </>
 );
