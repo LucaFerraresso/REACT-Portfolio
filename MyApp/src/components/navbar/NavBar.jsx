@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../useContext/AuthContext"; // Assicurati di importare il contesto
+import { useAuth } from "./AuthContext"; // Importa il contesto
 import { toast } from "react-toastify"; // Importa la libreria toast
 
 const menulist = [
@@ -39,16 +39,19 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
-        {user && ( // Mostra il pulsante di logout solo se l'utente è loggato
-          <li className="text-center sm:text-left">
-            <button onClick={handleLogout} className="text-red">
-              Logout
-            </button>
-          </li>
+        {user && ( // Mostra il pulsante di logout e nome utente solo se l'utente è loggato
+          <>
+            <li className="text-center sm:text-left">
+              <span className="text-white">Ciao, {user.username}</span>
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleLogout} className="text-red-500">
+                Logout
+              </button>
+            </li>
+          </>
         )}
       </ul>
-      {user && <div className="text-white">Benvenuto, {user}</div>}{" "}
-      {/* Mostra il nome utente */}
     </nav>
   );
 };
