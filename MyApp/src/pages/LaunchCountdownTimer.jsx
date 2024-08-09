@@ -8,36 +8,74 @@ const CountdownTimer = () => {
     seconds: "41",
   });
 
+  const calculateTimeLeft = () => {
+    const countDate = new Date("Sep 30, 2024 00:00:00").getTime();
+    const now = new Date().getTime();
+    const gap = countDate - now;
+
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    const days = Math.floor(gap / day)
+      .toString()
+      .padStart(2, "0");
+    const hours = Math.floor((gap % day) / hour)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((gap % hour) / minute)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor((gap % minute) / second)
+      .toString()
+      .padStart(2, "0");
+
+    return { days, hours, minutes, seconds };
+  };
+
   useEffect(() => {
-    const countdown = () => {
-      const countDate = new Date("Sep 30, 2024 00:00:00").getTime();
-      const now = new Date().getTime();
-      const gap = countDate - now;
+    const interval = setInterval(() => {
+      setTime(calculateTimeLeft());
+    }, 1000);
 
-      const second = 1000;
-      const minute = second * 60;
-      const hour = minute * 60;
-      const day = hour * 24;
-
-      const days = Math.floor(gap / day)
-        .toString()
-        .padStart(2, "0");
-      const hours = Math.floor((gap % day) / hour)
-        .toString()
-        .padStart(2, "0");
-      const minutes = Math.floor((gap % hour) / minute)
-        .toString()
-        .padStart(2, "0");
-      const seconds = Math.floor((gap % minute) / second)
-        .toString()
-        .padStart(2, "0");
-
-      setTime({ days, hours, minutes, seconds });
-    };
-
-    const interval = setInterval(countdown, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const resetTimer = () => {
+    setTime({
+      days: "00",
+      hours: "00",
+      minutes: "00",
+      seconds: "00",
+    });
+  };
+
+  const handleDateChange = (newDate) => {
+    const now = new Date().getTime();
+    const countDate = new Date(newDate).getTime();
+    const gap = countDate - now;
+
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    const days = Math.floor(gap / day)
+      .toString()
+      .padStart(2, "0");
+    const hours = Math.floor((gap % day) / hour)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((gap % hour) / minute)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor((gap % minute) / second)
+      .toString()
+      .padStart(2, "0");
+
+    setTime({ days, hours, minutes, seconds });
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-stars bg-cover text-white font-red-hat">
@@ -55,12 +93,26 @@ const CountdownTimer = () => {
         <SocialIcon href="#" icon="icon-pinterest.svg" />
         <SocialIcon href="#" icon="icon-instagram.svg" />
       </div>
+      <div className="mt-10 flex space-x-4">
+        <button
+          onClick={resetTimer}
+          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
+        >
+          Reset Timer
+        </button>
+        <button
+          onClick={() => handleDateChange("Dec 31, 2024 00:00:00")}
+          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
+        >
+          Set to Dec 31, 2024
+        </button>
+      </div>
     </div>
   );
 };
 
 const TimeBox = ({ label, value }) => (
-  <div className="bg-dark-blue p-4 sm:p-6 rounded-lg text-center">
+  <div className="bg-dark-blue p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110">
     <span className="block text-4xl sm:text-6xl font-bold text-light-pink">
       {value}
     </span>
