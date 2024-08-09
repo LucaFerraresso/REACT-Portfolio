@@ -134,7 +134,7 @@ const ContactPage = () => {
 
       <div className="hidden lg:flex justify-center items-center lg:w-1/3">
         <img
-          src="/public/ContactsPageFoto/myFoto/200"
+          src="/public/ContactsPageFoto/myFoto.jpg"
           alt="Profile"
           className="w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-primary-input-border shadow-lg"
         />
