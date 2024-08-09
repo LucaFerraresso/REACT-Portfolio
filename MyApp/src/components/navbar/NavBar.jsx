@@ -5,6 +5,10 @@ const menulist = [
     name: "Home",
     path: "/homepage",
   },
+  {
+    name: "Log-in",
+    path: "/login",
+  },
 ];
 
 const Navbar = () => {

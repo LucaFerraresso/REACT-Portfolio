@@ -11,6 +11,7 @@ const HomePage = () => {
       link: "/exercise/advicegenerator",
       backgroundImage:
         "/Exercises/advice-generator-app-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Age Calculator",
@@ -19,6 +20,7 @@ const HomePage = () => {
       link: "/exercise/agecalculator",
       backgroundImage:
         "/Exercises/age-calculator-app-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Contact Form",
@@ -27,6 +29,7 @@ const HomePage = () => {
       link: "/exercise/contactform",
       backgroundImage:
         "/Exercises/contact-form-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Mortgage Calculator",
@@ -35,6 +38,7 @@ const HomePage = () => {
       link: "/exercise/mortgagecalculator",
       backgroundImage:
         "/Exercises/mortgage-repayment-calculator-main/design/desktop-design-completed.jpg",
+      initialRating: 0,
     },
     {
       title: "Product List with Cart",
@@ -43,6 +47,7 @@ const HomePage = () => {
       link: "/exercise/fakeecommerce",
       backgroundImage:
         "/Exercises/product-list-with-cart-main/design/desktop-design-selected.jpg",
+      initialRating: 0,
     },
     {
       title: "Interactive Credit Card Details Form",
@@ -51,6 +56,7 @@ const HomePage = () => {
       link: "/exercise/interactivecardform",
       backgroundImage:
         "/Exercises/interactive-card-details-form-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Tip Calculator",
@@ -59,6 +65,7 @@ const HomePage = () => {
       link: "/exercise/tipcalculator",
       backgroundImage:
         "/Exercises/tip-calculator-app-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Interactive Pricing Components",
@@ -67,6 +74,7 @@ const HomePage = () => {
       link: "/exercise/pricingslider",
       backgroundImage:
         "/Exercises/interactive-pricing-component-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "NewsLetter Sign Up",
@@ -75,6 +83,7 @@ const HomePage = () => {
       link: "/exercise/newslettersignup",
       backgroundImage:
         "/Exercises/newsletter-sign-up-with-success-message-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Launch Countdown Timer",
@@ -83,6 +92,7 @@ const HomePage = () => {
       link: "/exercise/launchcountdowntimer",
       backgroundImage:
         "/Exercises/launch-countdown-timer-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
     {
       title: "Expenses Chart Component",
@@ -91,6 +101,7 @@ const HomePage = () => {
       link: "/exercise/expenseschartcomponent",
       backgroundImage:
         "/Exercises/expenses-chart-component-main/design/desktop-preview.jpg",
+      initialRating: 0,
     },
   ];
 
@@ -124,6 +135,7 @@ const HomePage = () => {
                 description={exercise.description}
                 link={exercise.link}
                 backgroundImage={exercise.backgroundImage}
+                initialRating={exercise.initialRating}
               />
             </animated.div>
           );

@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 
-const Card = ({ title, description, link, backgroundImage }) => {
+const Card = ({ title, description, link, backgroundImage, initialRating }) => {
+  const [rating, setRating] = useState(initialRating || 0); // Stato per il rating
+  const [votes, setVotes] = useState(0); // Stato per il numero di voti
+  const [total, setTotal] = useState(0); // Stato per la somma totale dei voti
+
+  const handleVote = (value) => {
+    setTotal((prev) => prev + value); // Aggiungi il voto
+    setVotes((prev) => prev + 1); // Incrementa il numero di voti
+    setRating(total / (votes + 1)); // Calcola la media
+  };
+
   const [imageProps, imageApi] = useSpring(() => ({
     transform: "scale(1)",
     config: { tension: 200, friction: 20 },
@@ -66,6 +76,24 @@ const Card = ({ title, description, link, backgroundImage }) => {
               JS
             </span>
           </div>
+
+          {/* Sezione per il Rating */}
+          <div className="flex items-center space-x-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                className="text-yellow-500"
+                onClick={() => handleVote(star)} // Gestisce il voto
+              >
+                ★
+              </button>
+            ))}
+          </div>
+          <p className="text-gray-600 mt-2">
+            {votes > 0
+              ? `Rating: ${rating.toFixed(1)} (${votes} votes)`
+              : "No votes yet"}
+          </p>
         </div>
       </div>
     </div>
