@@ -37,10 +37,10 @@ const ContactPage = () => {
             <p>Tel: 334 83 66 ###</p>
             <p>Email: lucaferraresso96@gmail.com</p>
           </div>
-          <div className="flex space-x-4 mb-4">
+          <div className="flex p-2 gap-2 justify-center space-x-4 mt-4 mb-4">
             <LinkedInSvg className="hover:text-blue-500 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
             <FacebookSvg className="hover:text-blue-700 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
-            <GmailSvg className="hover:text-red-500 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <GmailSvg className="hover:text-red transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
             <GitHubSvg className="hover:text-gray-900 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
             <TwitterSvg className="hover:text-blue-400 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
           </div>
