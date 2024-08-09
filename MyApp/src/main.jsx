@@ -19,6 +19,7 @@ import InteractiveForm from "./pages/InteractiveCardForm.jsx";
 import TipCalculator from "./pages/TipCalculator.jsx";
 import InteractivePricingSlider from "./pages/InteractivePricingSlider.jsx";
 import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
+import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import Contacts from "./pages/Contacts.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
@@ -93,6 +94,11 @@ const router = createBrowserRouter([
         path: "/exercise/newslettersignup",
         element: <NewsLetterSignUp />,
       },
+      {
+        path: "/exercise/launchcountdowntimer",
+        element: <LaunchCountdownTimer />,
+      },
+
       {
         path: "/contacts",
         element: <Contacts />,

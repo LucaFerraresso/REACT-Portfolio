@@ -76,6 +76,14 @@ const HomePage = () => {
       backgroundImage:
         "/Exercises/newsletter-sign-up-with-success-message-main/design/desktop-preview.jpg",
     },
+    {
+      title: "Launch Countdown Timer",
+      description:
+        "This will be a fun one! Your challenge is to build this countdown timer. There are lots of small CSS tests in the design as well. So it should keep you busy!",
+      link: "/exercise/launchcountdowntimer",
+      backgroundImage:
+        "/Exercises/launch-countdown-timer-main/design/desktop-preview.jpg",
+    },
   ];
 
   // Funzione di animazione per il titolo
