@@ -4,9 +4,9 @@ import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 const CountdownTimer = () => {
   const initialState = {
     days: "99",
-    hours: "99",
-    minutes: "99",
-    seconds: "99",
+    hours: "23",
+    minutes: "59",
+    seconds: "59",
   };
 
   const [time, setTime] = useState(initialState);
@@ -78,7 +78,12 @@ const CountdownTimer = () => {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTime({ days: 0, hours: 0, minutes: 0, seconds: 10 });
+    setTime({
+      days: "00",
+      hours: "00",
+      minutes: "00",
+      seconds: "10",
+    });
     setIsRunning(true);
     setIsCompleted(false);
   };
@@ -94,6 +99,12 @@ const CountdownTimer = () => {
     setIsRunning(true);
     setIsCompleted(false);
     setIsModalOpen(false);
+    setInputValues({
+      days: "",
+      hours: "",
+      minutes: "",
+      seconds: "",
+    }); // Reset input values
   };
 
   const handleInputChange = (e) => {
@@ -134,11 +145,10 @@ const CountdownTimer = () => {
       {/* Modal per impostare il timer */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          Facebook Facebook – log in or sign up Log in to Facebook to start
+          sharing and connecting with your friends, family and people you know.
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
             <h2 className="text-xl font-bold mb-4">Imposta Timer</h2>
-            Facebook Facebook – log in or sign up Log in to Facebook to start
-            sharing and connecting with your friends, family and people you
-            know.
             <div className="flex flex-col space-y-4">
               <input
                 type="number"
@@ -147,6 +157,7 @@ const CountdownTimer = () => {
                 value={inputValues.days}
                 onChange={handleInputChange}
                 className="border border-gray-400 p-2 rounded"
+                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
               />
               <input
                 type="number"
@@ -155,6 +166,7 @@ const CountdownTimer = () => {
                 value={inputValues.hours}
                 onChange={handleInputChange}
                 className="border border-gray-400 p-2 rounded"
+                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
               />
               <input
                 type="number"
@@ -163,6 +175,7 @@ const CountdownTimer = () => {
                 value={inputValues.minutes}
                 onChange={handleInputChange}
                 className="border border-gray-400 p-2 rounded"
+                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
               />
               <input
                 type="number"
@@ -171,6 +184,7 @@ const CountdownTimer = () => {
                 value={inputValues.seconds}
                 onChange={handleInputChange}
                 className="border border-gray-400 p-2 rounded"
+                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
               />
             </div>
             <div className="mt-4 flex justify-end">
