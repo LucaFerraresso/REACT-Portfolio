@@ -9,15 +9,8 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Logica di autenticazione (questa è solo una simulazione)
-    if (username && password) {
-      // Qui puoi implementare la logica di autenticazione
-      // Ad esempio, salvare l'utente nel contesto o nello stato globale
-      console.log("Login successful for", username);
-      navigate("/homepage"); // Reindirizza alla homepage dopo il login
-    } else {
-      alert("Please fill in both fields!");
-    }
+    console.log("Login successful for", username);
+    navigate("/homepage"); // Reindirizza alla homepage dopo il login
   };
 
   return (
