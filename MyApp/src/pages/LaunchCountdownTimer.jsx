@@ -142,22 +142,19 @@ const CountdownTimer = () => {
         </button>
       </div>
 
-      {/* Modal per impostare il timer */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          Facebook Facebook – log in or sign up Log in to Facebook to start
-          sharing and connecting with your friends, family and people you know.
+        <div className="fixed inset-0 flex flex-row items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-xl font-bold mb-4">Imposta Timer</h2>
             <div className="flex flex-col space-y-4">
+              <h2 className="text-xl font-bold mb-4">Imposta Timer</h2>
               <input
                 type="number"
                 name="days"
                 placeholder="Giorni"
                 value={inputValues.days}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded"
-                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
+                className="border border-gray-400 p-2 rounded text-black"
+                style={{ backgroundColor: "#f9f9f9" }}
               />
               <input
                 type="number"
@@ -165,8 +162,8 @@ const CountdownTimer = () => {
                 placeholder="Ore"
                 value={inputValues.hours}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded"
-                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
+                className="border border-gray-400 p-2 rounded  text-black"
+                style={{ backgroundColor: "#f9f9f9" }}
               />
               <input
                 type="number"
@@ -174,8 +171,8 @@ const CountdownTimer = () => {
                 placeholder="Minuti"
                 value={inputValues.minutes}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded"
-                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
+                className="border border-gray-400 p-2 rounded  text-black"
+                style={{ backgroundColor: "#f9f9f9" }}
               />
               <input
                 type="number"
@@ -183,8 +180,8 @@ const CountdownTimer = () => {
                 placeholder="Secondi"
                 value={inputValues.seconds}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded"
-                style={{ backgroundColor: "#f9f9f9" }} // Colore di sfondo degli input
+                className="border border-gray-400 p-2 rounded  text-black"
+                style={{ backgroundColor: "#f9f9f9" }}
               />
             </div>
             <div className="mt-4 flex justify-end">
@@ -195,7 +192,7 @@ const CountdownTimer = () => {
                 Imposta
               </button>
               <button
-                onClick={() => setIsModalOpen(false)} // Chiudi la finestra modale
+                onClick={() => setIsModalOpen(false)}
                 className="bg-gray-300 p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105 ml-2"
               >
                 Annulla
