@@ -50,12 +50,12 @@ const Navbar = () => {
               <span className="text-white">Benvenuto {user} </span>
             </li>
             <li className="text-center sm:text-left">
-              <button onClick={handleLogout} className="text-red">
+              <button onClick={handleLogout} className="text-red underline">
                 Logout
               </button>
             </li>
             <li className="text-center sm:text-left">
-              <button onClick={handleClearLocalStorage} className="text-red">
+              <button onClick={handleClearLocalStorage} className="text-green">
                 Clear LocalStorage
               </button>
             </li>
