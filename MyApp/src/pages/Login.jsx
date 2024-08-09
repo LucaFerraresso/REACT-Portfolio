@@ -7,13 +7,19 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setUser(username);
-    toast.success("Login successful");
-    navigate("/homepage");
+
+    if (username && password) {
+      // Aggiungi validazione se necessario
+      login(username); // Effettua il login e salva l'utente nel contesto
+      toast.success("Login effettuato con successo!");
+      navigate("/homepage"); // Reindirizza alla homepage dopo il login
+    } else {
+      toast.error("Username o password non validi!");
+    }
   };
 
   return (
