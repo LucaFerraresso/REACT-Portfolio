@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext"; // Assicurati di importare il contesto
+import { useAuth } from "../../useContext/AuthContext"; // Assicurati di importare il contesto
 import { toast } from "react-toastify"; // Importa la libreria toast
 
 const menulist = [

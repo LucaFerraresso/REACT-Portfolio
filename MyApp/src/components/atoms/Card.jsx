@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
-import { useAuth } from "./AuthContext"; // Importa il contesto
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
 
 const Card = ({ title, description, link, backgroundImage }) => {
   const [rating, setRating] = useState(0); // Stato per il punteggio
