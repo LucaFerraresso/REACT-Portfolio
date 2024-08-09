@@ -37,12 +37,12 @@ const ContactPage = () => {
             <p>Tel: 334 83 66 ###</p>
             <p>Email: lucaferraresso96@gmail.com</p>
           </div>
-          <div className="flex space-x-4">
-            <LinkedInSvg className="hover:text-blue-500 transition-colors duration-300 ease-in-out" />
-            <FacebookSvg className="hover:text-blue-700 transition-colors duration-300 ease-in-out" />
-            <GmailSvg className="hover:text-red-500 transition-colors duration-300 ease-in-out" />
-            <GitHubSvg className="hover:text-gray-900 transition-colors duration-300 ease-in-out" />
-            <TwitterSvg className="hover:text-blue-400 transition-colors duration-300 ease-in-out" />
+          <div className="flex space-x-4 mb-4">
+            <LinkedInSvg className="hover:text-blue-500 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <FacebookSvg className="hover:text-blue-700 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <GmailSvg className="hover:text-red-500 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <GitHubSvg className="hover:text-gray-900 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
+            <TwitterSvg className="hover:text-blue-400 transition-colors duration-300 ease-in-out p-2 border border-black rounded-full" />
           </div>
         </div>
 
@@ -134,7 +134,7 @@ const ContactPage = () => {
 
       <div className="hidden lg:flex justify-center items-center lg:w-1/3">
         <img
-          src="../../public/ContactsPageFoto/myFoto.jpg/200"
+          src="/public/ContactsPageFoto/myFoto/200"
           alt="Profile"
           className="w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-primary-input-border shadow-lg"
         />
