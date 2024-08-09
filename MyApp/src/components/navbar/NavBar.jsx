@@ -15,13 +15,13 @@ const menulist = [
 ];
 
 const Navbar = () => {
-  const { user, setUser } = useAuth(); // Recupera l'utente dal contesto
+  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null); // Imposta l'utente su null
+    logout(null); // Imposta l'utente su null
     toast.error("Logout effettuato!"); // Toast di errore per il logout
-    navigate("/login"); // Reindirizza alla pagina di login
+    navigate("/homepage"); // Reindirizza alla pagina di login
   };
 
   return (
