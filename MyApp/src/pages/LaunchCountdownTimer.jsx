@@ -3,14 +3,14 @@ import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const CountdownTimer = () => {
   const initialState = {
-    days: "00",
-    hours: "00",
-    minutes: "01",
-    seconds: "00",
+    days: "99",
+    hours: "99",
+    minutes: "99",
+    seconds: "99",
   };
 
   const [time, setTime] = useState(initialState);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(true);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValues, setInputValues] = useState({
@@ -78,8 +78,8 @@ const CountdownTimer = () => {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTime(initialState);
-    setIsRunning(false);
+    setTime({ days: 0, hours: 0, minutes: 0, seconds: 10 });
+    setIsRunning(true);
     setIsCompleted(false);
   };
 
