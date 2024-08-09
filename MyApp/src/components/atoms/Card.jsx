@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
-import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
+import { useAuth } from "../../useContext/AuthContext";
+import { toast } from "react-toastify";
 
 const Card = ({ title, description, link, backgroundImage }) => {
-  const [rating, setRating] = useState(0); // Stato per il punteggio
-  const { user } = useAuth(); // Verifica se l'utente è loggato
+  const [rating, setRating] = useState(0);
+  const { user } = useAuth();
 
   const handleVote = (value) => {
     if (!user) {
-      alert("Devi effettuare il login per votare!"); // Avviso se non loggato
+      toast.error("Devi effettuare il login per votare!");
       return;
     }
-    setRating(value); // Imposta il punteggio
+    setRating(value);
   };
 
   const [imageProps, imageApi] = useSpring(() => ({
     transform: "scale(1)",
     config: { tension: 200, friction: 20 },
   }));
+  const setVote = () => {
+    toast.success("Voto registrato con successo!");
+  };
 
   return (
     <div className="w-[300px] h-[400px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
@@ -80,6 +84,13 @@ const Card = ({ title, description, link, backgroundImage }) => {
               className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
             >
               5
+            </button>
+            {/* Aggiungi pulsanti per il voto */}
+            <button
+              onClick={setVote}
+              className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
+            >
+              Vota
             </button>
           </div>
 
