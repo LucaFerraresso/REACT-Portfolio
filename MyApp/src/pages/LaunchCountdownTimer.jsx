@@ -104,7 +104,7 @@ const CountdownTimer = () => {
       hours: "",
       minutes: "",
       seconds: "",
-    }); // Reset input values
+    });
   };
 
   const handleInputChange = (e) => {
@@ -121,13 +121,13 @@ const CountdownTimer = () => {
       <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
         {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
       </h1>
-      <div className="flex space-x-4 sm:space-x-8 mb-10">
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
         <TimeBox label="Days" value={time.days} />
         <TimeBox label="Hours" value={time.hours} />
         <TimeBox label="Minutes" value={time.minutes} />
         <TimeBox label="Seconds" value={time.seconds} />
       </div>
-      <div className="mt-10 flex space-x-4">
+      <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <button
           onClick={resetTimer}
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
@@ -135,7 +135,7 @@ const CountdownTimer = () => {
           Reset Timer
         </button>
         <button
-          onClick={() => setIsModalOpen(true)} // Apri la finestra modale
+          onClick={() => setIsModalOpen(true)}
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
         >
           Set Timer
@@ -144,7 +144,7 @@ const CountdownTimer = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex flex-row items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-1/3">
             <div className="flex flex-col space-y-4">
               <h2 className="text-xl font-bold mb-4 text-black">
                 Imposta Timer
@@ -164,7 +164,7 @@ const CountdownTimer = () => {
                 placeholder="Ore"
                 value={inputValues.hours}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded  text-black"
+                className="border border-gray-400 p-2 rounded text-black"
                 style={{ backgroundColor: "#f9f9f9" }}
               />
               <input
@@ -173,7 +173,7 @@ const CountdownTimer = () => {
                 placeholder="Minuti"
                 value={inputValues.minutes}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded  text-black"
+                className="border border-gray-400 p-2 rounded text-black"
                 style={{ backgroundColor: "#f9f9f9" }}
               />
               <input
@@ -182,7 +182,7 @@ const CountdownTimer = () => {
                 placeholder="Secondi"
                 value={inputValues.seconds}
                 onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded  text-black"
+                className="border border-gray-400 p-2 rounded text-black"
                 style={{ backgroundColor: "#f9f9f9" }}
               />
             </div>
@@ -242,7 +242,7 @@ const CountdownTimer = () => {
 };
 
 const TimeBox = ({ label, value }) => (
-  <div className="p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110 bg-very-dark-blue">
+  <div className="p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110 bg-very-dark-blue w-full sm:w-auto">
     <span className="block text-4xl sm:text-6xl font-bold text-light-pink">
       {value}
     </span>
