@@ -231,7 +231,7 @@ const CountdownTimer = () => {
         </a>
       </div>
       {isCompleted && (
-        <div className="mt-10 p-4 bg-soft-red text-dark-blue rounded-lg animate-fade-in">
+        <div className="mb-4 p-4 bg-soft-red text-dark-blue rounded-lg animate-fade-in">
           <p className="text-center">
             The countdown has ended. Please set a new timer.
           </p>
