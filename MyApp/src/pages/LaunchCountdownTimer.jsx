@@ -1,85 +1,91 @@
 import React, { useState, useEffect } from "react";
 
+const initialState = {
+  days: "00",
+  hours: "00",
+  minutes: "01",
+  seconds: "00",
+};
+
 const CountdownTimer = () => {
-  const [time, setTime] = useState({
-    days: "08",
-    hours: "23",
-    minutes: "55",
-    seconds: "41",
-  });
-
-  const calculateTimeLeft = () => {
-    const countDate = new Date("Sep 30, 2024 00:00:00").getTime();
-    const now = new Date().getTime();
-    const gap = countDate - now;
-
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-
-    const days = Math.floor(gap / day)
-      .toString()
-      .padStart(2, "0");
-    const hours = Math.floor((gap % day) / hour)
-      .toString()
-      .padStart(2, "0");
-    const minutes = Math.floor((gap % hour) / minute)
-      .toString()
-      .padStart(2, "0");
-    const seconds = Math.floor((gap % minute) / second)
-      .toString()
-      .padStart(2, "0");
-
-    return { days, hours, minutes, seconds };
-  };
+  const [time, setTime] = useState(initialState);
+  const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(calculateTimeLeft());
-    }, 1000);
+    let interval;
+
+    if (isRunning) {
+      interval = setInterval(() => {
+        const { days, hours, minutes, seconds } = time;
+
+        if (
+          days === "00" &&
+          hours === "00" &&
+          minutes === "00" &&
+          seconds === "00"
+        ) {
+          clearInterval(interval);
+          setIsRunning(false);
+        } else {
+          updateTime();
+        }
+      }, 1000);
+    }
 
     return () => clearInterval(interval);
-  }, []);
+  }, [time, isRunning]);
 
-  const resetTimer = () => {
+  const updateTime = () => {
+    const { days, hours, minutes, seconds } = time;
+
+    let newSeconds = parseInt(seconds) - 1;
+    let newMinutes = parseInt(minutes);
+    let newHours = parseInt(hours);
+    let newDays = parseInt(days);
+
+    if (newSeconds < 0) {
+      newSeconds = 59;
+      newMinutes--;
+
+      if (newMinutes < 0) {
+        newMinutes = 59;
+        newHours--;
+
+        if (newHours < 0) {
+          newHours = 23;
+          newDays--;
+        }
+      }
+    }
+
     setTime({
-      days: "00",
-      hours: "00",
-      minutes: "00",
-      seconds: "10",
+      days: newDays.toString().padStart(2, "0"),
+      hours: newHours.toString().padStart(2, "0"),
+      minutes: newMinutes.toString().padStart(2, "0"),
+      seconds: newSeconds.toString().padStart(2, "0"),
     });
   };
 
-  const handleDateChange = (newDate) => {
-    const now = new Date().getTime();
-    const countDate = new Date(newDate).getTime();
-    const gap = countDate - now;
+  const resetTimer = () => {
+    setIsRunning(false);
+    setTime(initialState);
+    setIsRunning(true);
+  };
 
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-
-    const days = Math.floor(gap / day)
-      .toString()
-      .padStart(2, "0");
-    const hours = Math.floor((gap % day) / hour)
-      .toString()
-      .padStart(2, "0");
-    const minutes = Math.floor((gap % hour) / minute)
-      .toString()
-      .padStart(2, "0");
-    const seconds = Math.floor((gap % minute) / second)
-      .toString()
-      .padStart(2, "0");
-
-    setTime({ days, hours, minutes, seconds });
+  const handleDateChange = (days, hours, minutes, seconds) => {
+    setIsRunning(false);
+    setTime({
+      days: days.toString().padStart(2, "0"),
+      hours: hours.toString().padStart(2, "0"),
+      minutes: minutes.toString().padStart(2, "0"),
+      seconds: seconds.toString().padStart(2, "0"),
+    });
+    setIsRunning(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-stars bg-cover text-white font-red-hat">
-      <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-black">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-blue bg-cover text-white font-red-hat">
+      <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
         We're launching soon
       </h1>
       <div className="flex space-x-4 sm:space-x-8">
@@ -101,10 +107,10 @@ const CountdownTimer = () => {
           Reset Timer
         </button>
         <button
-          onClick={() => handleDateChange("Dec 31, 2024 00:00:00")}
+          onClick={() => handleDateChange(1, 0, 0, 0)} // Set to 1 day
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
         >
-          Set to Dec 31, 2024
+          Set to 24h
         </button>
       </div>
     </div>
@@ -112,7 +118,7 @@ const CountdownTimer = () => {
 };
 
 const TimeBox = ({ label, value }) => (
-  <div className="bg-dark-blue p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110">
+  <div className="bg-very-dark-blue p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110">
     <span className="block text-4xl sm:text-6xl font-bold text-light-pink">
       {value}
     </span>
