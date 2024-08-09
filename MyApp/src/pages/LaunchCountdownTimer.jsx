@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa"; // Importa le icone social
 
 const CountdownTimer = () => {
-  const initialState = {
+  const [time, setTime] = useState({
     days: "00",
     hours: "00",
-    minutes: "01",
+    minutes: "00",
     seconds: "00",
-  };
-
-  const [time, setTime] = useState(initialState);
+  });
   const [isRunning, setIsRunning] = useState(true);
-  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     let interval;
 
-    if (isRunning && !isCompleted) {
+    if (isRunning) {
       interval = setInterval(() => {
         const { days, hours, minutes, seconds } = time;
 
@@ -27,7 +25,7 @@ const CountdownTimer = () => {
         ) {
           clearInterval(interval);
           setIsRunning(false);
-          setIsCompleted(true);
+          alert("Il timer ha raggiunto lo zero. Imposta un nuovo timer.");
         } else {
           updateTime();
         }
@@ -35,7 +33,7 @@ const CountdownTimer = () => {
     }
 
     return () => clearInterval(interval);
-  }, [time, isRunning, isCompleted]);
+  }, [time, isRunning]);
 
   const updateTime = () => {
     const { days, hours, minutes, seconds } = time;
@@ -68,98 +66,90 @@ const CountdownTimer = () => {
     });
   };
 
-  const resetTimer = () => {
+  const handleDateChange = () => {
     setIsRunning(false);
-    setTime(initialState);
     setIsRunning(true);
-    setIsCompleted(false);
   };
 
-  const handleDateChange = (days, hours, minutes, seconds) => {
-    setIsRunning(false);
-    setTime({
-      days: days.toString().padStart(2, "0"),
-      hours: hours.toString().padStart(2, "0"),
-      minutes: minutes.toString().padStart(2, "0"),
-      seconds: seconds.toString().padStart(2, "0"),
-    });
-    setIsRunning(true);
-    setIsCompleted(false);
+  const handleInputChange = (e, unit) => {
+    setTime({ ...time, [unit]: e.target.value });
   };
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-screen text-white font-red-hat transition-colors duration-500 ${
-        isCompleted ? "bg-light-cyan" : "bg-dark-blue"
-      }`}
-    >
+    <div className="flex flex-col items-center justify-center min-h-screen bg-dark-blue bg-cover text-white font-red-hat px-4">
       <h1 className="text-lg sm:text-2xl tracking-wider uppercase text-center mb-8 text-light-pink">
-        {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
+        We're launching soon
       </h1>
-      <div className="flex space-x-4 sm:space-x-8">
-        <TimeBox label="Days" value={time.days} isCompleted={isCompleted} />
-        <TimeBox label="Hours" value={time.hours} isCompleted={isCompleted} />
+      <div className="flex space-x-4 sm:space-x-8 mb-10">
+        <TimeBox
+          label="Days"
+          value={time.days}
+          onChange={(e) => handleInputChange(e, "days")}
+        />
+        <TimeBox
+          label="Hours"
+          value={time.hours}
+          onChange={(e) => handleInputChange(e, "hours")}
+        />
         <TimeBox
           label="Minutes"
           value={time.minutes}
-          isCompleted={isCompleted}
+          onChange={(e) => handleInputChange(e, "minutes")}
         />
         <TimeBox
           label="Seconds"
           value={time.seconds}
-          isCompleted={isCompleted}
+          onChange={(e) => handleInputChange(e, "seconds")}
         />
       </div>
-      <div className="mt-10 flex space-x-6">
-        <SocialIcon href="#" icon="icon-facebook.svg" />
-        <SocialIcon href="#" icon="icon-pinterest.svg" />
-        <SocialIcon href="#" icon="icon-instagram.svg" />
-      </div>
-      <div className="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="mt-10 flex space-x-4">
         <button
-          onClick={resetTimer}
+          onClick={handleDateChange}
           className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
         >
-          Reset Timer
-        </button>
-        <button
-          onClick={() => handleDateChange(1, 0, 0, 0)}
-          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
-        >
-          Set to 24h
+          Set Timer
         </button>
       </div>
-      {isCompleted && (
-        <div className="mt-10 p-4 bg-soft-red text-dark-blue rounded-lg animate-fade-in">
-          <p className="text-center">
-            The countdown has ended. Please set a new timer.
-          </p>
-        </div>
-      )}
+      <div className="mt-10 flex space-x-4">
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-light-pink hover:text-white"
+        >
+          <FaFacebook size={24} />
+        </a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-light-pink hover:text-white"
+        >
+          <FaTwitter size={24} />
+        </a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-light-pink hover:text-white"
+        >
+          <FaInstagram size={24} />
+        </a>
+      </div>
     </div>
   );
 };
-const TimeBox = ({ label, value, isCompleted }) => (
-  <div
-    className={`p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110 ${
-      isCompleted ? "bg-light-cyan text-dark-blue" : "bg-very-dark-blue"
-    } animate-flip`}
-  >
-    <span className="block text-4xl sm:text-6xl font-bold text-light-pink">
-      {value}
-    </span>
+
+const TimeBox = ({ label, value, onChange }) => (
+  <div className="bg-very-dark-blue p-4 sm:p-6 rounded-lg text-center transform transition-transform hover:scale-110">
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}
+      className="block text-4xl sm:text-6xl font-bold text-light-pink bg-transparent border-none text-center w-16 sm:w-24 focus:outline-none"
+    />
     <p className="uppercase text-xs sm:text-sm mt-2 tracking-widest">{label}</p>
   </div>
-);
-
-const SocialIcon = ({ href, icon }) => (
-  <a href={href} className="transform transition-transform hover:scale-110">
-    <img
-      src={`/Exercises/launch-countdown-timer-main/images/${icon}`}
-      alt={icon}
-      className="w-8 h-8"
-    />
-  </a>
 );
 
 export default CountdownTimer;
