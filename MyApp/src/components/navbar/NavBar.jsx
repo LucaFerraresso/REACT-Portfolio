@@ -42,10 +42,10 @@ const Navbar = () => {
         {user && (
           <>
             <li className="text-center sm:text-left">
-              <span className="text-white">Ciao, {user.username}</span>
+              <span className="text-white">Benvenuto {user} </span>
             </li>
             <li className="text-center sm:text-left">
-              <button onClick={handleLogout} className="text-red-500">
+              <button onClick={handleLogout} className="text-red">
                 Logout
               </button>
             </li>
