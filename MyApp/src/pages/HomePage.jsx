@@ -84,6 +84,14 @@ const HomePage = () => {
       backgroundImage:
         "/Exercises/launch-countdown-timer-main/design/desktop-preview.jpg",
     },
+    {
+      title: "Expenses Chart Component",
+      description:
+        "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
+      link: "/exercise/expenseschartcomponent",
+      backgroundImage:
+        "/Exercises/expenses-chart-component-main/design/desktop-preview.jpg",
+    },
   ];
 
   // Funzione di animazione per il titolo
