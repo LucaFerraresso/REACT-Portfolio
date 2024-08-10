@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../API/firebaseAuth";
+import { auth } from "../firebaseConfig";
 import { logoutUser } from "../API/firebaseAuth";
 
 const AuthContext = createContext();
