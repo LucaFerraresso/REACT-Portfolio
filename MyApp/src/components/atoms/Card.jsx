@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSpring, animated, update } from "@react-spring/web";
+import { useSpring, animated } from "@react-spring/web";
 import { useAuth } from "../../useContext/AuthContext";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -94,14 +94,14 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   }));
 
   return (
-    <div className="w-[300px] h-[450px] md:w-[350px] md:h-[500px] lg:w-[400px] lg:h-[550px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
+    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
       <div className="flex flex-col justify-between h-full">
         <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream">
           <Link to={link}>
             <animated.img
               src={backgroundImage}
               alt="Background"
-              className="w-full h-80 object-cover transition-transform duration-300 cursor-pointer"
+              className="w-full h-96 object-cover transition-transform duration-300 cursor-pointer"
               style={imageProps}
               onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
               onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
@@ -117,7 +117,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             FREE
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-4">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
