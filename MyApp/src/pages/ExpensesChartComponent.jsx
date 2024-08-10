@@ -13,7 +13,6 @@ const ExpensesChart = () => {
       try {
         const expensesData = await getExpensesFirestore();
 
-        // Ordina i dati in base ai giorni della settimana
         const daysOrder = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
         const orderedData = expensesData.sort((a, b) => {
           return (
@@ -62,24 +61,26 @@ const ExpensesChart = () => {
       <div className="flex space-x-2 md:space-x-4 h-48 items-end">
         {data.map((item, index) => {
           console.log("item", item);
-          <div key={index} className="flex-1 flex flex-col items-center">
-            <div
-              className={`relative ${
-                item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
-              } w-full rounded-md transition-all duration-500 ease-in-out transform hover:scale-105`}
-              style={{
-                height: `${(item.amount / maxAmount) * 100}%`,
-                minHeight: "10px",
-              }}
-            >
-              <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
-                ${item.amount.toFixed(2)}
+          return (
+            <div key={index} className="flex-1 flex flex-col items-center">
+              <div
+                className={`relative ${
+                  item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
+                } w-full rounded-md transition-all duration-500 ease-in-out transform hover:scale-105`}
+                style={{
+                  height: `${(item.amount / maxAmount) * 100}%`,
+                  minHeight: "10px",
+                }}
+              >
+                <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
+                  ${item.amount.toFixed(2)}
+                </span>
+              </div>
+              <span className="text-medium-brown mt-2 capitalize text-xs md:text-sm">
+                {item.day}
               </span>
             </div>
-            <span className="text-medium-brown mt-2 capitalize text-xs md:text-sm">
-              {item.day}
-            </span>
-          </div>;
+          );
         })}
       </div>
       <div className="border-t-2 border-cream mt-6 pt-4">
