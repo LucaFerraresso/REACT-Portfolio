@@ -6,6 +6,7 @@ import firebaseConfig from "../firebaseConfig";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+//fetch per ottenere i prodotti dal database per il fake ecommerce
 export async function getProductsFireStore() {
   const productsCollection = collection(db, "products");
   const productSnapshot = await getDocs(productsCollection);
@@ -15,4 +16,16 @@ export async function getProductsFireStore() {
   }));
   console.log(productsList);
   return productsList;
+}
+
+//fetch per ottenere le spese nel expenses chart components
+export async function getExpensesFirestore() {
+  const expensesCollection = collection(db, "expenses");
+  const expensesSnapshot = await getDocs(expensesCollection);
+  const expensesList = expensesSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  console.log(expensesList);
+  return expensesList;
 }
