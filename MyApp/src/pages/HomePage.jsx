@@ -112,20 +112,6 @@ const HomePage = () => {
         "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
       initialRating: 0,
     },
-    {
-      title: "Interactive Comments Section",
-      description:
-        "This is a great project for practicing working with forms, client-side validation, and updating the DOM. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
-      link: "/exercise/interactivecomments",
-      backgroundImage:
-        "/Exercises/interactive-comments-section-main/design/desktop-preview.jpg",
-      initialRating: 0,
-    },
-    {
-      title: "Interactive Rating Component",
-      description:
-        "This is a great project for practicing working with forms, client-side validation, and updating the DOM. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
-    },
   ];
 
   // Funzione di animazione per il titolo
