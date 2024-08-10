@@ -24,6 +24,7 @@ const ExpensesChart = () => {
 
         setData(orderedData);
         const max = Math.max(...orderedData.map((item) => item.amount));
+        console.log("height", `${(item.amount / maxAmount) * 100}%`);
         setMaxAmount(max);
         setLoading(false);
       } catch (error) {
