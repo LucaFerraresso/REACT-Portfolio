@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, update } from "@react-spring/web";
 import { useAuth } from "../../useContext/AuthContext";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
@@ -8,12 +8,14 @@ import {
   saveVoteToFirestore,
   getVotesFromFirestore,
   getTotalVotes,
+  getAllVotes,
 } from "../../API/firestore";
 
 const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [rating, setRating] = useState(0);
   const [selectedVote, setSelectedVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
   const { user } = useAuth();
 
   const handleStarClick = (value) => {
@@ -43,10 +45,18 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
 
       const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
       setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
+      updateAvarangeRating();
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
       //console.error("Errore nel salvataggio del voto:", error);
     }
+  };
+  const updateAverageRating = async () => {
+    const votes = await getAllVotes(projectId); // Ottieni tutti i voti
+    const totalVotesCount = votes.length; // Numero totale di voti
+    const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0); // Somma dei voti
+    const average = totalVotesCount > 0 ? sumOfVotes / totalVotesCount : 0; // Calcola la media
+    setAverageRating(average.toFixed(1)); // Imposta la media, con una cifra decimale
   };
 
   useEffect(() => {
@@ -69,6 +79,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       try {
         const votesCount = await getTotalVotes(projectId);
         setTotalVotes(votesCount);
+        updateAverageRating();
       } catch (error) {
         console.error("Errore nel recupero del totale voti:", error);
       }
@@ -134,6 +145,24 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
 
           <div className="text-gray-700 text-base mt-4 mb-2">
             Punteggio attuale: {rating} ({totalVotes} voti)
+          </div>
+          <div className="text-gray-700 text-base mt-2">
+            Media voti: {averageRating} ({totalVotes} voti)
+          </div>
+          <div className="flex items-center space-x-1 mt-2">
+            {Array.from({ length: Math.round(averageRating) }, (_, index) => (
+              <FaStar key={index} size={24} color="#ffc107" />
+            ))}
+            {Array.from(
+              { length: 5 - Math.round(averageRating) },
+              (_, index) => (
+                <FaStar
+                  key={index + Math.round(averageRating)}
+                  size={24}
+                  color="#e4e5e9"
+                />
+              )
+            )}
           </div>
           <div className="flex items-center space-x-2">
             <span

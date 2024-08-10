@@ -94,3 +94,21 @@ export async function getTotalVotes(projectId) {
     return 0;
   }
 }
+
+// Funzione per ottenere tutti i voti di un progetto
+export async function getAllVotes(projectId) {
+  if (!projectId) {
+    throw new Error("Project ID is required");
+  }
+  const votesCollection = collection(db, "votes");
+  const q = query(votesCollection, where("projectId", "==", projectId));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    const votes = querySnapshot.docs.map((doc) => doc.data().vote);
+    return votes; // Ritorna un array di voti
+  } catch (error) {
+    console.error("Errore nel recupero dei voti: ", error);
+    return [];
+  }
+}
