@@ -1,174 +1,3 @@
-backupcard con bottoni 12345
-senza chiamate (post) a firestore per  voti
-salvo tutto in local storage. semplice
-
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSpring, animated } from "@react-spring/web";
-import { useAuth } from "../../useContext/AuthContext";
-import { toast } from "react-toastify";
-
-const Card = ({ title, description, link, backgroundImage }) => {
-  const [votes, setVotes] = useState([]); // Mantieni una lista dei voti
-  const [rating, setRating] = useState(0);
-  const { user } = useAuth();
-
-  // Funzione per calcolare la media dei voti
-  const calculateAverageRating = (votes) => {
-    const sum = votes.reduce((acc, vote) => acc + vote, 0);
-    return votes.length ? (sum / votes.length).toFixed(2) : 0;
-  };
-
-  const handleVote = (value) => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-      return;
-    }
-    const newVotes = [...votes, value]; // Aggiungi il nuovo voto alla lista
-    setVotes(newVotes);
-    setRating(calculateAverageRating(newVotes)); // Aggiorna il rating con la nuova media
-    //toast.success("Voto registrato con successo!");
-  };
-
-  const [imageProps, imageApi] = useSpring(() => ({
-    transform: "scale(1)",
-    config: { tension: 200, friction: 20 },
-  }));
-  const handleConfirmVote = () => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-    } else {
-      toast.success("Voto registrato con successo!");
-    }
-  };
-
-  useEffect(() => {
-    const savedVotes = JSON.parse(localStorage.getItem(`${title}-votes`));
-    if (savedVotes) {
-      setVotes(savedVotes);
-      setRating(calculateAverageRating(savedVotes));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(`${title}-votes`, JSON.stringify(votes));
-  }, [votes]);
-
-  return (
-    <div className="w-[300px] h-[400px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
-      <div className="flex flex-col justify-between h-full">
-        <div className="relative overflow-hidden">
-          <Link to={link}>
-            <animated.img
-              src={backgroundImage}
-              alt="Background"
-              className="w-full h-40 md:h-48 lg:h-60 object-cover transition-transform duration-300 cursor-pointer"
-              style={imageProps}
-              onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
-              onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
-            />
-          </Link>
-
-          <div
-            className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
-            style={{
-              textShadow:
-                "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-            }}
-          >
-            FREE
-          </div>
-        </div>
-        <div className="p-6">
-          <h1 className="text-gray-900 text-xl font-bold mb-2">{title}</h1>
-          <p className="text-gray-700 text-base mb-4">{description}</p>
-
-          <div className="flex items-center space-x-2 mb-4">
-            {/* Aggiungi pulsanti per il voto */}
-            <button
-              onClick={() => handleVote(1)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              1
-            </button>
-            <button
-              onClick={() => handleVote(2)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              2
-            </button>
-            <button
-              onClick={() => handleVote(3)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              3
-            </button>
-            <button
-              onClick={() => handleVote(4)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              4
-            </button>
-            <button
-              onClick={() => handleVote(5)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              5
-            </button>
-
-            <button
-              onClick={handleConfirmVote}
-              className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
-            >
-              Vota
-            </button>
-          </div>
-
-          {/* Mostra il punteggio attuale */}
-          <div className="text-gray-700 text-base mb-2">
-            Punteggio attuale: {rating}
-          </div>
-          <div className="flex items-center space-x-2">
-            <span
-              className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              HTML
-            </span>
-            <span
-              className="text-blue-800 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              CSS
-            </span>
-            <span
-              className="text-pink-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              JS
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Card; 
-
-questa card invece manda post ad databsase il voto assegnato
-tra l'altro i bottoni ora sono diventati stelle 
-manca ancora pero' il pulsante conferma, da aggiungere assolutamente 
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
@@ -178,20 +7,36 @@ import { FaStar } from "react-icons/fa";
 import {
   saveVoteToFirestore,
   getVotesFromFirestore,
-} from "../../API/firestore"; // Importa le nuove funzioni
+  getTotalVotes,
+} from "../../API/firestore";
 
 const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [rating, setRating] = useState(0);
+  const [selectedVote, setSelectedVote] = useState(0); // Nuovo stato per il voto selezionato
+  const [totalVotes, setTotalVotes] = useState(0); // Nuovo stato per il totale dei voti
   const { user } = useAuth();
 
-  const handleVote = async (value) => {
+  // Funzione per gestire il click sulle stelle
+  const handleStarClick = (value) => {
     if (!user) {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
-    setRating(value);
-    await saveVoteToFirestore(projectId, user.uid, value); // Salva il voto nel Firestore
+    setSelectedVote(value); // Imposta il voto selezionato
+  };
+
+  // Funzione per confermare il voto
+  const handleVote = async () => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
+    }
+    setRating(selectedVote); // Aggiorna il rating con il voto selezionato
+    await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
     toast.success("Voto registrato con successo!");
+
+    const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
+    setTotalVotes(updatedTotalVotes);
   };
 
   useEffect(() => {
@@ -200,8 +45,12 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
         const savedVote = await getVotesFromFirestore(projectId, user.uid);
         if (savedVote) {
           setRating(savedVote);
+          setSelectedVote(savedVote); // Imposta anche il voto selezionato
         }
       }
+
+      const votesCount = await getTotalVotes(projectId);
+      setTotalVotes(votesCount); // Imposta il totale dei voti
     };
 
     fetchVotes();
@@ -220,7 +69,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             <animated.img
               src={backgroundImage}
               alt="Background"
-              className="w-full h-60 md:h-72 lg:h-80 object-cover transition-transform duration-300 cursor-pointer"
+              className="w-full h-[45%] md:h-72 lg:h-80 object-cover transition-transform duration-300 cursor-pointer"
               style={imageProps}
               onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
               onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
@@ -246,10 +95,8 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
               <FaStar
                 key={star}
                 size={24}
-                onClick={() => handleVote(star)}
-                onMouseEnter={() => setRating(star)}
-                onMouseLeave={() => setRating((prevRating) => prevRating)}
-                color={star <= rating ? "#ffc107" : "#e4e5e9"}
+                onClick={() => handleStarClick(star)} // Seleziona il voto
+                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"} // Colora le stelle selezionate
                 style={{
                   cursor: "pointer",
                   transition: "color 200ms",
@@ -258,9 +105,18 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             ))}
           </div>
 
+          {/* Pulsante Vota */}
+          <button
+            onClick={handleVote}
+            className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-700"
+            disabled={!selectedVote} // Disabilitato se non è stato selezionato nessun voto
+          >
+            Vota
+          </button>
+
           {/* Mostra il punteggio attuale */}
-          <div className="text-gray-700 text-base mb-2">
-            Punteggio attuale: {rating}
+          <div className="text-gray-700 text-base mt-4 mb-2">
+            Punteggio attuale: {rating} ({totalVotes} voti)
           </div>
           <div className="flex items-center space-x-2">
             <span
@@ -298,674 +154,149 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
 };
 
 export default Card;
-//in progetto ora dovrebbe funzionare con anche il pulsante 
-//da rivedere la questione dell'utente quando logga e se logga, come riconoscerlo
 
-backup delle funzioni get
-//fetch (post) per salvare nel database i voti assegnati ai progetti dagli utenti
 
-// Funzione per salvare i voti nel Firestore
-export async function saveVoteToFirestore(projectId, userId, vote) {
-  const votesCollection = collection(db, "votes");
-  const voteDocRef = doc(votesCollection, `${projectId}_${userId}`);
+esperimento senza i tre linguaggi span
 
-  try {
-    const docSnapshot = await getDocs(voteDocRef);
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSpring, animated } from "@react-spring/web";
+import { useAuth } from "../../useContext/AuthContext";
+import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
+import {
+  saveVoteToFirestore,
+  getVotesFromFirestore,
+  getTotalVotes,
+} from "../../API/firestore";
 
-    if (docSnapshot.exists()) {
-      // Se il documento esiste già, aggiorniamo il voto
-      await updateDoc(voteDocRef, {
-        vote: vote,
-      });
-    } else {
-      // Se il documento non esiste, lo creiamo
-      await addDoc(votesCollection, {
-        projectId,
-        userId,
-        vote,
-      });
+const Card = ({ title, description, link, backgroundImage, projectId }) => {
+  const [rating, setRating] = useState(0);
+  const [selectedVote, setSelectedVote] = useState(0);
+  const [totalVotes, setTotalVotes] = useState(0);
+  const { user } = useAuth();
+
+  const handleStarClick = (value) => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
+    }
+    setSelectedVote(value);
+  };
+
+  const handleVote = async () => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
     }
 
-    toast.success("Voto salvato con successo");
-  } catch (error) {
-    toast.error("Errore nel salvataggio del voto: ");
-  }
-}
-
-// Funzione per ottenere i voti esistenti da Firestore
-export async function getVotesFromFirestore(projectId, userId) {
-  const votesCollection = collection(db, "votes");
-  const voteDocRef = doc(votesCollection, `${projectId}_${userId}`);
-
-  try {
-    const docSnapshot = await getDoc(voteDocRef);
-
-    if (docSnapshot.exists()) {
-      return docSnapshot.data().vote;
-    } else {
-      return null;
+    if (selectedVote === 0) {
+      toast.error("Seleziona un voto prima di votare!");
+      return;
     }
-  } catch (error) {
-    toast.error("Errore nel recupero del voto");
-    return null;
-  }
-}
 
-// Funzione per ottenere il numero totale di voti per un progetto
-export async function getTotalVotes(projectId) {
-  const votesCollection = collection(db, "votes");
-  const q = query(votesCollection, where("projectId", "==", projectId));
+    try {
+      await saveVoteToFirestore(projectId, user.uid, selectedVote);
+      setRating(selectedVote);
+      toast.success("Voto registrato con successo!");
 
-  try {
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.size; // Ritorna il numero totale di documenti
-  } catch (error) {
-    console.error("Errore nel conteggio dei voti: ", error);
-    return 0;
-  }
-}
-//useeffetc getvotes card
- useEffect(() => {
+      const updatedTotalVotes = await getTotalVotes(projectId);
+      setTotalVotes(updatedTotalVotes);
+    } catch (error) {
+      toast.error("Errore durante la registrazione del voto.");
+      console.error("Errore nel salvataggio del voto:", error);
+    }
+  };
+
+  useEffect(() => {
     const fetchVotes = async () => {
       if (user) {
-        const savedVote = await getVotesFromFirestore(projectId, user.uid);
-        if (savedVote) {
-          setRating(savedVote);
-          setSelectedVote(savedVote); // Imposta anche il voto selezionato
+        try {
+          const savedVote = await getVotesFromFirestore(projectId, user.uid);
+          if (savedVote) {
+            setRating(savedVote);
+            setSelectedVote(savedVote);
+          }
+        } catch (error) {
+          console.error("Errore nel recupero del voto:", error);
         }
       }
 
-      const votesCount = await getTotalVotes(projectId);
-      setTotalVotes(votesCount); // Imposta il totale dei voti
+      try {
+        const votesCount = await getTotalVotes(projectId);
+        setTotalVotes(votesCount);
+      } catch (error) {
+        console.error("Errore nel recupero del totale voti:", error);
+      }
     };
 
     fetchVotes();
   }, [user, projectId]);
 
-  ////backup login prima del database
-  import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../useContext/AuthContext";
-import { toast } from "react-toastify";
-
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    if (username && password) {
-      // Aggiungi validazione se necessario
-      login(username); // Effettua il login e salva l'utente nel contesto
-      toast.success("Login effettuato con successo!");
-      navigate("/homepage");
-    } else {
-      toast.error("Username o password non validi!");
-    }
-  };
+  const [imageProps, imageApi] = useSpring(() => ({
+    transform: "scale(1)",
+    config: { tension: 200, friction: 20 },
+  }));
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded shadow-md w-80"
-      >
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="border border-gray-300 rounded p-2 w-full"
-            required
-          />
+    <div className="w-[300px] h-[450px] md:w-[350px] md:h-[500px] lg:w-[400px] lg:h-[550px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
+      <div className="flex flex-col justify-between h-full">
+        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream"> {/* Gradient di sfondo */}
+          <Link to={link}>
+            <animated.img
+              src={backgroundImage}
+              alt="Background"
+              className="w-full h-64 object-cover transition-transform duration-300 cursor-pointer"
+              style={imageProps}
+              onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
+              onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
+            />
+          </Link>
+
+          <div
+            className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
+            style={{
+              textShadow:
+                "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+            }}
+          >
+            FREE
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 rounded p-2 w-full"
-            required
-          />
+        <div className="p-6">
+          <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1> {/* Cambiato il colore del testo */}
+          <p className="text-gray-700 text-base mb-4">{description}</p>
+
+          <div className="flex items-center space-x-1 mb-4">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <FaStar
+                key={star}
+                size={24}
+                onClick={() => handleStarClick(star)}
+                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"}
+                style={{
+                  cursor: "pointer",
+                  transition: "color 200ms",
+                }}
+/>
+            ))}
+          </div>
+
+          <button
+            onClick={handleVote}
+            className="bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200"
+            disabled={selectedVote === 0}
+          >
+            Vota
+          </button>
+
+          <div className="text-gray-700 text-base mt-4 mb-2">
+            Punteggio attuale: {rating} ({totalVotes} voti)
+          </div>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-        >
-          Login
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default Login;
-
-secondo backuplogin ,va sempre in errore, manca la registrazione
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { loginUser, logoutUser, useAuth } from "../API/firebaseAuth";
-import { toast } from "react-toastify";
-
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { user } = useAuth(); // Ottieni l'utente autenticato
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    if (email && password) {
-      try {
-        const loggedInUser = await loginUser(email, password); // Usa loginUser per autenticare l'utente
-        if (loggedInUser) {
-          toast.success("Login effettuato con successo!");
-          navigate("/homepage"); // Reindirizza alla homepage
-        } else {
-          toast.error("Login fallito. Controlla le tue credenziali.");
-        }
-      } catch (error) {
-        toast.error("Errore durante il login. Riprova.");
-        console.error("Errore durante il login:", error);
-      }
-    } else {
-      toast.error("Email o password non validi!");
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser(); // Effettua il logout
-      toast.success("Logout effettuato con successo!");
-      navigate("/login"); // Reindirizza alla pagina di login
-    } catch (error) {
-      toast.error("Errore durante il logout. Riprova.");
-      console.error("Errore durante il logout:", error);
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {!user ? (
-        <form
-          onSubmit={handleLogin}
-          className="bg-white p-8 rounded shadow-md w-80"
-        >
-          <h2 className="text-2xl font-bold mb-4">Login</h2>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-          >
-            Login
-          </button>
-        </form>
-      ) : (
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4">Bentornato, {user.email}</h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Login;
-
-auth/login advanced
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  loginUser,
-  registerUser,
-  logoutUser,
-  useAuth,
-} from "../API/firebaseAuth";
-import { toast } from "react-toastify";
-
-const AuthComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
-  const navigate = useNavigate();
-  const { user } = useAuth();
-
-  const handleAuth = async (e) => {
-    e.preventDefault();
-
-    if (email && password) {
-      try {
-        let authenticatedUser;
-        if (isRegistering) {
-          authenticatedUser = await registerUser(email, password); // Usa registerUser per registrare l'utente
-          if (authenticatedUser) {
-            toast.success(
-              "Registrazione effettuata con successo! Puoi ora effettuare il login."
-            );
-          }
-        } else {
-          authenticatedUser = await loginUser(email, password); // Usa loginUser per autenticare l'utente
-          if (authenticatedUser) {
-            toast.success("Login effettuato con successo!");
-            navigate("/homepage");
-          } else {
-            toast.error("Login fallito. Controlla le tue credenziali.");
-          }
-        }
-      } catch (error) {
-        toast.error("Errore durante l'autenticazione. Riprova.");
-        console.error("Errore durante l'autenticazione:", error.message);
-      }
-    } else {
-      toast.error("Email o password non validi!");
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      toast.success("Logout effettuato con successo!");
-      navigate("/login");
-    } catch (error) {
-      toast.error("Errore durante il logout. Riprova.");
-      console.error("Errore durante il logout:", error);
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {!user ? (
-        <form
-          onSubmit={handleAuth}
-          className="bg-white p-8 rounded shadow-md w-80"
-        >
-          <h2 className="text-2xl font-bold mb-4">
-            {isRegistering ? "Registrati" : "Login"}
-          </h2>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-          >
-            {isRegistering ? "Registrati" : "Login"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsRegistering((prev) => !prev)}
-            className="text-blue-500 mt-2"
-          >
-            {isRegistering
-              ? "Hai già un account? Accedi"
-              : "Non hai un account? Registrati"}
-          </button>
-        </form>
-      ) : (
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4">Bentornato, {user.email}</h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default AuthComponent;
-
-login 4/5
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  loginUser,
-  registerUser,
-  logoutUser,
-  useAuth,
-} from "../API/firebaseAuth";
-import { toast } from "react-toastify";
-
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  console.log(user);
-
-  const handleAuth = async (e) => {
-    e.preventDefault();
-
-    if (email && password) {
-      try {
-        let authenticatedUser;
-        if (isRegistering) {
-          authenticatedUser = await registerUser(email, password);
-          if (authenticatedUser) {
-            toast.success(
-              "Registrazione effettuata con successo! Puoi ora effettuare il login."
-            );
-            setIsRegistering(false); // Torna alla schermata di login
-          }
-        } else {
-          authenticatedUser = await loginUser(email, password);
-          if (authenticatedUser) {
-            toast.success("Login effettuato con successo!");
-            navigate("/homepage");
-          } else {
-            toast.error("Login fallito. Controlla le tue credenziali.");
-          }
-        }
-      } catch (error) {
-        // Gestisci gli errori specifici per il login e la registrazione
-        if (isRegistering) {
-          toast.error("Errore durante la registrazione. Riprova.");
-        } else {
-          toast.error("Errore durante il login. Controlla le tue credenziali.");
-        }
-        console.error("Errore:", error.message);
-      }
-    } else {
-      toast.error("Email o password non validi!");
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      toast.success("Logout effettuato con successo!");
-      navigate("/homepage");
-    } catch (error) {
-      toast.error("Errore durante il logout. Riprova.");
-      console.error("Errore durante il logout:", error);
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {!user ? (
-        <form
-          onSubmit={handleAuth}
-          className="bg-white p-8 rounded shadow-md w-80"
-        >
-          <h2 className="text-2xl font-bold mb-4">
-            {isRegistering ? "Registrati" : "Login"}
-          </h2>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-          >
-            {isRegistering ? "Registrati" : "Login"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsRegistering((prev) => !prev)}
-            className="text-blue-500 mt-2"
-          >
-            {isRegistering
-              ? "Hai già un account? Accedi"
-              : "Non hai un account? Registrati"}
-          </button>
-        </form>
-      ) : (
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4">Bentornato, {user.email}</h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red text-white py-2 px-4 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Login;
-//////////////////////////////////////
-navbar
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
-import { toast } from "react-toastify"; // Importa la libreria toast
-
-const menulist = [
-  {
-    name: "Home",
-    path: "/homepage",
-  },
-  {
-    name: "Log-in",
-    path: "/login",
-  },
-];
-
-const Navbar = () => {
-  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout(null);
-    toast.error("Logout effettuato!");
-    navigate("/homepage");
-  };
-  const handleClearLocalStorage = () => {
-    localStorage.clear();
-    toast.success("LocalStorage svuotato con successo!");
-    navigate("/homepage");
-  };
-
-  return (
-    <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
-      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
-        {menulist.map((item, index) => (
-          <li key={index} className="text-center sm:text-left">
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? "font-bold text-green underline" : ""
-              }
-              to={item.path}
-            >
-              {item.name}
-            </NavLink>
-          </li>
-        ))}
-        {user && (
-          <>
-            <li className="text-center sm:text-left">
-              <span className="text-white">Benvenuto {user} </span>
-            </li>
-            <li className="text-center sm:text-left">
-              <button onClick={handleLogout} className="text-red underline">
-                Logout
-              </button>
-            </li>
-            <li className="text-center sm:text-left">
-              <button onClick={handleClearLocalStorage} className="text-green">
-                Clear LocalStorage
-              </button>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
-  );
-};
-
-export default Navbar;
-
-////////////////////
-authcontext con localStorage
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-const AuthContext = createContext();
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Stato dell'utente
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  const login = (username) => {
-    setUser(username);
-    localStorage.setItem("user", JSON.stringify(username));
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-navbar/rotta
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
-import { toast } from "react-toastify"; // Importa la libreria toast
-import { logoutUser } from "../../API/firebaseAuth";
-
-const menulist = [
-  {
-    name: "Home",
-    path: "/homepage",
-  },
-  {
-    name: "Log-in",
-    path: "/login",
-  },
-];
-
-const Navbar = () => {
-  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    toast.error("Logout effettuato!");
-    navigate("/homepage");
-  };
-
-  return (
-    <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
-      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
-        {menulist.map((item, index) => (
-          <li key={index} className="text-center sm:text-left">
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? "font-bold text-green underline" : ""
-              }
-              to={item.path}
-            >
-              {item.name}
-            </NavLink>
-          </li>
-        ))}
-        {user && (
-          <>
-            <li className="text-center sm:text-left">
-              <span className="text-white">
-                Benvenuto, {user.email.split("@")[0]}{" "}
-              </span>{" "}
-              {/* Mostra il nome utente */}
-            </li>
-            <li className="text-center sm:text-left">
-              <button onClick={handleLogout} className="text-red underline">
-                Logout
-              </button>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
-  );
-};
-
-export default Navbar;
-
-
-
+export default Card;

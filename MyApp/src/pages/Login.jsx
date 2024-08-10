@@ -112,7 +112,7 @@ const Login = () => {
       ) : (
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">
-            Bentornato, {user.email.split("@")[0]}
+            Benvenuto, {user.email.split("@")[0]}
           </h2>{" "}
           {/* Mostra solo il nome */}
           <button
