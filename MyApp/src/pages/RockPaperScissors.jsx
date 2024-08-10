@@ -1,7 +1,7 @@
 const RockPaperScissors = () => {
   return (
     <div>
-      <h1>Rock Paper Scissors</h1>
+      <h1>Rock Paper Scissors coming soon...</h1>
     </div>
   );
 };
