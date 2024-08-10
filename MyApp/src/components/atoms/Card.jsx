@@ -7,20 +7,36 @@ import { FaStar } from "react-icons/fa";
 import {
   saveVoteToFirestore,
   getVotesFromFirestore,
-} from "../../API/firestore"; // Importa le nuove funzioni
+  getTotalVotes,
+} from "../../API/firestore";
 
 const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [rating, setRating] = useState(0);
+  const [selectedVote, setSelectedVote] = useState(0); // Nuovo stato per il voto selezionato
+  const [totalVotes, setTotalVotes] = useState(0); // Nuovo stato per il totale dei voti
   const { user } = useAuth();
 
-  const handleVote = async (value) => {
+  // Funzione per gestire il click sulle stelle
+  const handleStarClick = (value) => {
     if (!user) {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
-    setRating(value);
-    await saveVoteToFirestore(projectId, user.uid, value); // Salva il voto nel Firestore
+    setSelectedVote(value); // Imposta il voto selezionato
+  };
+
+  // Funzione per confermare il voto
+  const handleVote = async () => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
+    }
+    setRating(selectedVote); // Aggiorna il rating con il voto selezionato
+    await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
     toast.success("Voto registrato con successo!");
+
+    const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
+    setTotalVotes(updatedTotalVotes);
   };
 
   useEffect(() => {
@@ -29,8 +45,12 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
         const savedVote = await getVotesFromFirestore(projectId, user.uid);
         if (savedVote) {
           setRating(savedVote);
+          setSelectedVote(savedVote); // Imposta anche il voto selezionato
         }
       }
+
+      const votesCount = await getTotalVotes(projectId);
+      setTotalVotes(votesCount); // Imposta il totale dei voti
     };
 
     fetchVotes();
@@ -75,10 +95,8 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
               <FaStar
                 key={star}
                 size={24}
-                onClick={() => handleVote(star)}
-                onMouseEnter={() => setRating(star)}
-                onMouseLeave={() => setRating((prevRating) => prevRating)}
-                color={star <= rating ? "#ffc107" : "#e4e5e9"}
+                onClick={() => handleStarClick(star)} // Seleziona il voto
+                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"} // Colora le stelle selezionate
                 style={{
                   cursor: "pointer",
                   transition: "color 200ms",
@@ -87,9 +105,18 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             ))}
           </div>
 
+          {/* Pulsante Vota */}
+          <button
+            onClick={handleVote}
+            className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-700"
+            disabled={!selectedVote} // Disabilitato se non è stato selezionato nessun voto
+          >
+            Vota
+          </button>
+
           {/* Mostra il punteggio attuale */}
-          <div className="text-gray-700 text-base mb-2">
-            Punteggio attuale: {rating}
+          <div className="text-gray-700 text-base mt-4 mb-2">
+            Punteggio attuale: {rating} ({totalVotes} voti)
           </div>
           <div className="flex items-center space-x-2">
             <span
