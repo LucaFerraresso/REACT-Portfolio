@@ -2,39 +2,37 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../API/firebaseAuth"; // Non importiamo più logoutUser qui, lo prendiamo dal contesto
 import { toast } from "react-toastify";
-import { useAuth } from "../useContext/AuthContext"; // Assicurati che il percorso sia corretto
+import { useAuth } from "../useContext/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState(""); // Stato per l'email
-  const [password, setPassword] = useState(""); // Stato per la password
-  const [isRegistering, setIsRegistering] = useState(false); // Stato per la registrazione
-  const navigate = useNavigate(); // Hook per la navigazione
-  const { user, logout } = useAuth(); // Otteniamo l'utente e la funzione di logout dal contesto
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const handleAuth = async (e) => {
-    e.preventDefault(); // Previene il comportamento predefinito del form
+    e.preventDefault();
 
     if (email && password) {
-      // Controlla se email e password sono forniti
       try {
         let authenticatedUser;
 
         if (isRegistering) {
-          authenticatedUser = await registerUser(email, password); // Prova a registrare l'utente
+          authenticatedUser = await registerUser(email, password);
           if (authenticatedUser) {
-            // Qui non dobbiamo navigare o loggare l'utente
             toast.success(
-              "Registrazione effettuata con successo! Puoi ora effettuare il login."
+              "Registrazione effettuata con successo! Login Automatico."
             );
-            setIsRegistering(false); // Passa alla schermata di login
+            setIsRegistering(false);
           } else {
             toast.error("Registrazione fallita. Riprova.");
           }
         } else {
-          authenticatedUser = await loginUser(email, password); // Prova a effettuare il login
+          authenticatedUser = await loginUser(email, password);
           if (authenticatedUser) {
             toast.success("Login effettuato con successo!");
-            navigate("/homepage"); // Naviga alla homepage se il login ha successo
+            navigate("/homepage");
           } else {
             toast.error("Login fallito. Controlla le tue credenziali.");
           }
@@ -44,7 +42,7 @@ const Login = () => {
         console.error("Errore:", error.message);
       }
     } else {
-      toast.error("Email o password non validi!"); // Messaggio di errore se i campi sono vuoti
+      toast.error("Email o password non validi!");
     }
   };
 
@@ -61,21 +59,20 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {!user ? ( // Se l'utente non è loggato
+      {!user ? (
         <form
           onSubmit={handleAuth}
           className="bg-white p-8 rounded shadow-md w-80"
         >
           <h2 className="text-2xl font-bold mb-4">
-            {isRegistering ? "Registrati" : "Login"} // Mostra "Registrati" o
-            "Login"
+            {isRegistering ? "Registrati" : "Login"}
           </h2>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Email</label>
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Aggiorna l'email nello stato
+              onChange={(e) => setEmail(e.target.value)}
               className="border border-gray-300 rounded p-2 w-full"
               required
             />
@@ -85,7 +82,7 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Aggiorna la password nello stato
+              onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-300 rounded p-2 w-full"
               required
             />
@@ -94,11 +91,11 @@ const Login = () => {
             type="submit"
             className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
           >
-            {isRegistering ? "Registrati" : "Login"} // Testo del pulsante
+            {isRegistering ? "Registrati" : "Login"}
           </button>
           <button
             type="button"
-            onClick={() => setIsRegistering((prev) => !prev)} // Passa tra registrazione e login
+            onClick={() => setIsRegistering((prev) => !prev)}
             className="text-blue-500 mt-2"
           >
             {isRegistering
@@ -109,7 +106,7 @@ const Login = () => {
       ) : (
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">
-            Benvenuto, {user.email.split("@")[0]} // Mostra il nome utente
+            Benvenuto, {user.email.split("@")[0]}
           </h2>
           <button
             onClick={handleLogout}
