@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { getExpensesFirestore } from "../API/firestore";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const ExpensesChart = () => {
   const [data, setData] = useState([]);
@@ -12,7 +10,6 @@ const ExpensesChart = () => {
     const fetchData = async () => {
       try {
         const expensesData = await getExpensesFirestore();
-
         const daysOrder = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
         const orderedData = expensesData.sort((a, b) => {
           return (
@@ -20,7 +17,6 @@ const ExpensesChart = () => {
             daysOrder.indexOf(b.day.toLowerCase())
           );
         });
-
         setData(orderedData);
         const max = Math.max(...orderedData.map((item) => item.amount));
         setMaxAmount(max);
@@ -54,11 +50,11 @@ const ExpensesChart = () => {
   }
 
   return (
-    <div className="max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
       <h1 className="text-dark-brown text-2xl font-bold mb-6">
         Spending - Last 7 days
       </h1>
-      <div className="flex space-x-2 md:space-x-4 h-48 items-end">
+      <div className="flex space-x-4 h-48">
         {data.map((item, index) => {
           console.log("item", item);
           return (
@@ -66,19 +62,14 @@ const ExpensesChart = () => {
               <div
                 className={`relative ${
                   item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
-                } w-full rounded-md transition-all duration-500 ease-in-out transform hover:scale-105`}
-                style={{
-                  height: `${(item.amount / maxAmount) * 100}%`,
-                  minHeight: "10px",
-                }}
+                } h-0 w-full rounded-md transition-all duration-300`}
+                style={{ height: `${(item.amount / maxAmount) * 100}% ` }}
               >
-                <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
-                  ${item.amount.toFixed(2)}
+                <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 hover:opacity-100">
+                  ${item.amount}
                 </span>
               </div>
-              <span className="text-medium-brown mt-2 capitalize text-xs md:text-sm">
-                {item.day}
-              </span>
+              <span className="text-medium-brown mt-2">{item.day}</span>
             </div>
           );
         })}
