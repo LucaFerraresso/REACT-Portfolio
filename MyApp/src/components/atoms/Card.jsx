@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 import {
   saveVoteToFirestore,
   getVotesFromFirestore,
-} from "../firebase/voteService"; // Importa le nuove funzioni
+} from "../../API/firestore"; // Importa le nuove funzioni
 
 const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [rating, setRating] = useState(0);

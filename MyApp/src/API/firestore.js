@@ -46,7 +46,7 @@ export async function saveVoteToFirestore(projectId, userId, vote) {
   const voteDocRef = doc(votesCollection, `${projectId}_${userId}`);
 
   try {
-    const docSnapshot = await getDoc(voteDocRef);
+    const docSnapshot = await getDocs(voteDocRef);
 
     if (docSnapshot.exists()) {
       // Se il documento esiste già, aggiorniamo il voto
