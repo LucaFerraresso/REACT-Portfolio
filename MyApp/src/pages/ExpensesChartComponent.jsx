@@ -24,9 +24,7 @@ const ExpensesChart = () => {
 
         setData(orderedData);
         const max = Math.max(...orderedData.map((item) => item.amount));
-
         setMaxAmount(max);
-        console.log("height", `${(item.amount / maxAmount) * 100}%`);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching expenses:", error);
@@ -62,7 +60,8 @@ const ExpensesChart = () => {
         Spending - Last 7 days
       </h1>
       <div className="flex space-x-2 md:space-x-4 h-48 items-end">
-        {data.map((item, index) => (
+        {data.map((item, index) => {
+          console.log("item", item);
           <div key={index} className="flex-1 flex flex-col items-center">
             <div
               className={`relative ${
@@ -80,8 +79,8 @@ const ExpensesChart = () => {
             <span className="text-medium-brown mt-2 capitalize text-xs md:text-sm">
               {item.day}
             </span>
-          </div>
-        ))}
+          </div>;
+        })}
       </div>
       <div className="border-t-2 border-cream mt-6 pt-4">
         <div className="flex justify-between">

@@ -15,6 +15,10 @@ export async function getProductsFireStore() {
     ...doc.data(),
   }));
   console.log(productsList);
+  productsList.forEach((product) => {
+    console.log("day", product.day, "amount", product.amount);
+  });
+
   return productsList;
 }
 
