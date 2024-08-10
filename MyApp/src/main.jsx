@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "tailwindcss/tailwind.css";
+import { Navigate } from "react-router-dom";
 //default setup
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage.jsx";
@@ -21,11 +22,13 @@ import InteractivePricingSlider from "./pages/InteractivePricingSlider.jsx";
 import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
 import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
+import RockPaperScissors from "./pages/RockPaperScissors.jsx";
+//navbar and footer links
 import Contacts from "./pages/Contacts.jsx";
 import Login from "./pages/Login.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
-import { Navigate } from "react-router-dom";
+import { AuthProvider } from "./useContext/AuthContext.jsx";
 //toast library
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +36,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import firebaseConfig from "./firebaseConfig.js";
-import { AuthProvider } from "./useContext/AuthContext.jsx";
 //authContext
 export { AuthContext } from "./useContext/AuthContext.jsx";
 
@@ -106,6 +108,10 @@ const router = createBrowserRouter([
       {
         path: "/exercise/expenseschartcomponent",
         element: <ExpensesChartComponent />,
+      },
+      {
+        path: "/exercise/rockpaperscissorsmaster",
+        element: <RockPaperScissors />,
       },
       {
         path: "/contacts",
