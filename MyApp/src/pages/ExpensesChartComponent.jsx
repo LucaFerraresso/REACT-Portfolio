@@ -68,7 +68,7 @@ const ExpensesChart = () => {
               } w-full rounded-md transition-all duration-500 ease-in-out transform hover:scale-105`}
               style={{
                 height: `${(item.amount / maxAmount) * 100}%`,
-                minHeight: "10px", // Altezza minima per le colonne
+                minHeight: "10px",
               }}
             >
               <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">

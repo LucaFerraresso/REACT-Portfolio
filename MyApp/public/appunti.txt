@@ -23,7 +23,6 @@ const ExpensesChart = () => {
         });
 
         setData(orderedData);
-
         const max = Math.max(...orderedData.map((item) => item.amount));
         setMaxAmount(max);
         setLoading(false);
@@ -39,7 +38,7 @@ const ExpensesChart = () => {
   if (loading) {
     return (
       <div className="max-w-md mx-auto p-6 rounded-lg">
-        <Skeleton height={20} width={180} />
+        <Skeleton height={30} width={200} />
         <div className="flex space-x-4 h-48 mt-6">
           {[...Array(7)].map((_, index) => (
             <Skeleton key={index} height={150} width={40} />
@@ -56,27 +55,27 @@ const ExpensesChart = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
+    <div className="max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
       <h1 className="text-dark-brown text-2xl font-bold mb-6">
         Spending - Last 7 days
       </h1>
-      <div className="flex space-x-4 h-48 items-end">
+      <div className="flex space-x-2 md:space-x-4 h-48 items-end">
         {data.map((item, index) => (
           <div key={index} className="flex-1 flex flex-col items-center">
             <div
-              className={`relative flex items-end justify-center ${
+              className={`relative ${
                 item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
-              } w-full rounded-md transition-all duration-700 ease-in-out transform hover:scale-105`}
+              } w-full rounded-md transition-all duration-500 ease-in-out transform hover:scale-105`}
               style={{
                 height: `${(item.amount / maxAmount) * 100}%`,
-                minHeight: "10px",
+                minHeight: "10px", // Altezza minima per le colonne
               }}
             >
               <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
                 ${item.amount.toFixed(2)}
               </span>
             </div>
-            <span className="text-medium-brown mt-2 capitalize">
+            <span className="text-medium-brown mt-2 capitalize text-xs md:text-sm">
               {item.day}
             </span>
           </div>
