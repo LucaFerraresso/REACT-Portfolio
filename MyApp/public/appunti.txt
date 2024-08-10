@@ -67,7 +67,8 @@ const ExpensesChart = () => {
                 } w-full rounded-md transition-all duration-300`}
                 style={{
                   height: `${(item.amount / maxAmount) * 100}%`,
-                  maxHeight: "150px",
+                  maxHeight: "250px",
+                  width: "60px",
                 }}
               >
                 <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 hover:opacity-100">
