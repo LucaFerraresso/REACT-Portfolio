@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getExpensesFirestore } from "../API/firestore";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ExpensesChart = () => {
   const [data, setData] = useState([]);
@@ -10,8 +12,19 @@ const ExpensesChart = () => {
     const fetchData = async () => {
       try {
         const expensesData = await getExpensesFirestore();
-        setData(expensesData);
-        const max = Math.max(...expensesData.map((item) => item.amount));
+
+        // Ordina i dati in base ai giorni della settimana
+        const daysOrder = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+        const orderedData = expensesData.sort((a, b) => {
+          return (
+            daysOrder.indexOf(a.day.toLowerCase()) -
+            daysOrder.indexOf(b.day.toLowerCase())
+          );
+        });
+
+        setData(orderedData);
+
+        const max = Math.max(...orderedData.map((item) => item.amount));
         setMaxAmount(max);
         setLoading(false);
       } catch (error) {
@@ -25,8 +38,19 @@ const ExpensesChart = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-48">
-        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-12 w-12"></div>
+      <div className="max-w-md mx-auto p-6 rounded-lg">
+        <Skeleton height={20} width={180} />
+        <div className="flex space-x-4 h-48 mt-6">
+          {[...Array(7)].map((_, index) => (
+            <Skeleton key={index} height={150} width={40} />
+          ))}
+        </div>
+        <div className="mt-6 pt-4">
+          <Skeleton height={20} width={120} />
+          <Skeleton height={32} width={180} className="mt-2" />
+          <Skeleton height={20} width={60} className="mt-4" />
+          <Skeleton height={20} width={140} className="mt-1" />
+        </div>
       </div>
     );
   }
@@ -52,7 +76,9 @@ const ExpensesChart = () => {
                 ${item.amount.toFixed(2)}
               </span>
             </div>
-            <span className="text-medium-brown mt-2">{item.day}</span>
+            <span className="text-medium-brown mt-2 capitalize">
+              {item.day}
+            </span>
           </div>
         ))}
       </div>
