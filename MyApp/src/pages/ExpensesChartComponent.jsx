@@ -57,7 +57,7 @@ const ExpensesChart = () => {
         <h1 className="text-dark-brown text-2xl font-bold mb-10">
           Spending - Last 7 days
         </h1>
-        <div className="flex justify-between h-48 items-end">
+        <div className="flex flex-wrap justify-between h-48 ">
           {data.map((item, index) => {
             console.log("item", item);
             return (
