@@ -37,7 +37,7 @@ const Navbar = () => {
           <li
             key={index}
             className={`text-center sm:text-left ${
-              item.name === "Log-in" ? "ml-auto sm:ml-auto" : ""
+              item.name === "Log-in" ? "mr-[150px] sm:ml-auto" : ""
             }`}
           >
             <NavLink

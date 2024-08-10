@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  loginUser,
-  registerUser,
-  logoutUser,
-  useAuth,
-} from "../API/firebaseAuth";
+import { loginUser, registerUser, logoutUser } from "../API/firebaseAuth";
 import { toast } from "react-toastify";
+import { useAuth } from "../../useContext/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
-  console.log("Utente corrente:", user); // Verifica il valore di user
+  const { user, logout } = useAuth(); // Aggiungi la funzione di logout dal contesto
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -22,6 +17,7 @@ const Login = () => {
     if (email && password) {
       try {
         let authenticatedUser;
+
         if (isRegistering) {
           authenticatedUser = await registerUser(email, password);
           if (authenticatedUser) {
@@ -40,11 +36,7 @@ const Login = () => {
           }
         }
       } catch (error) {
-        if (isRegistering) {
-          toast.error("Errore durante la registrazione. Riprova.");
-        } else {
-          toast.error("Errore durante il login. Controlla le tue credenziali.");
-        }
+        toast.error("Errore durante l'operazione. Riprova.");
         console.error("Errore:", error.message);
       }
     } else {
@@ -54,7 +46,7 @@ const Login = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
+      await logout(); // Usa la funzione di logout dal contesto
       toast.success("Logout effettuato con successo!");
       navigate("/login");
     } catch (error) {
@@ -113,14 +105,12 @@ const Login = () => {
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">
             Benvenuto, {user.email.split("@")[0]}
-          </h2>{" "}
-          {/* Mostra solo il nome */}
+          </h2>
           <button
             onClick={handleLogout}
-            className="bg-green text-white py-2 px-4 rounded hover:bg-green"
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
           >
-            {" "}
-            Thank's for your registration! You can LOG-IN now
+            Logout
           </button>
         </div>
       )}

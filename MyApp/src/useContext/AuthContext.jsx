@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig"; // Assicurati che il percorso sia corretto
+import { logoutUser as FirebaseLogoutUser } from "../API/firebaseAuth";
 
 const AuthContext = createContext();
 
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await logoutUser(); // Assicurati di utilizzare la funzione corretta
+      await FirebaseLogoutUser();
     } catch (error) {
       console.error("Errore durante il logout: ", error);
     }
