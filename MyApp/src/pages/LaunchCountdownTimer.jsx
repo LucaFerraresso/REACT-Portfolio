@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
-
 const CountdownTimer = () => {
   const initialState = {
     days: "99",
@@ -9,7 +8,17 @@ const CountdownTimer = () => {
     seconds: "59",
   };
 
-  const [time, setTime] = useState(initialState);
+  const getInitialTime = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const days = urlParams.get("days") || initialState.days;
+    const hours = urlParams.get("hours") || initialState.hours;
+    const minutes = urlParams.get("minutes") || initialState.minutes;
+    const seconds = urlParams.get("seconds") || initialState.seconds;
+
+    return { days, hours, minutes, seconds };
+  };
+
+  const [time, setTime] = useState(getInitialTime);
   const [isRunning, setIsRunning] = useState(true);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,12 +99,14 @@ const CountdownTimer = () => {
 
   const handleSetTimer = () => {
     setIsRunning(false);
-    setTime({
+    const updatedTime = {
       days: inputValues.days.toString().padStart(2, "0"),
       hours: inputValues.hours.toString().padStart(2, "0"),
       minutes: inputValues.minutes.toString().padStart(2, "0"),
       seconds: inputValues.seconds.toString().padStart(2, "0"),
-    });
+    };
+    setTime(updatedTime);
+    updateURL(updatedTime);
     setIsRunning(true);
     setIsCompleted(false);
     setIsModalOpen(false);
@@ -105,6 +116,16 @@ const CountdownTimer = () => {
       minutes: "",
       seconds: "",
     });
+  };
+
+  const updateURL = (updatedTime) => {
+    const { days, hours, minutes, seconds } = updatedTime;
+    const url = new URL(window.location);
+    url.searchParams.set("days", days);
+    url.searchParams.set("hours", hours);
+    url.searchParams.set("minutes", minutes);
+    url.searchParams.set("seconds", seconds);
+    window.history.pushState({}, "", url);
   };
 
   const handleInputChange = (e) => {
