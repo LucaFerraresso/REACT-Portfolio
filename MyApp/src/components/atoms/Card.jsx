@@ -45,7 +45,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
 
       const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
       setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
-      updateAvarangeRating();
+      updateAverageRating();
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
       //console.error("Errore nel salvataggio del voto:", error);
