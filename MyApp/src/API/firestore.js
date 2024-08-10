@@ -42,7 +42,7 @@ export async function getExpensesFirestore() {
 
 // Funzione per salvare o aggiornare i voti nel Firestore
 export async function saveVoteToFirestore(projectId, userId, vote) {
-  const voteDocRef = doc(db, `votes`, `${projectId}_${userId}`);
+  const voteDocRef = doc(db, "votes", `${projectId}_${userId}`);
 
   try {
     // Utilizza setDoc per creare o aggiornare il documento con un ID specifico
@@ -61,7 +61,7 @@ export async function saveVoteToFirestore(projectId, userId, vote) {
 
 // Funzione per ottenere il voto di un utente per un progetto specifico da Firestore
 export async function getVotesFromFirestore(projectId, userId) {
-  const voteDocRef = doc(db, `votes`, `${projectId}_${userId}`);
+  const voteDocRef = doc(db, "votes", `${projectId}_${userId}`);
 
   try {
     const docSnapshot = await getDoc(voteDocRef);
@@ -80,6 +80,9 @@ export async function getVotesFromFirestore(projectId, userId) {
 
 // Funzione per ottenere il numero totale di voti per un progetto
 export async function getTotalVotes(projectId) {
+  if (!projectId) {
+    throw new Error("Project ID is required");
+  }
   const votesCollection = collection(db, "votes");
   const q = query(votesCollection, where("projectId", "==", projectId));
 

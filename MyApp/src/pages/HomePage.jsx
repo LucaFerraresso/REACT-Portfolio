@@ -5,6 +5,7 @@ import Card from "../components/atoms/Card";
 const HomePage = () => {
   const Exercises = [
     {
+      id: "advice-generator",
       title: "Advice Generator",
       description:
         "The perfect project if you're learning how to interact with 3rd-party APIs. This challenge uses the Advice Slip API to generate random quotes of advice.",
@@ -14,6 +15,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "age-calculator",
       title: "Age Calculator",
       description:
         "This challenge is designed to sharpen your JavaScript and form validation skills. Working with dates in JavaScript can be tricky, so this will be a nice test!",
@@ -23,6 +25,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "contact-form",
       title: "Contact Form",
       description:
         "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice building a form with several input types and validation.",
@@ -32,6 +35,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "mortgage-calculator",
       title: "Mortgage Calculator",
       description:
         "This mortgage calculator is an excellent project for practicing working with forms, client-side validation, and updating the DOM. Remember to focus on accessibility, too!",
@@ -41,6 +45,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "product-list-with-cart",
       title: "Product List with Cart",
       description:
         "Practice updating the UI in multiple places based on user actions. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
@@ -50,6 +55,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "interactive-card-details-form",
       title: "Interactive Credit Card Details Form",
       description:
         "This fun project will be an excellent way to practice DOM manipulation and form validation while also putting your HTML and CSS skills to the test.",
@@ -59,6 +65,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "tip-calculator",
       title: "Tip Calculator",
       description:
         "This small app is perfect for anyone starting to get to grips with JavaScript. The calculator functionality will be a nice test!",
@@ -68,6 +75,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "interactive-pricing-components",
       title: "Interactive Pricing Components",
       description:
         "In this project, you'll build out an interactive pricing component complete with custom range input slider and pricing toggle. A perfect way to test your JS skills!",
@@ -77,6 +85,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "news-letter-sign-up",
       title: "NewsLetter Sign Up",
       description:
         "This will test your skills with basic form structure, validation, and submission. The success state will also be an excellent opportunity to work with DOM manipulation.",
@@ -86,6 +95,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "launch-countdown-timer",
       title: "Launch Countdown Timer",
       description:
         "This will be a fun one! Your challenge is to build this countdown timer. There are lots of small CSS tests in the design as well. So it should keep you busy!",
@@ -95,6 +105,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "expenses-chart-component",
       title: "Expenses Chart Component",
       description:
         "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
@@ -104,6 +115,7 @@ const HomePage = () => {
       initialRating: 0,
     },
     {
+      id: "rock-paper-scissors-master",
       title: "Rock Paper Scissors Master",
       description:
         "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
@@ -145,6 +157,7 @@ const HomePage = () => {
                 link={exercise.link}
                 backgroundImage={exercise.backgroundImage}
                 initialRating={exercise.initialRating}
+                projectId={exercise.id}
               />
             </animated.div>
           );

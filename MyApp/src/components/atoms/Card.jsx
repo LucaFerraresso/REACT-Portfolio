@@ -21,6 +21,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
+
     setSelectedVote(value); // Imposta il voto selezionato
   };
 
@@ -44,7 +45,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
-      console.error("Errore nel salvataggio del voto:", error);
+      //console.error("Errore nel salvataggio del voto:", error);
     }
   };
 
@@ -53,9 +54,12 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       if (user) {
         try {
           const savedVote = await getVotesFromFirestore(projectId, user.uid);
-          if (savedVote) {
+          if (savedVote !== null) {
             setRating(savedVote);
             setSelectedVote(savedVote);
+          } else {
+            setRating(0);
+            setSelectedVote(0);
           }
         } catch (error) {
           console.error("Errore nel recupero del voto:", error);
@@ -86,7 +90,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             <animated.img
               src={backgroundImage}
               alt="Background"
-              className="w-full h-64 object-cover transition-transform duration-300 cursor-pointer"
+              className="w-full h-80 object-cover transition-transform duration-300 cursor-pointer"
               style={imageProps}
               onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
               onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
