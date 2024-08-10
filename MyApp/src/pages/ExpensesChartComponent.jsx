@@ -52,29 +52,29 @@ const ExpensesChart = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
-      <h1 className="text-dark-brown text-2xl font-bold mb-10">
+    <div className="flex flex-col items-center justify-center max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg h-full">
+      <h1 className="text-dark-brown text-2xl font-bold mb-6">
         Spending - Last 7 days
       </h1>
-      <div className="flex flex-wrap justify-between h-48">
+      <div className="flex h-48 items-end space-x-2">
         {data.map((item, index) => {
-          console.log("item", item);
+          const heightPercentage = (item.amount / maxAmount) * 100; // Percentuale di altezza
           return (
-            <div key={index} className="flex-1 flex flex-col items-center mx-1">
+            <div key={index} className="flex-1 flex flex-col items-center">
               <div
                 className={`relative ${
                   item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
                 } w-full rounded-md transition-all duration-300`}
                 style={{
-                  height: `${(item.amount / maxAmount) * 100}%`,
-                  maxHeight: "150px",
+                  height: `${heightPercentage}%`,
+                  minHeight: "10px", // Altezza minima
                 }}
               >
-                <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 hover:opacity-100">
+                <span className="absolute -top-8 bg-dark-brown text-white text-sm px-2 py-1 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
                   ${item.amount}
                 </span>
               </div>
-              <span className="text-medium-brown mt-2 text-xs md:text-sm">
+              <span className="text-medium-brown mt-2 text-xs md:text-sm capitalize">
                 {item.day}
               </span>
             </div>
