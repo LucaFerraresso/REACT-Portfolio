@@ -40,7 +40,6 @@ const Login = () => {
           }
         }
       } catch (error) {
-        // Gestisci gli errori specifici per il login e la registrazione
         if (isRegistering) {
           toast.error("Errore durante la registrazione. Riprova.");
         } else {
@@ -112,11 +111,15 @@ const Login = () => {
         </form>
       ) : (
         <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4">Bentornato, {user.email}</h2>
+          <h2 className="text-2xl font-bold mb-4">
+            Bentornato, {user.email.split("@")[0]}
+          </h2>{" "}
+          {/* Mostra solo il nome */}
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+            className="bg-red text-white py-2 px-4 rounded hover:bg-red"
           >
+            {" "}
             Logout
           </button>
         </div>

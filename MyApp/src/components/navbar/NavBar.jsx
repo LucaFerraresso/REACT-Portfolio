@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
 import { toast } from "react-toastify"; // Importa la libreria toast
+import { logoutUser } from "../../API/firebaseAuth"; // Importa la funzione di logout
 
 const menulist = [
   {
@@ -15,18 +16,17 @@ const menulist = [
 ];
 
 const Navbar = () => {
-  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
+  const { user } = useAuth(); // Recupera l'utente dal contesto
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout(null);
-    toast.error("Logout effettuato!");
-    navigate("/homepage");
-  };
-  const handleClearLocalStorage = () => {
-    localStorage.clear();
-    toast.success("LocalStorage svuotato con successo!");
-    navigate("/homepage");
+  const handleLogout = async () => {
+    try {
+      await logoutUser(); // Chiama la funzione di logout da firebaseAuth
+      toast.success("Logout effettuato!");
+      navigate("/homepage");
+    } catch (error) {
+      toast.error("Errore durante il logout: " + error.message);
+    }
   };
 
   return (
@@ -47,16 +47,13 @@ const Navbar = () => {
         {user && (
           <>
             <li className="text-center sm:text-left">
-              <span className="text-white">Benvenuto {user} </span>
+              <span className="text-white">
+                Benvenuto, {user.email.split("@")[0]}{" "}
+              </span>
             </li>
             <li className="text-center sm:text-left">
               <button onClick={handleLogout} className="text-red underline">
                 Logout
-              </button>
-            </li>
-            <li className="text-center sm:text-left">
-              <button onClick={handleClearLocalStorage} className="text-green">
-                Clear LocalStorage
               </button>
             </li>
           </>

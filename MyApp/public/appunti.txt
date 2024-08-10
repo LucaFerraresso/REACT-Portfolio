@@ -795,6 +795,177 @@ const Login = () => {
 };
 
 export default Login;
+//////////////////////////////////////
+navbar
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
+import { toast } from "react-toastify"; // Importa la libreria toast
+
+const menulist = [
+  {
+    name: "Home",
+    path: "/homepage",
+  },
+  {
+    name: "Log-in",
+    path: "/login",
+  },
+];
+
+const Navbar = () => {
+  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(null);
+    toast.error("Logout effettuato!");
+    navigate("/homepage");
+  };
+  const handleClearLocalStorage = () => {
+    localStorage.clear();
+    toast.success("LocalStorage svuotato con successo!");
+    navigate("/homepage");
+  };
+
+  return (
+    <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menulist.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+        {user && (
+          <>
+            <li className="text-center sm:text-left">
+              <span className="text-white">Benvenuto {user} </span>
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleLogout} className="text-red underline">
+                Logout
+              </button>
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleClearLocalStorage} className="text-green">
+                Clear LocalStorage
+              </button>
+            </li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+////////////////////
+authcontext con localStorage
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+const AuthContext = createContext();
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null); // Stato dell'utente
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const login = (username) => {
+    setUser(username);
+    localStorage.setItem("user", JSON.stringify(username));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+navbar/rotta
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
+import { toast } from "react-toastify"; // Importa la libreria toast
+import { logoutUser } from "../../API/firebaseAuth";
+
+const menulist = [
+  {
+    name: "Home",
+    path: "/homepage",
+  },
+  {
+    name: "Log-in",
+    path: "/login",
+  },
+];
+
+const Navbar = () => {
+  const { user, logout } = useAuth(); // Recupera l'utente dal contesto
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    toast.error("Logout effettuato!");
+    navigate("/homepage");
+  };
+
+  return (
+    <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menulist.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+        {user && (
+          <>
+            <li className="text-center sm:text-left">
+              <span className="text-white">
+                Benvenuto, {user.email.split("@")[0]}{" "}
+              </span>{" "}
+              {/* Mostra il nome utente */}
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleLogout} className="text-red underline">
+                Logout
+              </button>
+            </li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;
 
 
 
