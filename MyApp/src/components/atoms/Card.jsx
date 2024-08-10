@@ -3,52 +3,43 @@ import { Link } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 import { useAuth } from "../../useContext/AuthContext";
 import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
+import {
+  saveVoteToFirestore,
+  getVotesFromFirestore,
+} from "../firebase/voteService"; // Importa le nuove funzioni
 
-const Card = ({ title, description, link, backgroundImage }) => {
-  const [votes, setVotes] = useState([]); // Mantieni una lista dei voti
+const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [rating, setRating] = useState(0);
   const { user } = useAuth();
 
-  // Funzione per calcolare la media dei voti
-  const calculateAverageRating = (votes) => {
-    const sum = votes.reduce((acc, vote) => acc + vote, 0);
-    return votes.length ? (sum / votes.length).toFixed(2) : 0;
-  };
-
-  const handleVote = (value) => {
+  const handleVote = async (value) => {
     if (!user) {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
-    const newVotes = [...votes, value]; // Aggiungi il nuovo voto alla lista
-    setVotes(newVotes);
-    setRating(calculateAverageRating(newVotes)); // Aggiorna il rating con la nuova media
-    //toast.success("Voto registrato con successo!");
+    setRating(value);
+    await saveVoteToFirestore(projectId, user.uid, value); // Salva il voto nel Firestore
+    toast.success("Voto registrato con successo!");
   };
+
+  useEffect(() => {
+    const fetchVotes = async () => {
+      if (user) {
+        const savedVote = await getVotesFromFirestore(projectId, user.uid);
+        if (savedVote) {
+          setRating(savedVote);
+        }
+      }
+    };
+
+    fetchVotes();
+  }, [user, projectId]);
 
   const [imageProps, imageApi] = useSpring(() => ({
     transform: "scale(1)",
     config: { tension: 200, friction: 20 },
   }));
-  const handleConfirmVote = () => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-    } else {
-      toast.success("Voto registrato con successo!");
-    }
-  };
-
-  useEffect(() => {
-    const savedVotes = JSON.parse(localStorage.getItem(`${title}-votes`));
-    if (savedVotes) {
-      setVotes(savedVotes);
-      setRating(calculateAverageRating(savedVotes));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(`${title}-votes`, JSON.stringify(votes));
-  }, [votes]);
 
   return (
     <div className="w-[300px] h-[400px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
@@ -58,7 +49,7 @@ const Card = ({ title, description, link, backgroundImage }) => {
             <animated.img
               src={backgroundImage}
               alt="Background"
-              className="w-full h-40 md:h-48 lg:h-60 object-cover transition-transform duration-300 cursor-pointer"
+              className="w-full h-60 md:h-72 lg:h-80 object-cover transition-transform duration-300 cursor-pointer"
               style={imageProps}
               onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
               onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
@@ -79,45 +70,21 @@ const Card = ({ title, description, link, backgroundImage }) => {
           <h1 className="text-gray-900 text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
-          <div className="flex items-center space-x-2 mb-4">
-            {/* Aggiungi pulsanti per il voto */}
-            <button
-              onClick={() => handleVote(1)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              1
-            </button>
-            <button
-              onClick={() => handleVote(2)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              2
-            </button>
-            <button
-              onClick={() => handleVote(3)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              3
-            </button>
-            <button
-              onClick={() => handleVote(4)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              4
-            </button>
-            <button
-              onClick={() => handleVote(5)}
-              className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-            >
-              5
-            </button>
-
-            <button
-              onClick={handleConfirmVote}
-              className="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-600"
-            >
-              Vota
-            </button>
+          <div className="flex items-center space-x-1 mb-4">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <FaStar
+                key={star}
+                size={24}
+                onClick={() => handleVote(star)}
+                onMouseEnter={() => setRating(star)}
+                onMouseLeave={() => setRating((prevRating) => prevRating)}
+                color={star <= rating ? "#ffc107" : "#e4e5e9"}
+                style={{
+                  cursor: "pointer",
+                  transition: "color 200ms",
+                }}
+              />
+            ))}
           </div>
 
           {/* Mostra il punteggio attuale */}
