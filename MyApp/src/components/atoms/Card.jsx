@@ -21,7 +21,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       toast.error("Devi effettuare il login per votare!");
       return;
     }
-    setSelectedVote(value);
+    setSelectedVote(value); // Imposta il voto selezionato
   };
 
   const handleVote = async () => {
@@ -36,12 +36,12 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
     }
 
     try {
-      await saveVoteToFirestore(projectId, user.uid, selectedVote);
-      setRating(selectedVote);
+      await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
+      setRating(selectedVote); // Aggiorna il rating con il voto selezionato
       toast.success("Voto registrato con successo!");
 
-      const updatedTotalVotes = await getTotalVotes(projectId);
-      setTotalVotes(updatedTotalVotes);
+      const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
+      setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
       console.error("Errore nel salvataggio del voto:", error);
@@ -82,8 +82,6 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
     <div className="w-[300px] h-[450px] md:w-[350px] md:h-[500px] lg:w-[400px] lg:h-[550px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
       <div className="flex flex-col justify-between h-full">
         <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream">
-          {" "}
-          {/* Gradient di sfondo */}
           <Link to={link}>
             <animated.img
               src={backgroundImage}
@@ -113,8 +111,8 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
               <FaStar
                 key={star}
                 size={24}
-                onClick={() => handleStarClick(star)}
-                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"}
+                onClick={() => handleStarClick(star)} // Seleziona il voto
+                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"} // Colora le stelle selezionate
                 style={{
                   cursor: "pointer",
                   transition: "color 200ms",
