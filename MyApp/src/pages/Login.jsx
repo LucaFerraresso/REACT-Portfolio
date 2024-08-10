@@ -117,10 +117,10 @@ const Login = () => {
           {/* Mostra solo il nome */}
           <button
             onClick={handleLogout}
-            className="bg-red text-white py-2 px-4 rounded hover:bg-red"
+            className="bg-green text-white py-2 px-4 rounded hover:bg-green"
           >
             {" "}
-            Logout
+            Thank's for your registration! You can LOG-IN now
           </button>
         </div>
       )}
