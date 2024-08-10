@@ -16,7 +16,8 @@ const menulist = [
 ];
 
 const Navbar = () => {
-  const { user } = useAuth(); // Recupera l'utente dal contesto
+  // Recupera l'utente e lo stato di caricamento dal contesto
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -33,7 +34,12 @@ const Navbar = () => {
     <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
       <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
         {menulist.map((item, index) => (
-          <li key={index} className="text-center sm:text-left">
+          <li
+            key={index}
+            className={`text-center sm:text-left ${
+              item.name === "Log-in" ? "ml-auto" : ""
+            }`}
+          >
             <NavLink
               className={({ isActive }) =>
                 isActive ? "font-bold text-green underline" : ""
@@ -44,7 +50,9 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
-        {user && (
+
+        {/* Mostra il benvenuto solo se l'utente è presente e loading è falso */}
+        {!loading && user && (
           <>
             <li className="text-center sm:text-left">
               <span className="text-white">
