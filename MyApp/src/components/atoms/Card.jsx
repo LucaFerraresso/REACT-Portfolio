@@ -69,7 +69,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             <animated.img
               src={backgroundImage}
               alt="Background"
-              className="w-full h-60 md:h-72 lg:h-80 object-cover transition-transform duration-300 cursor-pointer"
+              className="w-full h-[45%] md:h-72 lg:h-80 object-cover transition-transform duration-300 cursor-pointer"
               style={imageProps}
               onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
               onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
