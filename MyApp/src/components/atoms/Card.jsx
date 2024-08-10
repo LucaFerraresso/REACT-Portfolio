@@ -149,7 +149,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
           <div className="text-gray-700 text-base mt-2">
             Media voti: {averageRating} ({totalVotes} voti)
           </div>
-          <div className="flex items-center space-x-1 mt-2">
+          <div className="flex items-center space-x-1 mt-2 mb-2">
             {Array.from({ length: Math.round(averageRating) }, (_, index) => (
               <FaStar key={index} size={24} color="#ffc107" />
             ))}
