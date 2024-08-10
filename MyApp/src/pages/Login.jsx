@@ -14,6 +14,7 @@ const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  console.log("Utente corrente:", user); // Verifica il valore di user
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -58,7 +59,7 @@ const Login = () => {
       toast.success("Logout effettuato con successo!");
       navigate("/login");
     } catch (error) {
-      toast.error("Errore durante il logout. Riprova.");
+      toast.error("Errore durante il logout: " + error.message);
       console.error("Errore durante il logout:", error);
     }
   };

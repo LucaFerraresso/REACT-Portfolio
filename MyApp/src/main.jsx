@@ -134,8 +134,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <CartProvider>
         <RouterProvider router={router} />
-        <ToastContainer />
       </CartProvider>
     </AuthProvider>
+    <ToastContainer />
   </>
 );
