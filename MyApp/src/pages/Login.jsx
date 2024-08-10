@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, logoutUser, useAuth } from "../firebaseauth";
+import { loginUser, logoutUser, useAuth } from "../API/firebaseAuth";
 import { toast } from "react-toastify";
 
 const Login = () => {
