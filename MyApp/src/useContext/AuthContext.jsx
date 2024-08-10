@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../API/firebaseAuth"; // Assicurati che il percorso sia corretto
+//import { auth } from "../API/firebaseAuth"; // Assicurati che il percorso sia corretto
 
 const AuthContext = createContext();
 

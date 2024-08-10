@@ -2,7 +2,7 @@ import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-export const auth = getAuth();
+const auth = getAuth();
 
 export async function loginUser(email, password) {
   try {
