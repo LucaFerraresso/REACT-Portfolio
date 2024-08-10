@@ -8,7 +8,7 @@ import {
 } from "../API/firebaseAuth";
 import { toast } from "react-toastify";
 
-const AuthComponent = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
@@ -22,14 +22,15 @@ const AuthComponent = () => {
       try {
         let authenticatedUser;
         if (isRegistering) {
-          authenticatedUser = await registerUser(email, password); // Usa registerUser per registrare l'utente
+          authenticatedUser = await registerUser(email, password);
           if (authenticatedUser) {
             toast.success(
               "Registrazione effettuata con successo! Puoi ora effettuare il login."
             );
+            setIsRegistering(false); // Torna alla schermata di login
           }
         } else {
-          authenticatedUser = await loginUser(email, password); // Usa loginUser per autenticare l'utente
+          authenticatedUser = await loginUser(email, password);
           if (authenticatedUser) {
             toast.success("Login effettuato con successo!");
             navigate("/homepage");
@@ -38,8 +39,13 @@ const AuthComponent = () => {
           }
         }
       } catch (error) {
-        toast.error("Errore durante l'autenticazione. Riprova.");
-        console.error("Errore durante l'autenticazione:", error.message);
+        // Gestisci gli errori specifici per il login e la registrazione
+        if (isRegistering) {
+          toast.error("Errore durante la registrazione. Riprova.");
+        } else {
+          toast.error("Errore durante il login. Controlla le tue credenziali.");
+        }
+        console.error("Errore:", error.message);
       }
     } else {
       toast.error("Email o password non validi!");
@@ -118,4 +124,4 @@ const AuthComponent = () => {
   );
 };
 
-export default AuthComponent;
+export default Login;
