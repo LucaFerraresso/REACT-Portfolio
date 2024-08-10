@@ -1,6 +1,7 @@
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
+//import { useAuthState } from "react-firebase-hooks/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 const auth = getAuth();
 
@@ -26,12 +27,6 @@ export async function logoutUser() {
   }
 }
 
-// Puoi usare useAuthState per gestire lo stato dell'utente:
-export function useAuth() {
-  const [user, loading, error] = useAuthState(auth);
-  return { user, loading, error };
-}
-
 // per registrarsi la prima volta
 export async function registerUser(email, password) {
   try {
@@ -46,3 +41,5 @@ export async function registerUser(email, password) {
     return null;
   }
 }
+
+export { auth };

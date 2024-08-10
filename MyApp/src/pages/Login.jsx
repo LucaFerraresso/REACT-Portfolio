@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, registerUser, logoutUser } from "../API/firebaseAuth";
+import { loginUser, registerUser } from "../API/firebaseAuth"; // Non importiamo più logoutUser qui, lo prendiamo dal contesto
 import { toast } from "react-toastify";
-import { useAuth } from "../../useContext/AuthContext";
+import { useAuth } from "../useContext/AuthContext"; // Assicurati che il percorso sia corretto
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
-  const { user, logout } = useAuth(); // Aggiungi la funzione di logout dal contesto
+  const { user, logout } = useAuth(); // Prendiamo il logout dal contesto
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -24,7 +24,9 @@ const Login = () => {
             toast.success(
               "Registrazione effettuata con successo! Puoi ora effettuare il login."
             );
-            setIsRegistering(false); // Torna alla schermata di login
+            setIsRegistering(false); // Passa alla schermata di login
+          } else {
+            toast.error("Registrazione fallita. Riprova.");
           }
         } else {
           authenticatedUser = await loginUser(email, password);
@@ -46,7 +48,7 @@ const Login = () => {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Usa la funzione di logout dal contesto
+      await logout(); // Usa il logout dal contesto
       toast.success("Logout effettuato con successo!");
       navigate("/login");
     } catch (error) {
@@ -108,7 +110,7 @@ const Login = () => {
           </h2>
           <button
             onClick={handleLogout}
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+            className="bg-green text-white py-2 px-4 rounded hover:bg-green-600"
           >
             Logout
           </button>

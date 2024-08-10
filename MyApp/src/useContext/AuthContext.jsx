@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebaseConfig"; // Assicurati che il percorso sia corretto
-import { logoutUser as FirebaseLogoutUser } from "../API/firebaseAuth";
+import { auth } from "../API/firebaseAuth";
+import { logoutUser } from "../API/firebaseAuth";
 
 const AuthContext = createContext();
 
@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await FirebaseLogoutUser();
+      await logoutUser();
     } catch (error) {
       console.error("Errore durante il logout: ", error);
     }
@@ -25,5 +25,9 @@ export const AuthProvider = ({ children }) => {
 
 // Hook personalizzato per utilizzare il contesto
 export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
   return useContext(AuthContext);
 };
