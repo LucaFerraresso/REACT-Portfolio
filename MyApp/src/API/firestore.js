@@ -27,8 +27,5 @@ export async function getExpensesFirestore() {
     ...doc.data(),
   }));
   console.log(expensesList);
-  expensesList.forEach((item) => {
-    console.log("day", item.day, "amount", item.amount);
-  });
   return expensesList;
 }
