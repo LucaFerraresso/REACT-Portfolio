@@ -38,7 +38,7 @@ export async function getExpensesFirestore() {
   return expensesList;
 }
 
-//fetch (post) per saòvare nel database i voti assegnati ai progetti dagli utenti
+//fetch (post) per salvare nel database i voti assegnati ai progetti dagli utenti
 
 // Funzione per salvare i voti nel Firestore
 export async function saveVoteToFirestore(projectId, userId, vote) {
@@ -84,5 +84,19 @@ export async function getVotesFromFirestore(projectId, userId) {
   } catch (error) {
     toast.error("Errore nel recupero del voto");
     return null;
+  }
+}
+
+// Funzione per ottenere il numero totale di voti per un progetto
+export async function getTotalVotes(projectId) {
+  const votesCollection = collection(db, "votes");
+  const q = query(votesCollection, where("projectId", "==", projectId));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.size; // Ritorna il numero totale di documenti
+  } catch (error) {
+    console.error("Errore nel conteggio dei voti: ", error);
+    return 0;
   }
 }
