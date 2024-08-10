@@ -24,8 +24,9 @@ const ExpensesChart = () => {
 
         setData(orderedData);
         const max = Math.max(...orderedData.map((item) => item.amount));
-        console.log("height", `${(item.amount / maxAmount) * 100}%`);
+
         setMaxAmount(max);
+        console.log("height", `${(item.amount / maxAmount) * 100}%`);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching expenses:", error);
