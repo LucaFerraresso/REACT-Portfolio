@@ -1,29 +1,45 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, logoutUser, useAuth } from "../API/firebaseAuth";
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  useAuth,
+} from "../API/firebaseAuth";
 import { toast } from "react-toastify";
 
-const Login = () => {
+const AuthComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth(); // Ottieni l'utente autenticato
+  const { user } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
 
     if (email && password) {
       try {
-        const loggedInUser = await loginUser(email, password); // Usa loginUser per autenticare l'utente
-        if (loggedInUser) {
-          toast.success("Login effettuato con successo!");
-          navigate("/homepage"); // Reindirizza alla homepage
+        let authenticatedUser;
+        if (isRegistering) {
+          authenticatedUser = await registerUser(email, password); // Usa registerUser per registrare l'utente
+          if (authenticatedUser) {
+            toast.success(
+              "Registrazione effettuata con successo! Puoi ora effettuare il login."
+            );
+          }
         } else {
-          toast.error("Login fallito. Controlla le tue credenziali.");
+          authenticatedUser = await loginUser(email, password); // Usa loginUser per autenticare l'utente
+          if (authenticatedUser) {
+            toast.success("Login effettuato con successo!");
+            navigate("/homepage");
+          } else {
+            toast.error("Login fallito. Controlla le tue credenziali.");
+          }
         }
       } catch (error) {
-        toast.error("Errore durante il login. Riprova.");
-        console.error("Errore durante il login:", error);
+        toast.error("Errore durante l'autenticazione. Riprova.");
+        console.error("Errore durante l'autenticazione:", error.message);
       }
     } else {
       toast.error("Email o password non validi!");
@@ -32,9 +48,9 @@ const Login = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Effettua il logout
+      await logoutUser();
       toast.success("Logout effettuato con successo!");
-      navigate("/login"); // Reindirizza alla pagina di login
+      navigate("/login");
     } catch (error) {
       toast.error("Errore durante il logout. Riprova.");
       console.error("Errore durante il logout:", error);
@@ -45,10 +61,12 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {!user ? (
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleAuth}
           className="bg-white p-8 rounded shadow-md w-80"
         >
-          <h2 className="text-2xl font-bold mb-4">Login</h2>
+          <h2 className="text-2xl font-bold mb-4">
+            {isRegistering ? "Registrati" : "Login"}
+          </h2>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Email</label>
             <input
@@ -73,7 +91,16 @@ const Login = () => {
             type="submit"
             className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
           >
-            Login
+            {isRegistering ? "Registrati" : "Login"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsRegistering((prev) => !prev)}
+            className="text-blue-500 mt-2"
+          >
+            {isRegistering
+              ? "Hai già un account? Accedi"
+              : "Non hai un account? Registrati"}
           </button>
         </form>
       ) : (
@@ -91,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AuthComponent;
