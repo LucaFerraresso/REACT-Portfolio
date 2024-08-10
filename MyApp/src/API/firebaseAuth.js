@@ -1,9 +1,7 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 //import { useAuthState } from "react-firebase-hooks/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-
-const auth = getAuth();
 
 export async function loginUser(email, password) {
   try {
@@ -41,5 +39,3 @@ export async function registerUser(email, password) {
     return null;
   }
 }
-
-export { auth };
