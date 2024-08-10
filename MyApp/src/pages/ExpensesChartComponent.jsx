@@ -32,7 +32,6 @@ const ExpensesChart = () => {
     fetchData();
   }, []);
 
-  // Visualizzazione del caricamento
   if (loading) {
     return (
       <div className="max-w-md mx-auto p-6 rounded-lg">
@@ -53,15 +52,13 @@ const ExpensesChart = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg h-full">
+    <div className="flex flex-row items-center justify-center max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg h-full">
       <h1 className="text-dark-brown text-2xl font-bold mb-6 text-center">
         Spending - Last 7 days
       </h1>
       <div className="flex h-48 items-end space-x-2 w-full">
         {" "}
-        {/* 1. Contenitore delle colonne */}
         {data.map((item, index) => {
-          const heightPercentage = (item.amount / maxAmount) * 100; // Calcolo altezza in percentuale
           return (
             <div key={index} className="flex-1 flex flex-col items-center">
               {" "}
@@ -71,7 +68,7 @@ const ExpensesChart = () => {
                   item.amount === maxAmount ? "bg-cyan" : "bg-soft-red"
                 } w-full rounded-md transition-all duration-300`}
                 style={{
-                  height: `${heightPercentage}%`,
+                  height: `${(item.amount / maxAmount) * 100}%`,
                   minHeight: "30px",
                   width: "60px",
                 }}
@@ -82,7 +79,6 @@ const ExpensesChart = () => {
               </div>
               <span className="text-medium-brown mt-2 text-xs md:text-sm text-center">
                 {" "}
-                {/* 3. Giorno */}
                 {item.day}
               </span>
             </div>
