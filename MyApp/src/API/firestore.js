@@ -1,10 +1,12 @@
 import {
   getFirestore,
   collection,
-  getDocs,
-  addDoc,
-  updateDoc,
+  getDoc,
+  setDoc,
   doc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../firebaseConfig";
@@ -38,40 +40,28 @@ export async function getExpensesFirestore() {
   return expensesList;
 }
 
-//fetch (post) per salvare nel database i voti assegnati ai progetti dagli utenti
-
-// Funzione per salvare i voti nel Firestore
+// Funzione per salvare o aggiornare i voti nel Firestore
 export async function saveVoteToFirestore(projectId, userId, vote) {
-  const votesCollection = collection(db, "votes");
-  const voteDocRef = doc(votesCollection, `${projectId}_${userId}`);
+  const voteDocRef = doc(db, "votes", `${projectId}_${userId}`);
 
   try {
-    const docSnapshot = await getDocs(voteDocRef);
-
-    if (docSnapshot.exists()) {
-      // Se il documento esiste già, aggiorniamo il voto
-      await updateDoc(voteDocRef, {
-        vote: vote,
-      });
-    } else {
-      // Se il documento non esiste, lo creiamo
-      await addDoc(votesCollection, {
-        projectId,
-        userId,
-        vote,
-      });
-    }
+    // Utilizza setDoc per creare o aggiornare il documento con un ID specifico
+    await setDoc(voteDocRef, {
+      projectId,
+      userId,
+      vote,
+    });
 
     toast.success("Voto salvato con successo");
   } catch (error) {
-    toast.error("Errore nel salvataggio del voto: ");
+    toast.error("Errore nel salvataggio del voto");
+    console.error("Errore nel salvataggio del voto: ", error);
   }
 }
 
-// Funzione per ottenere i voti esistenti da Firestore
+// Funzione per ottenere il voto di un utente per un progetto specifico da Firestore
 export async function getVotesFromFirestore(projectId, userId) {
-  const votesCollection = collection(db, "votes");
-  const voteDocRef = doc(votesCollection, `${projectId}_${userId}`);
+  const voteDocRef = doc(db, "votes", `${projectId}_${userId}`);
 
   try {
     const docSnapshot = await getDoc(voteDocRef);
@@ -83,6 +73,7 @@ export async function getVotesFromFirestore(projectId, userId) {
     }
   } catch (error) {
     toast.error("Errore nel recupero del voto");
+    console.error("Errore nel recupero del voto: ", error);
     return null;
   }
 }
@@ -94,7 +85,7 @@ export async function getTotalVotes(projectId) {
 
   try {
     const querySnapshot = await getDocs(q);
-    return querySnapshot.size; // Ritorna il numero totale di documenti
+    return querySnapshot.size; // Ritorna il numero totale di documenti (voti)
   } catch (error) {
     console.error("Errore nel conteggio dei voti: ", error);
     return 0;
