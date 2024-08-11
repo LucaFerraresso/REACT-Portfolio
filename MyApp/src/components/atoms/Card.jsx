@@ -120,7 +120,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             FREE
           </div>
         </div>
-        <div className="p-4 h-1/3">
+        <div className="p-4 h-2/3">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
