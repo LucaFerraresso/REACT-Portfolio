@@ -99,7 +99,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   return (
     <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
       <div className="flex flex-col justify-between h-full">
-        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/3">
           <Link to={link}>
             <animated.img
               src={backgroundImage}
@@ -120,13 +120,13 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             FREE
           </div>
         </div>
-        <div className="p-4 h-1/2">
+        <div className="p-4 h-1/3">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
           {/* Sezione di voto condizionata */}
           {user && !hasVoted && (
-            <div>
+            <div className="h-1/3">
               <div className="flex items-center space-x-1 mb-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
@@ -145,7 +145,11 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
               </div>
               <button
                 onClick={handleVote}
-                className="bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200"
+                className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
+                  selectedVote === 0 || hasVoted
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
                 disabled={selectedVote === 0 || hasVoted} // Disabilita il pulsante se il voto è stato già inviato
               >
                 Vota
