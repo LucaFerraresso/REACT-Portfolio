@@ -43,9 +43,9 @@ const Login = () => {
         const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
           toast.success("Registrazione effettuata con successo!");
-          setIsRegistering(false); // Passa alla modalità login
           setEmail("");
           setPassword("");
+          setIsRegistering(false); // Passa alla modalità login
         } else {
           toast.error("Registrazione fallita. Riprova.");
         }
@@ -89,7 +89,7 @@ const Login = () => {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} // Aggiorna l'email
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Inserisci la tua email"
                 className="border border-gray-300 rounded p-2 w-full"
                 required
@@ -100,7 +100,7 @@ const Login = () => {
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} // Aggiorna la password
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Inserisci la tua password"
                 className="border border-gray-300 rounded p-2 w-full"
                 required
@@ -111,11 +111,10 @@ const Login = () => {
               className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
             >
               {isRegistering ? "Registrati" : "Accedi"}{" "}
-              {/* Cambia il testo del bottone */}
             </button>
             <button
               type="button"
-              onClick={() => setIsRegistering(!isRegistering)} // Alterna tra login e registrazione
+              onClick={() => setIsRegistering(!isRegistering)}
               className="text-blue-500 mt-2"
             >
               {isRegistering
@@ -123,18 +122,8 @@ const Login = () => {
                 : "Non hai un account? Registrati"}
             </button>
           </form>
-          {isRegistering && (
-            <button
-              type="button"
-              onClick={() => setIsRegistering(false)}
-              className="text-blue-500 mt-4"
-            >
-              Effettua il Login
-            </button>
-          )}
         </div>
       ) : (
-        // Se l'utente è loggato, mostra il messaggio di benvenuto e il pulsante di logout
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">
             Benvenuto, {user.email.split("@")[0]}
