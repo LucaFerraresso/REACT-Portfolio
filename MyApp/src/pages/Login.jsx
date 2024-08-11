@@ -87,7 +87,7 @@ const Login = () => {
               <form
                 onSubmit={handleAuth}
                 className={`transition-opacity duration-500 ease-in-out ${
-                  isRegistering ? "opacity-0" : "opacity-100"
+                  isRegistering ? "opacity-0" : "opacity-0"
                 }`}
               >
                 <h2 className="text-2xl font-bold mb-4">
