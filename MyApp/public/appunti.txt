@@ -1,3 +1,63 @@
 //card dinamic design : Done!
 //login page : add errorhanlder,add user guide/suggestion,like a true site
+//logica form
+const handleAuth = async (e) => {
+    e.preventDefault();
 
+    // Regex per validare l'email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Regex per validare la password (minimo 6 caratteri, almeno una lettera, un numero e un carattere speciale)
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+    if (!emailRegex.test(email)) {
+      toast.error("Email non valida, inserisci una email valida.");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password non valida! Deve contenere almeno 6 caratteri, un numero e un carattere speciale."
+      );
+      return;
+    }
+
+    try {
+      let authenticatedUser;
+
+      if (isRegistering) {
+        authenticatedUser = await registerUser(email, password);
+        if (authenticatedUser) {
+          toast.success(
+            "Registrazione effettuata con successo! Login Automatico."
+          );
+          setIsRegistering(false);
+        } else {
+          toast.error("Registrazione fallita. Riprova.");
+        }
+      } else {
+        authenticatedUser = await loginUser(email, password);
+        if (authenticatedUser) {
+          toast.success("Login effettuato con successo!");
+          navigate("/homepage");
+        } else {
+          toast.error("Login fallito. Controlla le tue credenziali.");
+        }
+      }
+    } catch (error) {
+      toast.error("Errore durante l'operazione. Riprova.");
+      console.error("Errore:", error.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("Logout effettuato con successo!");
+      navigate("/login");
+    } catch (error) {
+      toast.error("Errore durante il logout: " + error.message);
+      console.error("Errore durante il logout:", error);
+    }
+  };
