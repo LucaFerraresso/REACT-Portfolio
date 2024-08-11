@@ -161,14 +161,14 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             >
               Vota
             </button>
-            <div className="text-gray-700 text-base mb-2">
-              Punteggio attuale: {rating} ({totalVotes} voti)
-            </div>
           </div>
         )}
 
         {/* Media voti e linguaggi */}
         <div className="mt-auto">
+          <div className="text-gray-700 text-base mb-2">
+            Punteggio attuale: {rating} ({totalVotes} voti)
+          </div>
           <div className="text-gray-700 text-base mb-2">
             Media voti: {averageRating} ({totalVotes} voti)
           </div>
