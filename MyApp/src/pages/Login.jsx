@@ -41,11 +41,12 @@ const Login = () => {
       if (isRegistering) {
         const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
-          toast.success("Registrazione effettuata con successo! ");
-          navigate("/login");
+          toast.success(
+            "Registrazione effettuata con successo! (LOGIN AUTOMATICO) "
+          );
           setEmail("");
           setPassword("");
-          //setIsRegistering(false);
+          setIsRegistering(false);
         } else {
           toast.error("Registrazione fallita. Riprova.");
         }
