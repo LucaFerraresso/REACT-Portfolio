@@ -16,6 +16,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   const [selectedVote, setSelectedVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
+  const [hasVoted, setHasVoted] = useState(false);
   const { user } = useAuth();
 
   const handleStarClick = (value) => {
@@ -67,9 +68,11 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
           if (savedVote !== null) {
             setRating(savedVote);
             setSelectedVote(savedVote);
+            setHasVoted(true);
           } else {
             setRating(0);
             setSelectedVote(0);
+            setHasVoted(false);
           }
         } catch (error) {
           console.error("Errore nel recupero del voto:", error);
@@ -96,7 +99,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   return (
     <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
       <div className="flex flex-col justify-between h-full">
-        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream">
+        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-2/3">
           <Link to={link}>
             <animated.img
               src={backgroundImage}
@@ -117,31 +120,38 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             FREE
           </div>
         </div>
-        <div className="p-4">
+        <div className="p-4 h-1/3">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
-          <div className="flex items-center space-x-1 mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <FaStar
-                key={star}
-                size={24}
-                onClick={() => handleStarClick(star)} // Seleziona il voto
-                color={star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"} // Colora le stelle selezionate
-                style={{
-                  cursor: "pointer",
-                  transition: "color 200ms",
-                }}
-              />
-            ))}
-          </div>
-          <button
-            onClick={handleVote}
-            className="bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200"
-            disabled={selectedVote === 0}
-          >
-            Vota
-          </button>
+          {/* Sezione di voto condizionata */}
+          {user && !hasVoted && (
+            <div>
+              <div className="flex items-center space-x-1 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FaStar
+                    key={star}
+                    size={24}
+                    onClick={() => handleStarClick(star)}
+                    color={
+                      star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
+                    }
+                    style={{
+                      cursor: "pointer",
+                      transition: "color 200ms",
+                    }}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={handleVote}
+                className="bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200"
+                disabled={selectedVote === 0 || hasVoted} // Disabilita il pulsante se il voto è stato già inviato
+              >
+                Vota
+              </button>
+            </div>
+          )}
 
           <div className="text-gray-700 text-base mt-4 mb-2">
             Punteggio attuale: {rating} ({totalVotes} voti)
