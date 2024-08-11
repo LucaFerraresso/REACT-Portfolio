@@ -79,17 +79,17 @@ const Login = () => {
         <Flipper flipKey={isRegistering} spring="noWobble">
           <Flipped flipId="form">
             <div
-              className={`bg-white p-8 rounded shadow-md w-80 transition-transform duration-500 ease-in-out`}
+              className="bg-white p-8 rounded shadow-md w-80 transition-transform duration-500 ease-in-out"
               style={{
                 transform: isRegistering ? "rotateY(180deg)" : "rotateY(0deg)",
               }}
             >
-              {/* Aggiunta di un contenitore per i form */}
+              {/* Form di Login */}
               <div
-                className={`transition-all duration-500 ease-in-out ${
-                  isRegistering ? "absolute" : "relative"
+                className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                  isRegistering ? "opacity-0" : "opacity-100"
                 }`}
-                style={{ backfaceVisibility: "hidden" }} // Nasconde il lato posteriore del form
+                style={{ backfaceVisibility: "hidden" }}
               >
                 <form onSubmit={handleAuth}>
                   <h2 className="text-2xl font-bold mb-4">Login</h2>
@@ -123,19 +123,20 @@ const Login = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setIsRegistering((prev) => !prev)}
+                    onClick={() => setIsRegistering(true)} // Passa a registrazione
                     className="text-blue-500 mt-2"
                   >
                     Non hai un account? Registrati
                   </button>
                 </form>
               </div>
-              {/* Form di registrazione */}
+
+              {/* Form di Registrazione */}
               <div
-                className={`transition-all duration-500 ease-in-out ${
-                  isRegistering ? "relative" : "absolute"
+                className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                  isRegistering ? "opacity-100" : "opacity-0"
                 }`}
-                style={{ backfaceVisibility: "hidden" }} // Nasconde il lato posteriore del form
+                style={{ backfaceVisibility: "hidden" }}
               >
                 <form onSubmit={handleAuth}>
                   <h2 className="text-2xl font-bold mb-4">Registrati</h2>
@@ -169,7 +170,7 @@ const Login = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setIsRegistering((prev) => !prev)}
+                    onClick={() => setIsRegistering(false)} // Torna al login
                     className="text-blue-500 mt-2"
                   >
                     Hai già un account? Accedi
@@ -186,7 +187,7 @@ const Login = () => {
           </h2>
           <button
             onClick={handleLogout}
-            className="bg-green text-white py-2 px-4 rounded hover:bg-green-600"
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
           >
             Logout
           </button>
