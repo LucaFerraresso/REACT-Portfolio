@@ -38,21 +38,19 @@ const Login = () => {
     }
 
     try {
-      let authenticatedUser;
-
       // Logica di autenticazione
       if (isRegistering) {
-        authenticatedUser = await registerUser(email, password);
+        const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
-          toast.success(
-            "Registrazione effettuata con successo! Login Automatico."
-          );
+          toast.success("Registrazione effettuata con successo!");
           setIsRegistering(false); // Passa alla modalità login
+          setEmail("");
+          setPassword("");
         } else {
           toast.error("Registrazione fallita. Riprova.");
         }
       } else {
-        authenticatedUser = await loginUser(email, password);
+        const authenticatedUser = await loginUser(email, password);
         if (authenticatedUser) {
           toast.success("Login effettuato con successo!");
           navigate("/homepage"); // Naviga alla homepage dopo il login
@@ -125,6 +123,15 @@ const Login = () => {
                 : "Non hai un account? Registrati"}
             </button>
           </form>
+          {isRegistering && (
+            <button
+              type="button"
+              onClick={() => setIsRegistering(false)}
+              className="text-blue-500 mt-4"
+            >
+              Effettua il Login
+            </button>
+          )}
         </div>
       ) : (
         // Se l'utente è loggato, mostra il messaggio di benvenuto e il pulsante di logout

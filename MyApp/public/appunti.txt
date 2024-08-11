@@ -1,8 +1,9 @@
 //card dinamic design : Done!
 //login page : add errorhanlder,add user guide/suggestion,like a true site
 //logica form
-const handleAuth = async (e) => {
-    e.preventDefault();
+ // Funzione per gestire l'autenticazione
+  const handleAuth = async (e) => {
+    e.preventDefault(); // Previene il comportamento predefinito del form
 
     // Regex per validare l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,11 +12,13 @@ const handleAuth = async (e) => {
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
+    // Validazione email
     if (!emailRegex.test(email)) {
       toast.error("Email non valida, inserisci una email valida.");
       return;
     }
 
+    // Validazione password
     if (!passwordRegex.test(password)) {
       toast.error(
         "Password non valida! Deve contenere almeno 6 caratteri, un numero e un carattere speciale."
@@ -26,13 +29,14 @@ const handleAuth = async (e) => {
     try {
       let authenticatedUser;
 
+      // Logica di autenticazione
       if (isRegistering) {
         authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
           toast.success(
             "Registrazione effettuata con successo! Login Automatico."
           );
-          setIsRegistering(false);
+          setIsRegistering(false); // Passa alla modalità login
         } else {
           toast.error("Registrazione fallita. Riprova.");
         }
@@ -40,22 +44,23 @@ const handleAuth = async (e) => {
         authenticatedUser = await loginUser(email, password);
         if (authenticatedUser) {
           toast.success("Login effettuato con successo!");
-          navigate("/homepage");
+          navigate("/homepage"); // Naviga alla homepage dopo il login
         } else {
           toast.error("Login fallito. Controlla le tue credenziali.");
         }
       }
     } catch (error) {
       toast.error("Errore durante l'operazione. Riprova.");
-      console.error("Errore:", error.message);
+      console.error("Errore:", error.message); // Logga l'errore
     }
   };
 
+  // Funzione per gestire il logout
   const handleLogout = async () => {
     try {
       await logout();
       toast.success("Logout effettuato con successo!");
-      navigate("/login");
+      navigate("/login"); // Naviga alla pagina di login dopo il logout
     } catch (error) {
       toast.error("Errore durante il logout: " + error.message);
       console.error("Errore durante il logout:", error);
