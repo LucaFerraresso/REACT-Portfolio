@@ -40,9 +40,11 @@ const Login = () => {
     try {
       // Logica di autenticazione
       if (isRegistering) {
-        const authenticatedUser = await registerUser(email, password);
+        //const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
-          toast.success("Registrazione effettuata con successo!");
+          toast.success(
+            "Registrazione effettuata con successo! procedi con il login"
+          );
           setEmail("");
           setPassword("");
           setIsRegistering(false); // Passa alla modalità login
