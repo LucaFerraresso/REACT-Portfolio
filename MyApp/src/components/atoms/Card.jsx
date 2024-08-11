@@ -47,11 +47,13 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
       setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
       updateAverageRating();
+      setHasVoted(true); // Disabilita subito il pulsante dopo il voto
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
       //console.error("Errore nel salvataggio del voto:", error);
     }
   };
+
   const updateAverageRating = async () => {
     const votes = await getAllVotes(projectId); // Ottieni tutti i voti
     const totalVotesCount = votes.length; // Numero totale di voti
@@ -97,73 +99,80 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   }));
 
   return (
-    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
-      <div className="flex flex-col justify-between h-full">
-        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/3">
-          <Link to={link}>
-            <animated.img
-              src={backgroundImage}
-              alt="Background"
-              className="w-full h-96 object-cover transition-transform duration-300 cursor-pointer"
-              style={imageProps}
-              onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
-              onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
-            />
-          </Link>
-          <div
-            className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
-            style={{
-              textShadow:
-                "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-            }}
-          >
-            FREE
-          </div>
+    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
+      {/* Sezione Immagine */}
+      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+        <Link to={link}>
+          <animated.img
+            src={backgroundImage}
+            alt="Background"
+            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
+            style={imageProps}
+            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
+            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
+          />
+        </Link>
+        <div
+          className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
+          style={{
+            textShadow:
+              "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+          }}
+        >
+          FREE
         </div>
-        <div className="p-4 h-2/3">
+      </div>
+
+      {/* Sezione Contenuto */}
+      <div className="flex flex-col flex-grow p-4 justify-between">
+        {/* Titolo e Descrizione */}
+        <div className="flex-grow">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
+        </div>
 
-          {/* Sezione di voto condizionata */}
-          {user && !hasVoted && (
-            <div className="h-1/3">
-              <div className="flex items-center space-x-1 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar
-                    key={star}
-                    size={24}
-                    onClick={() => handleStarClick(star)}
-                    color={
-                      star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
-                    }
-                    style={{
-                      cursor: "pointer",
-                      transition: "color 200ms",
-                    }}
-                  />
-                ))}
-              </div>
-              <button
-                onClick={handleVote}
-                className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
-                  selectedVote === 0 || hasVoted
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                disabled={selectedVote === 0 || hasVoted} // Disabilita il pulsante se il voto è stato già inviato
-              >
-                Vota
-              </button>
+        {/* Sezione di voto condizionata */}
+        {user && !hasVoted && (
+          <div className="mb-4">
+            <div className="flex items-center space-x-1 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  size={24}
+                  onClick={() => handleStarClick(star)}
+                  color={
+                    star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
+                  }
+                  style={{
+                    cursor: "pointer",
+                    transition: "color 200ms",
+                  }}
+                />
+              ))}
             </div>
-          )}
+            <button
+              onClick={handleVote}
+              className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
+                selectedVote === 0 || hasVoted
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={selectedVote === 0 || hasVoted} // Disabilita il pulsante subito dopo il voto
+            >
+              Vota
+            </button>
+          </div>
+        )}
 
-          <div className="text-gray-700 text-base mt-4 mb-2">
+        {/* Media voti e linguaggi */}
+        <div className="mt-auto">
+          <div className="text-gray-700 text-base mb-2">
             Punteggio attuale: {rating} ({totalVotes} voti)
           </div>
-          <div className="text-gray-700 text-base mt-2">
+          <div className="text-gray-700 text-base mb-2">
             Media voti: {averageRating} ({totalVotes} voti)
           </div>
-          <div className="flex items-center space-x-1 mt-2 mb-2">
+          <div className="flex items-center space-x-1 mb-4">
             {Array.from({ length: Math.round(averageRating) }, (_, index) => (
               <FaStar key={index} size={24} color="#ffc107" />
             ))}
