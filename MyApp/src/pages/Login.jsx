@@ -83,6 +83,7 @@ const Login = () => {
               className="bg-white p-8 rounded shadow-md w-80 transform transition-transform duration-500 ease-in-out"
               style={{
                 transform: isRegistering ? "rotateY(180deg)" : "rotateY(0deg)",
+                backfaceVisibility: "hidden",
               }}
             >
               <h2 className="text-2xl font-bold mb-4">
