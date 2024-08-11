@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../API/firebaseAuth"; // Non importiamo più logoutUser qui, lo prendiamo dal contesto
+import { loginUser, registerUser } from "../API/firebaseAuth";
 import { toast } from "react-toastify";
 import { useAuth } from "../useContext/AuthContext";
+import { Flipper, Flipped } from "react-flip-toolkit"; // Importa react-flip-toolkit
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,43 +15,58 @@ const Login = () => {
   const handleAuth = async (e) => {
     e.preventDefault();
 
-    if (email && password) {
-      try {
-        let authenticatedUser;
+    // Regex per validare l'email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (isRegistering) {
-          authenticatedUser = await registerUser(email, password);
-          if (authenticatedUser) {
-            toast.success(
-              "Registrazione effettuata con successo! Login Automatico."
-            );
-            setIsRegistering(false);
-          } else {
-            toast.error("Registrazione fallita. Riprova.");
-          }
+    // Regex per validare la password (minimo 6 caratteri, almeno una lettera, un numero e un carattere speciale)
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+    if (!emailRegex.test(email)) {
+      toast.error("Email non valida, inserisci una email valida.");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password non valida! Deve contenere almeno 6 caratteri, un numero e un carattere speciale."
+      );
+      return;
+    }
+
+    try {
+      let authenticatedUser;
+
+      if (isRegistering) {
+        authenticatedUser = await registerUser(email, password);
+        if (authenticatedUser) {
+          toast.success(
+            "Registrazione effettuata con successo! Login Automatico."
+          );
+          setIsRegistering(false);
         } else {
-          authenticatedUser = await loginUser(email, password);
-          if (authenticatedUser) {
-            toast.success("Login effettuato con successo!");
-            navigate("/homepage");
-          } else {
-            toast.error("Login fallito. Controlla le tue credenziali.");
-          }
+          toast.error("Registrazione fallita. Riprova.");
         }
-      } catch (error) {
-        toast.error("Errore durante l'operazione. Riprova.");
-        console.error("Errore:", error.message);
+      } else {
+        authenticatedUser = await loginUser(email, password);
+        if (authenticatedUser) {
+          toast.success("Login effettuato con successo!");
+          navigate("/homepage");
+        } else {
+          toast.error("Login fallito. Controlla le tue credenziali.");
+        }
       }
-    } else {
-      toast.error("Email o password non validi!");
+    } catch (error) {
+      toast.error("Errore durante l'operazione. Riprova.");
+      console.error("Errore:", error.message);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await logout(); // Usa il logout dal contesto
+      await logout();
       toast.success("Logout effettuato con successo!");
-      navigate("/login"); // Naviga alla pagina di login
+      navigate("/login");
     } catch (error) {
       toast.error("Errore durante il logout: " + error.message);
       console.error("Errore durante il logout:", error);
@@ -60,49 +76,58 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {!user ? (
-        <form
-          onSubmit={handleAuth}
-          className="bg-white p-8 rounded shadow-md w-80"
-        >
-          <h2 className="text-2xl font-bold mb-4">
-            {isRegistering ? "Registrati" : "Login"}
-          </h2>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 rounded p-2 w-full"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-          >
-            {isRegistering ? "Registrati" : "Login"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsRegistering((prev) => !prev)}
-            className="text-blue-500 mt-2"
-          >
-            {isRegistering
-              ? "Hai già un account? Accedi"
-              : "Non hai un account? Registrati"}
-          </button>
-        </form>
+        <Flipper flipKey={isRegistering}>
+          <Flipped flipId="form">
+            <form
+              onSubmit={handleAuth}
+              className="bg-white p-8 rounded shadow-md w-80 transform transition-transform duration-500 ease-in-out"
+              style={{
+                transform: isRegistering ? "rotateY(180deg)" : "rotateY(0deg)",
+              }}
+            >
+              <h2 className="text-2xl font-bold mb-4">
+                {isRegistering ? "Registrati" : "Login"}
+              </h2>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Inserisci la tua email"
+                  className="border border-gray-300 rounded p-2 w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Inserisci la tua password"
+                  className="border border-gray-300 rounded p-2 w-full"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
+              >
+                {isRegistering ? "Registrati" : "Login"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsRegistering((prev) => !prev)}
+                className="text-blue-500 mt-2"
+              >
+                {isRegistering
+                  ? "Hai già un account? Accedi"
+                  : "Non hai un account? Registrati"}
+              </button>
+            </form>
+          </Flipped>
+        </Flipper>
       ) : (
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">
@@ -110,7 +135,7 @@ const Login = () => {
           </h2>
           <button
             onClick={handleLogout}
-            className="bg-green text-white py-2 px-4 rounded hover:bg-green-600"
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
           >
             Logout
           </button>
