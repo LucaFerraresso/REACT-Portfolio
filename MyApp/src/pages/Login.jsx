@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../API/firebaseAuth"; // Import delle funzioni per login e registrazione
-import { toast } from "react-toastify"; // Import per notifiche
+import { toast } from "react-toastify";
 import { useAuth } from "../useContext/AuthContext"; // Import del contesto di autenticazione
 
 const Login = () => {
-  // Stati per email, password e se si sta registrando
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
-  const navigate = useNavigate(); // Hook per navigare
+  const navigate = useNavigate();
   const { user, logout } = useAuth(); // Hook per ottenere lo stato utente e il logout
 
   // Funzione per gestire l'autenticazione
@@ -43,9 +42,10 @@ const Login = () => {
         const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
           toast.success("Registrazione effettuata con successo! ");
+          navigate("/login");
           setEmail("");
           setPassword("");
-          setIsRegistering(true); // Passa alla modalità login
+          //setIsRegistering(false);
         } else {
           toast.error("Registrazione fallita. Riprova.");
         }
@@ -53,7 +53,7 @@ const Login = () => {
         const authenticatedUser = await loginUser(email, password);
         if (authenticatedUser) {
           toast.success("Login effettuato con successo!");
-          navigate("/homepage"); // Naviga alla homepage dopo il login
+          navigate("/homepage");
         } else {
           toast.error("Login fallito. Controlla le tue credenziali.");
         }
