@@ -99,7 +99,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   return (
     <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black">
       <div className="flex flex-col justify-between h-full">
-        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-2/3">
+        <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
           <Link to={link}>
             <animated.img
               src={backgroundImage}
@@ -120,7 +120,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
             FREE
           </div>
         </div>
-        <div className="p-4 h-1/3">
+        <div className="p-4 h-1/2">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
 
