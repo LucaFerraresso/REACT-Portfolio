@@ -25,7 +25,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
       return;
     }
 
-    setSelectedVote(value); // Imposta il voto selezionato
+    setSelectedVote(value);
   };
 
   const handleVote = async () => {
@@ -157,7 +157,7 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
                   ? "opacity-50 cursor-not-allowed"
                   : ""
               }`}
-              disabled={selectedVote === 0 || hasVoted} // Disabilita il pulsante subito dopo il voto
+              disabled={selectedVote === 0 || hasVoted}
             >
               Vota
             </button>
