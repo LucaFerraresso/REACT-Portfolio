@@ -78,55 +78,60 @@ const Login = () => {
       {!user ? (
         <Flipper flipKey={isRegistering}>
           <Flipped flipId="form">
-            <form
-              onSubmit={handleAuth}
-              className="bg-white p-8 rounded shadow-md w-80 transform transition-transform duration-500 ease-in-out"
+            <div
+              className={`bg-white p-8 rounded shadow-md w-80 transition-transform duration-500 ease-in-out`}
               style={{
                 transform: isRegistering ? "rotateY(180deg)" : "rotateY(0deg)",
-                backfaceVisibility: "hidden",
               }}
             >
-              <h2 className="text-2xl font-bold mb-4">
-                {isRegistering ? "Registrati" : "Login"}
-              </h2>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Inserisci la tua email"
-                  className="border border-gray-300 rounded p-2 w-full"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Inserisci la tua password"
-                  className="border border-gray-300 rounded p-2 w-full"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
+              <form
+                onSubmit={handleAuth}
+                className={`transition-opacity duration-500 ease-in-out ${
+                  isRegistering ? "opacity-0" : "opacity-100"
+                }`}
               >
-                {isRegistering ? "Registrati" : "Login"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsRegistering((prev) => !prev)}
-                className="text-blue-500 mt-2"
-              >
-                {isRegistering
-                  ? "Hai già un account? Accedi"
-                  : "Non hai un account? Registrati"}
-              </button>
-            </form>
+                <h2 className="text-2xl font-bold mb-4">
+                  {isRegistering ? "Registrati" : "Login"}
+                </h2>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Inserisci la tua email"
+                    className="border border-gray-300 rounded p-2 w-full"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Inserisci la tua password"
+                    className="border border-gray-300 rounded p-2 w-full"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
+                >
+                  {isRegistering ? "Registrati" : "Login"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsRegistering((prev) => !prev)}
+                  className="text-blue-500 mt-2"
+                >
+                  {isRegistering
+                    ? "Hai già un account? Accedi"
+                    : "Non hai un account? Registrati"}
+                </button>
+              </form>
+            </div>
           </Flipped>
         </Flipper>
       ) : (
