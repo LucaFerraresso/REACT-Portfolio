@@ -43,7 +43,7 @@ const Login = () => {
         const authenticatedUser = await registerUser(email, password);
         if (authenticatedUser) {
           toast.success("Registrazione effettuata con successo!");
-          //setIsRegistering(false); // Passa alla modalità login
+          setIsRegistering(false); // Passa alla modalità login
           setEmail("");
           setPassword("");
         } else {
