@@ -23,7 +23,7 @@ const exerciseSchema = new mongoose.Schema({
   difficulty: String,
 });
 
-const Exercise = mongoose.model("Exercise", exerciseSchema);
+const Exercise = mongoose.model("esercizi", exerciseSchema);
 
 // Connessione a MongoDB utilizzando Mongoose
 mongoose
@@ -44,8 +44,8 @@ mongoose
 // Endpoint per recuperare gli esercizi
 app.get("/esercizi", async (req, res) => {
   try {
-    const esercizi = await Exercise.find();
-    res.json(esercizi);
+    const data = await Exercise.find();
+    res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
