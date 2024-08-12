@@ -39,6 +39,8 @@ import firebaseConfig from "./firebaseConfig.js";
 //authContext
 export { AuthContext } from "./useContext/AuthContext.jsx";
 
+//inizio app
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export { db };
