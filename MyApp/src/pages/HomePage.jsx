@@ -129,7 +129,7 @@ const HomePage = () => {
       title: "MongoDB implementation",
       description:
         "A Mongo-DB database implementation exercise involves designing,creating and populating a NoSQL database",
-      link: "/exercise/mongodbimplemetation",
+      link: "/exercise/mongodbimplementation",
       backgroundImage:
         "/Exercises/mongodb-implementation/design/desktop-preview-main.jpg",
       initialRating: 0,
