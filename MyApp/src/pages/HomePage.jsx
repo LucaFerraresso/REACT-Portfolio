@@ -114,16 +114,16 @@ const HomePage = () => {
         "/Exercises/expenses-chart-component-main/design/desktop-preview.jpg",
       initialRating: 0,
     },
-    {
-      id: "rock-paper-scissors-master",
-      title: "Rock Paper Scissors Master",
-      description:
-        "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
-      link: "/exercise/rockpaperscissorsmaster",
-      backgroundImage:
-        "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
-      initialRating: 0,
-    },
+    //{
+    //  id: "rock-paper-scissors-master",
+    //  title: "Rock Paper Scissors Master",
+    //  description:
+    //    "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
+    //  link: "/exercise/rockpaperscissorsmaster",
+    //  backgroundImage:
+    //    "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
+    //  initialRating: 0,
+    //},
     {
       id: "MongoDB-implementation",
       title: "MongoDB implementation",
