@@ -124,6 +124,16 @@ const HomePage = () => {
         "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
       initialRating: 0,
     },
+    {
+      id: "MongoDB-implementation",
+      title: "MongoDB implementation",
+      description:
+        "A Mongo-DB database implementation exercise involves designing,creating and populating a NoSQL database",
+      link: "/exercise/mongodbimplemetation",
+      backgroundImage:
+        "/Exercises/mongodb-implementation/design/desktop-preview-main.jpg",
+      initialRating: 0,
+    },
   ];
 
   // Funzione di animazione per il titolo

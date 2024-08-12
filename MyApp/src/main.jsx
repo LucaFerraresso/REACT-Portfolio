@@ -23,6 +23,7 @@ import NewsLetterSignUp from "./pages/NewsLetterSignUp.jsx";
 import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import RockPaperScissors from "./pages/RockPaperScissors.jsx";
+import MongoDbImplementation from "./pages/MongoDbImplementation.jsx";
 //navbar and footer links
 import Contacts from "./pages/Contacts.jsx";
 import Login from "./pages/Login.jsx";
@@ -114,6 +115,10 @@ const router = createBrowserRouter([
       {
         path: "/exercise/rockpaperscissorsmaster",
         element: <RockPaperScissors />,
+      },
+      {
+        path: "/exercise/mongodbimplementation",
+        element: <MongoDbImplementation />,
       },
       {
         path: "/contacts",
