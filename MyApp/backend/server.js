@@ -1,17 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import Product from "./models/Product.js"; // Importa il modello
 
-// Configura dotenv per caricare le variabili d'ambiente
 dotenv.config();
 
-// Inizializza l'app Express
 const app = express();
-
-// Middleware per il parsing del JSON
 app.use(express.json());
 
-// Connessione a MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -20,9 +16,14 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Definisci una route di esempio
-app.get("/", (req, res) => {
-  res.send("API is running...");
+// Definisci un endpoint per ottenere i prodotti
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.find(); // Trova tutti i prodotti
+    res.json(products); // Restituisci i prodotti come JSON
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // Imposta il server per ascoltare su una porta
