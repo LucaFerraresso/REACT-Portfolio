@@ -27,7 +27,7 @@ const exerciseSchema = new mongoose.Schema({
 
 const Exercise = mongoose.model("Exercise", exerciseSchema);
 
-app.get("/exercises", async (req, res) => {
+app.get("/exercise", async (req, res) => {
   try {
     const exercises = await Exercise.find();
     res.json(exercises);

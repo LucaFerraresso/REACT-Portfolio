@@ -5,7 +5,7 @@ const MongoDbImplementation = () => {
 
   const fetchExercises = async () => {
     try {
-      const response = await fetch("http://localhost:5000/exercises");
+      const response = await fetch("http://localhost:5000/exercise");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
