@@ -7,4 +7,4 @@ async function getRandomAdvice() {
   return data;
 }
 
-export default getRandomAdvice;
+export { getRandomAdvice };
