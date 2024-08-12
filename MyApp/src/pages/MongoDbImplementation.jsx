@@ -3,11 +3,21 @@ import React, { useEffect, useState } from "react";
 const MongoDbImplementation = () => {
   const [exercises, setExercises] = useState([]);
 
+  const fetchExercises = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/exercises");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setExercises(data);
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+    }
+  };
+
   useEffect(() => {
-    fetch("http://localhost:5000/exercises")
-      .then((response) => response.json())
-      .then((data) => setExercises(data))
-      .catch((error) => console.error("Error fetching exercises:", error));
+    fetchExercises();
   }, []);
 
   return (
