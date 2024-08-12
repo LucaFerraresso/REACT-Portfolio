@@ -42,10 +42,10 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Endpoint per recuperare gli esercizi
-app.get("/exercises", async (req, res) => {
+app.get("/esercizi", async (req, res) => {
   try {
-    const exercises = await Exercise.find();
-    res.json(exercises);
+    const esercizi = await Exercise.find();
+    res.json(esercizi);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
