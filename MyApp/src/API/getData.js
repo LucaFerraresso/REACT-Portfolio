@@ -6,3 +6,5 @@ async function getRandomAdvice() {
   //a me serve anche l'id
   return data;
 }
+
+export default getRandomAdvice;
