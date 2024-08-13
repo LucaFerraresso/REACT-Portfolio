@@ -32,6 +32,12 @@ const Navbar = () => {
     return "bg-gray-800 text-white";
   };
 
+  const getTextColor = () => {
+    return location.pathname === "/homepage" || location.pathname === "/aboutme"
+      ? "text-black"
+      : "text-white";
+  };
+
   return (
     <nav
       className={`${getNavBarStyles()} p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
@@ -53,7 +59,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         {!loading && user ? (
           <>
-            <span className="text-black sm:text-white">
+            <span className={getTextColor()}>
               Benvenuto, {user.email.split("@")[0]}
             </span>
             <button onClick={handleLogout} className="text-red underline">
