@@ -1,85 +1,20 @@
 import { useState } from "react";
+import { useSpring, animated } from "@react-spring/web";
 
-const RockPaperScissors = () => {
-  const [playerChoice, setPlayerChoice] = useState("");
-  const [computerChoice, setComputerChoice] = useState("");
-  const [result, setResult] = useState("");
-
-  const choices = ["rock", "paper", "scissors"];
-  const getRandomChoice = () => choices[Math.floor(Math.random() * 3)];
-
-  const getResult = (player, computer) => {
+ const getResult = (player, computer) => {
     if (player === computer) return "It's a tie!";
     if (
-      (player === "rock" && computer === "scissors") ||
-      (player === "paper" && computer === "rock") ||
-      (player === "scissors" && computer === "paper")
+      (player === "rock" &&
+        (computer === "scissors" || computer === "lizard")) ||
+      (player === "paper" && (computer === "rock" || computer === "spock")) ||
+      (player === "scissors" &&
+        (computer === "paper" || computer === "lizard")) ||
+      (player === "lizard" && (computer === "spock" || computer === "paper")) ||
+      (player === "spock" && (computer === "scissors" || computer === "rock"))
     ) {
+      setScore((prevScore) => prevScore + 1);
       return "You win!";
     }
+    setScore((prevScore) => prevScore - 1);
     return "You lose!";
   };
-
-  const handlePlayerChoice = (choice) => {
-    setPlayerChoice(choice);
-    const computer = getRandomChoice();
-    setComputerChoice(computer);
-    setResult(getResult(choice, computer));
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32]">
-      <h1 className="text-4xl font-bold text-white mb-8">
-        Rock Paper Scissors
-      </h1>
-
-      <div className="flex space-x-4 mb-8">
-        {choices.map((choice) => (
-          <button
-            key={choice}
-            className={`w-20 h-20 text-lg font-semibold text-white rounded-lg transition duration-300 ease-in-out 
-            ${
-              choice === "rock"
-                ? "bg-gradient-to-r from-[#b94c1f] to-[#d43c1f]"
-                : choice === "paper"
-                ? "bg-gradient-to-r from-[#1e6b85] to-[#2194e5]"
-                : "bg-gradient-to-r from-[#f9e53d] to-[#f9e83d]"
-            } hover:scale-105`}
-            onClick={() => handlePlayerChoice(choice)}
-          >
-            {choice.charAt(0).toUpperCase() + choice.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      <div className="text-center text-lg text-white">
-        {playerChoice && (
-          <p className="mb-2">
-            You chose: <span className="font-bold">{playerChoice}</span>
-          </p>
-        )}
-        {computerChoice && (
-          <p className="mb-2">
-            Computer chose: <span className="font-bold">{computerChoice}</span>
-          </p>
-        )}
-        {result && (
-          <p
-            className={`font-bold ${
-              result === "You win!"
-                ? "text-green-400"
-                : result === "It's a tie!"
-                ? "text-yellow-400"
-                : "text-red-400"
-            }`}
-          >
-            {result}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default RockPaperScissors;
-
