@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 
-// Importa React Spring
 const RockPaperScissors = () => {
   const [playerChoice, setPlayerChoice] = useState("");
   const [computerChoice, setComputerChoice] = useState("");
@@ -52,6 +51,7 @@ const RockPaperScissors = () => {
     setScore((prevScore) => prevScore - 1);
     return "You lose!";
   };
+
   const handlePlayerChoice = (choice) => {
     setPlayerChoice(choice);
     const computer = getRandomChoice().name;
@@ -67,7 +67,7 @@ const RockPaperScissors = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32]">
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32] px-4">
       <h1 className="text-4xl font-bold text-white mb-4">
         Rock Paper Scissors
       </h1>
@@ -104,10 +104,10 @@ const RockPaperScissors = () => {
           <p
             className={`font-bold ${
               result === "You win!"
-                ? "text-green"
+                ? "text-green-400"
                 : result === "It's a tie!"
                 ? "text-yellow-400"
-                : "text-red"
+                : "text-red-400"
             }`}
           >
             {result}
@@ -127,7 +127,7 @@ const RockPaperScissors = () => {
           style={modalAnimation}
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
         >
-          <div className="flex flex-col bg-white p-6 rounded-lg shadow-lg max-w-md w-full animate__animated animate__fadeIn">
+          <div className="flex flex-col bg-white p-4 rounded-lg shadow-lg max-w-xs w-full mx-6 my-4">
             <button
               onClick={() => setShowRules(false)}
               className="absolute top-2 right-2 text-black text-lg font-bold"
@@ -141,7 +141,7 @@ const RockPaperScissors = () => {
               <img
                 src="/Exercises/rock-paper-scissors-master/images/image-rules.svg"
                 alt="Standard Game Rules"
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
               />
             </div>
 
@@ -150,13 +150,13 @@ const RockPaperScissors = () => {
               <img
                 src="/Exercises/rock-paper-scissors-master/images/image-rules-bonus.svg"
                 alt="Bonus Game Rules"
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
               />
             </div>
 
             <button
               onClick={() => setShowRules(false)}
-              className="mt-4 px-6 py-2 bg-gray-300 text-black font-bold rounded transition duration-300 hover:bg-gray-400"
+              className="mt-4 px-4 py-2 bg-gray-300 text-black font-bold rounded transition duration-300 hover:bg-gray-400"
             >
               Close
             </button>
