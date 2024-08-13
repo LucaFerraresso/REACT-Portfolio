@@ -34,11 +34,11 @@ const HomePage = () => {
           variants={fadeIn}
         />
         <motion.h2 className="text-2xl sm:text-3xl font-bold" variants={fadeIn}>
-          Hello, I'm a Front-end Developer
+          Hello, I'am giovanni giorgio...but everyone call me Giorgio
         </motion.h2>
         <motion.p className="text-md sm:text-lg mt-4 mb-6" variants={fadeIn}>
-          Based in Venice, Italy, I specialize in creating beautiful and
-          functional websites.
+          Based in Venice, Italy, I am a React enthusiast and a web developer. I
+          love create beautiful and functional websites,i guess.
         </motion.p>
 
         <motion.div className="flex justify-center space-x-4" variants={fadeIn}>
