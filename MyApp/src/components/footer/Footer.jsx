@@ -1,8 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
 
 const menuFooter = [
-  { name: "Home", path: "/homepage" },
   { name: "Contacts", path: "/contacts" },
+  { name: "About me", path: "/aboutme" },
 ];
 
 const Footer = () => {
@@ -10,7 +10,7 @@ const Footer = () => {
 
   // Funzione per ottenere lo stile del footer
   const getFooterStyles = () => {
-    if (location.pathname === "/homepage") {
+    if (location.pathname === "/homepage" || location.pathname === "/aboutme") {
       return {
         container: "bg-white text-black border-t border-gray-300",
         link: "text-black border-b-2 border-black",

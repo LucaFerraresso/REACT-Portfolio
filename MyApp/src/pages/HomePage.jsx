@@ -40,6 +40,7 @@ const HomePage = () => {
           Based in Venice, Italy, I specialize in creating beautiful and
           functional websites.
         </motion.p>
+
         <motion.div className="flex justify-center space-x-4" variants={fadeIn}>
           <a
             href="https://www.linkedin.com/in/tuo-profilo"

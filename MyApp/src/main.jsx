@@ -26,8 +26,9 @@ import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import RockPaperScissors from "./pages/RockPaperScissors.jsx";
 import MongoDbImplementation from "./pages/MongoDbImplementation.jsx";
 //navbar and footer links
-import Contacts from "./pages/Contacts.jsx";
 import Login from "./pages/Login.jsx";
+import Contacts from "./pages/Contacts.jsx";
+import AboutMe from "./pages/AboutMe.jsx";
 //provider
 import { CartProvider } from "./useContext/CartContext.jsx";
 import { AuthProvider } from "./useContext/AuthContext.jsx";
@@ -129,6 +130,11 @@ const router = createBrowserRouter([
         path: "/contacts",
         element: <Contacts />,
       },
+      {
+        path: "/aboutme",
+        element: <AboutMe />,
+      },
+
       {
         path: "/login",
         element: <Login />,

@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   const getNavBarStyles = () => {
-    if (location.pathname === "/homepage") {
+    if (location.pathname === "/homepage" || location.pathname === "/aboutme") {
       return "bg-white text-black border-b border-gray-300";
     }
     return "bg-gray-800 text-white";
