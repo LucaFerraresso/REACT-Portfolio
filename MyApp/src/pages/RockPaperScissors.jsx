@@ -1,50 +1,58 @@
 import { useState } from "react";
 import { useSpring, animated } from "@react-spring/web";
 
+const choices = [
+  {
+    name: "rock",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-rock.svg",
+    color: "red",
+  },
+  {
+    name: "paper",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-paper.svg",
+    color: "blue",
+  },
+  {
+    name: "scissors",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-scissors.svg",
+    color: "yellow",
+  },
+  {
+    name: "lizard",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-lizard.svg",
+    color: "green",
+  },
+  {
+    name: "spock",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-spock.svg",
+    color: "purple",
+  },
+];
+
+const winConditions = {
+  rock: ["scissors", "lizard"],
+  paper: ["rock", "spock"],
+  scissors: ["paper", "lizard"],
+  lizard: ["spock", "paper"],
+  spock: ["scissors", "rock"],
+};
+
 const RockPaperScissors = () => {
   const [playerChoice, setPlayerChoice] = useState("");
   const [computerChoice, setComputerChoice] = useState("");
   const [result, setResult] = useState("");
   const [score, setScore] = useState(0);
   const [showRules, setShowRules] = useState(false);
+  const [isStandardMode, setIsStandardMode] = useState(true);
 
-  const choices = [
-    {
-      name: "rock",
-      image: "/Exercises/rock-paper-scissors-master/images/icon-rock.svg",
-    },
-    {
-      name: "paper",
-      image: "/Exercises/rock-paper-scissors-master/images/icon-paper.svg",
-    },
-    {
-      name: "scissors",
-      image: "/Exercises/rock-paper-scissors-master/images/icon-scissors.svg",
-    },
-    {
-      name: "lizard",
-      image: "/Exercises/rock-paper-scissors-master/images/icon-lizard.svg",
-    },
-    {
-      name: "spock",
-      image: "/Exercises/rock-paper-scissors-master/images/icon-spock.svg",
-    },
-  ];
+  const availableChoices = isStandardMode ? choices.slice(0, 3) : choices;
 
   const getRandomChoice = () =>
-    choices[Math.floor(Math.random() * choices.length)];
+    availableChoices[Math.floor(Math.random() * availableChoices.length)];
 
   const getResult = (player, computer) => {
     if (player === computer) return "It's a tie!";
-    if (
-      (player === "rock" &&
-        (computer === "scissors" || computer === "lizard")) ||
-      (player === "paper" && (computer === "rock" || computer === "spock")) ||
-      (player === "scissors" &&
-        (computer === "paper" || computer === "lizard")) ||
-      (player === "lizard" && (computer === "spock" || computer === "paper")) ||
-      (player === "spock" && (computer === "scissors" || computer === "rock"))
-    ) {
+    if (winConditions[player].includes(computer)) {
       setScore((prevScore) => prevScore + 1);
       return "You win!";
     }
@@ -59,7 +67,6 @@ const RockPaperScissors = () => {
     setResult(getResult(choice, computer));
   };
 
-  // Animazione per la modale
   const modalAnimation = useSpring({
     opacity: showRules ? 1 : 0,
     transform: showRules ? "translateY(0)" : "translateY(-50px)",
@@ -67,24 +74,30 @@ const RockPaperScissors = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32] px-4">
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32] px-4 font-barlow">
       <h1 className="text-4xl font-bold text-white mb-4">
         Rock Paper Scissors
       </h1>
       <h2 className="text-2xl text-white mb-4">Score: {score}</h2>
 
       <div className="flex flex-wrap justify-center mb-8">
-        {choices.map((choice) => (
+        {availableChoices.map((choice) => (
           <div
             key={choice.name}
-            className="relative cursor-pointer m-2"
+            className="relative cursor-pointer m-2 border border-white rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105"
             onClick={() => handlePlayerChoice(choice.name)}
+            style={{ padding: "10px", backgroundColor: choice.color }}
           >
-            <img
-              src={choice.image}
-              alt={choice.name}
-              className="bg-white w-20 h-20 rounded-full border-4 border-white transition-transform duration-300 ease-in-out hover:scale-110"
-            />
+            <div className="bg-white p-2 rounded-full">
+              {" "}
+              {/* Sfondo per le immagini */}
+              <img
+                src={choice.image}
+                alt={choice.name}
+                className="w-28 h-28 transition-transform duration-300 ease-in-out"
+                style={{ filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.5))" }}
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -104,10 +117,10 @@ const RockPaperScissors = () => {
           <p
             className={`font-bold ${
               result === "You win!"
-                ? "text-green"
+                ? "text-green-500"
                 : result === "It's a tie!"
                 ? "text-yellow-400"
-                : "text-red"
+                : "text-red-500"
             }`}
           >
             {result}
@@ -120,6 +133,12 @@ const RockPaperScissors = () => {
         className="mt-4 px-6 py-2 bg-blue-500 text-white font-bold rounded transition duration-300 hover:bg-blue-600"
       >
         Show Rules
+      </button>
+      <button
+        onClick={() => setIsStandardMode((prev) => !prev)}
+        className="mt-4 px-6 py-2 bg-gray-500 text-white font-bold rounded transition duration-300 hover:bg-gray-600"
+      >
+        {isStandardMode ? "Switch to Advanced Mode" : "Switch to Standard Mode"}
       </button>
 
       {showRules && (
