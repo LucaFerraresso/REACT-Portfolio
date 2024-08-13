@@ -59,6 +59,7 @@ const Login = () => {
           toast.error("Login fallito. Controlla le tue credenziali.");
         }
       }
+      navigate("/homepage");
     } catch (error) {
       toast.error("Errore durante l'operazione. Riprova.");
       console.error("Errore:", error.message); // Logga l'errore

@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import DefaultLayout from "./pages/DefaultLayout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 //components/pages
+import Projects from "./pages/Projects.jsx";
 import AdviceApp from "./pages/AdviceGenerator.jsx";
 import AgeCalculator from "./pages/AgeCalculator.jsx";
 import ContactForm from "./pages/ContactForm.jsx";
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/homepage",
         element: <HomePage />,
+      },
+      {
+        path: "/projects",
+        element: <Projects />,
       },
       {
         path: "/exercise/advicegenerator",

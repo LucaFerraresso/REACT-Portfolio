@@ -104,10 +104,10 @@ const RockPaperScissors = () => {
           <p
             className={`font-bold ${
               result === "You win!"
-                ? "text-green-400"
+                ? "text-green"
                 : result === "It's a tie!"
                 ? "text-yellow-400"
-                : "text-red-400"
+                : "text-red"
             }`}
           >
             {result}

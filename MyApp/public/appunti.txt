@@ -190,3 +190,274 @@ const RockPaperScissors = () => {
 };
 
 export default RockPaperScissors;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+HOME PAGE
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FaJsSquare,
+  FaReact,
+  FaNodeJs,
+  FaHtml5,
+  FaCss3Alt,
+} from "react-icons/fa";
+
+const HomePage = () => {
+  return (
+    <>
+      <motion.section
+        id="about"
+        className="text-center my-10"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <img
+          src="/path-to-your-image.jpg"
+          alt="Your Photo"
+          className="mx-auto rounded-full w-32 h-32 border-4 border-black mb-4"
+        />
+        <h2 className="text-3xl font-bold">About Me</h2>
+        <p className="text-lg mt-4">
+          I'm a passionate web developer with a keen eye for design and a love
+          for creating intuitive and user-friendly websites.GG
+        </p>
+      </motion.section>
+      <section id="skills" className="my-10">
+        <h2 className="text-3xl font-bold text-center mb-6">Skills</h2>
+        <div className="flex justify-center space-x-8">
+          <FaJsSquare className="text-yellow-500 text-6xl" />
+          <FaReact className="text-blue-500 text-6xl" />
+          <FaNodeJs className="text-green-500 text-6xl" />
+          <FaHtml5 className="text-red-500 text-6xl" />
+          <FaCss3Alt className="text-blue-600 text-6xl" />
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default HomePage;
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+HOMEPAGE AGGIORNATA 2 PRIMA DELL'AGGIUNTA DEL LOGIN IMG OMINO NAVBAR. 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FaJsSquare,
+  FaReact,
+  FaNodeJs,
+  FaHtml5,
+  FaCss3Alt,
+} from "react-icons/fa";
+
+const imgPath = "../../public/HomePageImg/myFoto.jpg";
+
+const HomePage = () => {
+  const fadeIn = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <>
+      <motion.section
+        id="about"
+        className="text-center my-10"
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.5 }}
+        variants={fadeIn}
+      >
+        <img
+          src={imgPath}
+          alt="Your Photo"
+          className="mx-auto rounded-full w-32 h-32 border-4 border-black mb-4"
+        />
+        <motion.h2 className="text-3xl font-bold" variants={fadeIn}>
+          About Me
+        </motion.h2>
+        <motion.p className="text-lg mt-4" variants={fadeIn}>
+          I'm a passionate Front-end React Developer based in Venice, Italy with
+          a keen eye for design and a love for creating intuitive and
+          user-friendly websites.
+        </motion.p>
+      </motion.section>
+      <motion.section
+        id="skills"
+        className="my-10"
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.5, delayChildren: 0.5, staggerChildren: 0.2 }}
+        variants={fadeIn}
+      >
+        <h2 className="text-3xl font-bold text-center mb-6">Tech Stack</h2>
+        <div className="flex justify-center space-x-8">
+          <motion.div variants={fadeIn}>
+            <FaJsSquare className="text-yellow-500 text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaReact className="text-blue-500 text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaNodeJs className="text-green-500 text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaHtml5 className="text-red-500 text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaCss3Alt className="text-blue-600 text-6xl" />
+          </motion.div>
+        </div>
+      </motion.section>
+    </>
+  );
+};
+
+export default HomePage;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+NAVBAR prima dell'aggiunta omino e cambio colori on HomePage
+///////////////////////////////////////////////////////////////////////////////////////////////////
+import React from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
+import { toast } from "react-toastify"; // Importa la libreria toast
+import { logoutUser } from "../../API/firebaseAuth"; // Importa la funzione di logout
+
+const menulist = [
+  {
+    name: "Home",
+    path: "/homepage",
+  },
+  {
+    name: "Log-in",
+    path: "/login",
+  },
+  {
+    name: "Projects",
+    path: "/projects",
+  },
+];
+
+const Navbar = () => {
+  // Recupera l'utente e lo stato di caricamento dal contesto
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser(); // Chiama la funzione di logout da firebaseAuth
+      toast.success("Logout effettuato!");
+      navigate("/homepage");
+    } catch (error) {
+      toast.error("Errore durante il logout: " + error.message);
+    }
+  };
+  const getNaBarColor = () => {
+    switch (location.pathname) {
+      case "/homepage":
+        return "bg-gray-800";
+      case "/login":
+        return "bg-cyan";
+      case "/projects":
+        return "bg-light-pink";
+      default:
+        return "bg-dark-blue";
+    }
+  };
+
+  return (
+    <nav
+      className={`${getNaBarColor()} text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl"`}
+    >
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menulist.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+
+        {/* Mostra il benvenuto solo se l'utente è presente e loading è falso */}
+        {!loading && user && (
+          <>
+            <li className="text-center sm:text-left">
+              <span className="text-white">
+                Benvenuto, {user.email.split("@")[0]}{" "}
+              </span>
+            </li>
+            <li className="text-center sm:text-left">
+              <button onClick={handleLogout} className="text-red underline">
+                Logout
+              </button>
+            </li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+FOOTER prima dell'aggiunta dello stile homepage /color white e linee nere
+////////////////////////////////////////////////////////////////////////////////////////////////////
+import { NavLink, useLocation } from "react-router-dom";
+
+const menuFooter = [
+  {
+    name: "Home",
+    path: "/homepage",
+  },
+  {
+    name: "Contacts",
+    path: "/contacts",
+  },
+];
+
+const Footer = () => {
+  const location = useLocation();
+  const getFooterColor = () => {
+    switch (location.pathname) {
+      case "/homepage":
+        return "bg-gray-800";
+      case "/login":
+        return "bg-cyan";
+      case "/projects":
+        return "bg-light-pink";
+      default:
+        return "bg-dark-blue";
+    }
+  };
+  return (
+    <nav
+      className={`${getFooterColor()}  text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
+    >
+      <p className="text-sm">&copy; 2024 MyPortfolio. All Rights Reserved.</p>
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menuFooter.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+export default Footer;

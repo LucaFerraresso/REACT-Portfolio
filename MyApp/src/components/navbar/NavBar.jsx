@@ -1,28 +1,23 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
 import { toast } from "react-toastify"; // Importa la libreria toast
 import { logoutUser } from "../../API/firebaseAuth"; // Importa la funzione di logout
+import { FaUserCircle } from "react-icons/fa"; // Importa l'icona utente
 
 const menulist = [
-  {
-    name: "Home",
-    path: "/homepage",
-  },
-  {
-    name: "Log-in",
-    path: "/login",
-  },
+  { name: "Home", path: "/homepage" },
+  { name: "Projects", path: "/projects" },
 ];
 
 const Navbar = () => {
-  // Recupera l'utente e lo stato di caricamento dal contesto
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Chiama la funzione di logout da firebaseAuth
+      await logoutUser();
       toast.success("Logout effettuato!");
       navigate("/homepage");
     } catch (error) {
@@ -30,8 +25,17 @@ const Navbar = () => {
     }
   };
 
+  const getNavBarStyles = () => {
+    if (location.pathname === "/homepage") {
+      return "bg-white text-black border-b border-gray-300";
+    }
+    return "bg-gray-800 text-white";
+  };
+
   return (
-    <nav className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl">
+    <nav
+      className={`${getNavBarStyles()} p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
+    >
       <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
         {menulist.map((item, index) => (
           <li key={index} className="text-center sm:text-left">
@@ -45,23 +49,23 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
-
-        {/* Mostra il benvenuto solo se l'utente è presente e loading è falso */}
-        {!loading && user && (
-          <>
-            <li className="text-center sm:text-left">
-              <span className="text-white">
-                Benvenuto, {user.email.split("@")[0]}{" "}
-              </span>
-            </li>
-            <li className="text-center sm:text-left">
-              <button onClick={handleLogout} className="text-red underline">
-                Logout
-              </button>
-            </li>
-          </>
-        )}
       </ul>
+      <div className="flex items-center space-x-4">
+        {!loading && user ? (
+          <>
+            <span className="text-black sm:text-white">
+              Benvenuto, {user.email.split("@")[0]}
+            </span>
+            <button onClick={handleLogout} className="text-red underline">
+              Logout
+            </button>
+          </>
+        ) : (
+          <NavLink to="/login">
+            <FaUserCircle className="text-3xl sm:text-4xl" />
+          </NavLink>
+        )}
+      </div>
     </nav>
   );
 };
