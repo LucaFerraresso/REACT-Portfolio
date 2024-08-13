@@ -1,1 +1,3 @@
+MONGO_URI=mongodb+srv://admin:BR6yPeZqDaVq7NYL@exercise.mongodb.net/exercise?retryWrites=true&w=majority
 
+MONGO_URI=mongodb://127.0.0.1:27017/exercise
