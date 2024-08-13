@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 
-const imgPath = "../../public/HomePageImg/myFoto.jpg";
+const imgPath = "/HomePageImg/myFoto.jpg";
 
 const HomePage = () => {
   const fadeIn = {
