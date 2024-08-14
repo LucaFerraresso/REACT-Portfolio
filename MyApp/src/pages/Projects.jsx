@@ -134,6 +134,14 @@ const Projects = () => {
         "/Exercises/mongodb-implementation/design/desktop-preview-main.jpg",
       initialRating: 0,
     },
+    {
+      id: "Three.js-Project",
+      title: "Three.js Mini Project",
+      description: "Three.js implementation ",
+      link: "/exercise/threejsproject",
+      backgroundImage: "/Exercises/threejs-project/images/desktop-preview.jpg",
+      initialRating: 0,
+    },
   ];
 
   // Funzione di animazione per il titolo

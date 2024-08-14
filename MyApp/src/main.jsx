@@ -25,6 +25,7 @@ import LaunchCountdownTimer from "./pages/LaunchCountdownTimer.jsx";
 import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import RockPaperScissors from "./pages/RockPaperScissors.jsx";
 import MongoDbImplementation from "./pages/MongoDbImplementation.jsx";
+import ThreeJsProject from "./pages/ThreeJsProject.jsx";
 //navbar and footer links
 import Login from "./pages/Login.jsx";
 import Contacts from "./pages/Contacts.jsx";
@@ -126,6 +127,11 @@ const router = createBrowserRouter([
         path: "/exercise/mongodbimplementation",
         element: <MongoDbImplementation />,
       },
+      {
+        path: "/exercise/threejsproject",
+        element: <ThreeJsProject />,
+      },
+
       {
         path: "/contacts",
         element: <Contacts />,
