@@ -8,7 +8,7 @@ const GroundPlane = () => {
       <Plane
         args={[50, 50]}
         rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -1.5, 0]}
+        position={[0, -1.4, 0]}
       >
         <meshStandardMaterial color="hsl(140, 40%, 50%)" /> {/* Verde */}
       </Plane>
@@ -23,7 +23,12 @@ const GroundPlane = () => {
       </Plane>
 
       {/* Muro posteriore */}
-      <Plane args={[50, 10]} rotation={[0, 0, 0]} position={[0, 3, -10]}>
+      <Plane args={[50, 10]} rotation={[0, 0, 0]} position={[10, 3, -10]}>
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" /> {/* Azzurro */}
+      </Plane>
+
+      {/* Muro laterale destro */}
+      <Plane args={[50, 10]} rotation={[0, 0, 0]} position={[-10, 3, 10]}>
         <meshStandardMaterial color="hsl(193, 38%, 86%)" /> {/* Azzurro */}
       </Plane>
     </>
