@@ -1,86 +1,41 @@
-andata ,backup della pagina funzioante con tutti gli elementi inseriti
+import React, { useRef } from "react";
+import { Plane } from "@react-three/drei";
 
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Box, Cylinder } from "@react-three/drei";
-import { useNavigate } from "react-router-dom";
-import Button3D from "../components/threejsComponents/Button3D";
-import StripedSphere from "../components/threejsComponents/StripedSphere";
-import Building from "../components/threejsComponents/Building";
-import RotatingText from "../components/threejsComponents/RotatingText";
-import GroundPlane from "../components/threejsComponents/GroundPlane";
-
-const ThreeJsProject = () => {
-  const navigate = useNavigate();
-
-  const navigateTo = (path) => {
-    navigate(path); // Reindirizzamento dinamico
-  };
-
+const GroundPlane = () => {
   return (
-    <div className="w-full h-screen">
-      <Canvas camera={{ position: [0, 10, 20], fov: 60 }}>
-        {/* Luce ambientale e direzionale */}
-        <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[0, 10, 5]}
-          intensity={1.5}
-          color={"#fff"}
-        />
+    <>
+      {/* Pavimento */}
+      <Plane
+        args={[20, 20]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.4, 0]}
+      >
+        <meshStandardMaterial color="hsl(140, 40%, 50%)" /> {/* Verde */}
+      </Plane>
 
-        {/* Controlli di rotazione */}
-        <OrbitControls enableZoom={true} />
+      {/* Muro laterale sinistro */}
+      <Plane
+        args={[20, 20]}
+        rotation={[0, Math.PI / 2, 0]}
+        position={[-11, 0, 0]}
+      >
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
+        {/* Verde */}
+      </Plane>
 
-        {/* Sfera */}
-        <StripedSphere position={[0, 4, 0]} />
+      {/* Muro posteriore */}
 
-        {/* Testo rotante attorno alla sfera */}
-        <RotatingText radius={6} speed={0.01} />
-        <Cylinder args={[0.5, 0.5, 2, 32]} position={[-1, 1, -1]}>
-          <meshStandardMaterial color="hsl(219, 100%, 50%)" />{" "}
-          {/* Blu brillante */}
-        </Cylinder>
-        <Box args={[1.5, 1.5, 1.5]} position={[0.5, 0.75, -2]}>
-          <meshStandardMaterial color="hsl(169, 82%, 27%)" />{" "}
-          {/* Verde brillante */}
-        </Box>
-
-        {/* Bottoni 3D posizionati a semicerchio */}
-        <Button3D
-          label="Home"
-          onClick={() => setTimeout(() => navigateTo("/homepage"), 500)}
-          position={[-4, -1, 2]}
-          rotation={[0, 0.3, 0]}
-          color="hsl(207, 90%, 54%)" // Blu accattivante
-        />
-        <Button3D
-          label="Projects"
-          onClick={() => setTimeout(() => navigateTo("/projects"), 500)}
-          position={[-2, -1, 3]}
-          rotation={[0, 0.1, 0]}
-          color="hsl(120, 73%, 48%)" // Verde brillante
-        />
-        <Button3D
-          label="Contacts"
-          onClick={() => setTimeout(() => navigateTo("/contacts"), 500)}
-          position={[2, -1, 3]}
-          rotation={[0, -0.1, 0]}
-          color="hsl(341, 92%, 63%)" // Rosso vivace
-        />
-        <Button3D
-          label="About Me"
-          onClick={() => setTimeout(() => navigateTo("/aboutme"), 500)}
-          position={[4, -1, 2]}
-          rotation={[0, -0.3, 0]}
-          color="hsl(30, 100%, 66%)" // Arancione intenso
-        />
-
-        {/* Terreno e muri */}
-        <Building />
-        <GroundPlane />
-      </Canvas>
-    </div>
+      {/* Muro laterale destro */}
+      <Plane
+        args={[20, 20]}
+        rotation={[0, Math.PI / 2, 0]}
+        position={[11, 0, 0]}
+      >
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
+        {/* Azzurro */}
+      </Plane>
+    </>
   );
 };
 
-export default ThreeJsProject;
+export default GroundPlane;

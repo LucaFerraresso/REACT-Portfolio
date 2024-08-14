@@ -21,13 +21,14 @@ const RotatingText = ({ radius = 5, speed = 0.01 }) => {
       <Text3D
         ref={textRef}
         font="/fonts/helvetiker_regular.typeface.json"
-        size={1.5}
+        size={1.4}
         height={0.2}
         curveSegments={12}
         bevelEnabled
         bevelThickness={0.1}
         bevelSize={0.02}
         bevelSegments={5}
+        castShadow={true}
       >
         Luca
         <meshStandardMaterial color="hsl(32, 100%, 50%)" /> {/* Arancione */}

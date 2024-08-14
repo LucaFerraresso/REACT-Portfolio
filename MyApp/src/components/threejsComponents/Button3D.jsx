@@ -37,7 +37,11 @@ const Button3D = ({ onClick, label, position, rotation, color }) => {
       </mesh>
 
       {/* Corpo del pulsante */}
-      <animated.mesh scale={scale} position={positionSpring}>
+      <animated.mesh
+        scale={scale}
+        position={positionSpring}
+        receiveShadow={true}
+      >
         <cylinderGeometry args={[1, 1, 0.4, 32]} />{" "}
         {/* Cilindro con altezza media */}
         <meshStandardMaterial color={color} />
@@ -48,7 +52,7 @@ const Button3D = ({ onClick, label, position, rotation, color }) => {
           position={[-0.8, 0.5, 0.26]}
         >
           {label}
-          <meshStandardMaterial color="white" />
+          <meshStandardMaterial color="black" />
         </Text3D>
       </animated.mesh>
     </animated.group>

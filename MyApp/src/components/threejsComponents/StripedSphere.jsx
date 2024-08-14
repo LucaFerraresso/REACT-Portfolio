@@ -53,7 +53,12 @@ const StripedSphere = ({ position }) => {
   const gradientMaterial = createGradientMaterial();
 
   return (
-    <Sphere ref={sphereRef} args={[1.5, 32, 32]} position={position}>
+    <Sphere
+      ref={sphereRef}
+      args={[1.5, 32, 32]}
+      position={position}
+      castShadow={true}
+    >
       <primitive attach="material" object={gradientMaterial} />
     </Sphere>
   );
