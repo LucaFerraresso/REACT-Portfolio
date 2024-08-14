@@ -137,7 +137,8 @@ const Projects = () => {
     {
       id: "Three.js-Project",
       title: "Three.js Mini Project",
-      description: "Three.js implementation ",
+      description:
+        "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls.  ",
       link: "/exercise/threejsproject",
       backgroundImage: "/Exercises/threejs-project/images/desktop-preview.jpg",
       initialRating: 0,
