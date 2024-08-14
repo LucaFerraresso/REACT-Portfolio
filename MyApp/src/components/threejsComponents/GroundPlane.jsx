@@ -11,8 +11,8 @@ const GroundPlane = () => {
         receiveShadow={true}
       >
         <meshStandardMaterial color="hsl(140, 40%, 50%)" side={2} />{" "}
-        {/* Verde */}
       </Plane>
+      {/* laterale d sinistra */}
       <Plane
         args={[20, 10]}
         rotation={[0, Math.PI / 2, 0]}
@@ -20,8 +20,8 @@ const GroundPlane = () => {
         receiveShadow={true}
       >
         <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
-        {/* Azzurro */}
       </Plane>
+      {/* laterale di destra */}
       <Plane
         args={[10, 20]}
         rotation={[0, 0, Math.PI / 2]}
