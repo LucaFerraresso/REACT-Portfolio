@@ -23,7 +23,7 @@ const techIcons = [
   { icon: FaCss3Alt, color: "text-blue-600", name: "CSS3" },
 ];
 
-const imgPath = "/HomePageImg/myFoto.jpg";
+const imgPath = "/assets-images/HomePageImg/myFoto.jpg";
 
 const HomePage = () => {
   const fadeIn = {
@@ -156,41 +156,53 @@ const HomePage = () => {
         >
           <motion.div className=" p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300  ">
             <img
-              src="/path/to/project1.jpg"
-              alt="ToDo List/ToDo App"
+              src="/assets-images/projects-preview-images/Screenshot (2955).png"
+              alt="https://todoapp-bice-two.vercel.app/"
               className="w-full h-40 object-cover mb-4 rounded-lg"
             />
             <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-              Project 1
+              ToDo-app , JavaScript only
             </h3>
             <p className="text-gray-700">
               A brief description of what this project is about.
             </p>
             <a
-              href="https://github.com/project1"
+              href="https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER"
               className="text-strong-cyan hover:underline mt-2 block"
             >
               View on GitHub
+            </a>
+            <a
+              href="https://todoapp-bice-two.vercel.app/"
+              className="text-dark-grayish-blue hover:underline mt-2 block"
+            >
+              View on vercel
             </a>
           </motion.div>
 
           <motion.div className="  p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300  ">
             <img
-              src="/path/to/project2.jpg"
-              alt="Final Project Edgemony"
+              src="/assets-images/projects-preview-images/Screenshot (2957).png"
+              alt="https://icescream-menu-app.vercel.app/"
               className="w-full h-40 object-cover mb-4 rounded-lg"
             />
             <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-              Project 2
+              Ice-Cream-App menù
             </h3>
             <p className="text-gray-700">
               A brief description of what this project is about.
             </p>
             <a
-              href="https://github.com/project2"
+              href="https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project"
               className="text-strong-cyan hover:underline mt-2 block"
             >
               View on GitHub
+            </a>
+            <a
+              href="https://icescream-menu-app.vercel.app/"
+              className="text-dark-grayish-blue hover:underline mt-2 block"
+            >
+              View on vercel
             </a>
           </motion.div>
         </motion.div>
