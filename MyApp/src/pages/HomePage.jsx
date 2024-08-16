@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+//importare l'icona di facebook e gmail
 import {
   FaJsSquare,
   FaReact,
@@ -8,11 +9,13 @@ import {
   FaCss3Alt,
   FaLinkedin,
   FaGithub,
+  FaFacebook,
 } from "react-icons/fa";
 
 const socialLinks = [
   { icon: FaLinkedin, url: "https://www.linkedin.com", color: "text-blue-600" },
   { icon: FaGithub, url: "https://github.com", color: "text-black" },
+  { icon: FaFacebook, url: "https://facebook.com", color: "text-blue-600" },
 ];
 
 const techIcons = [
@@ -37,37 +40,37 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen border border-black">
         {/* Sezione 1 */}
         <motion.section
           id="about"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8 my-10"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8 my-10 border border-black"
           initial="hidden"
           animate="visible"
           variants={fadeIn}
         >
           {/* Sezione immagine */}
-          <div className="flex justify-center items-center h-1/2 lg:h-full">
+          <div className="flex justify-center items-center h-1/2 lg:h-full border border-black">
             <motion.img
               src={imgPath}
               alt="Your Photo"
               loading="lazy"
-              className="rounded-lg w-48 h-48 lg:w-3/4 lg:h-auto mb-6 lg:mb-0 shadow-lg border-4 border-gradient-to-r from-green to-blue-500 hover:scale-105 transition-transform duration-500"
+              className="rounded-tr-3xl rounded-bl-3xl w-48 h-48 lg:w-3/4 lg:h-auto mb-6 lg:mb-0 shadow-lg border-4 border-gradient-to-r from-green to-blue-500 hover:scale-105 transition-transform duration-500"
             />
           </div>
 
           {/* Sezione About Me */}
-          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-1/2 lg:h-full">
+          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-1/2 lg:h-full border border-black">
             <motion.h2 className="text-4xl lg:text-5xl font-bold">
               Hi, my name is Luca Ferraresso, I'm a Web Developer.
             </motion.h2>
 
-            <motion.p className="text-lg lg:text-xl mt-4 mb-6 text-gray-700">
+            <motion.p className="text-lg lg:text-xl mt-4 mb-6 text-gray-700 border border-black">
               Based in Venice, Italy, I am a React enthusiast and I love to
               create beautiful and functional websites, I guess.
             </motion.p>
 
-            <motion.div className="flex justify-center lg:justify-start space-x-6 mt-6">
+            <motion.div className="flex justify-center lg:justify-start space-x-6 mt-6 border border-black">
               {socialLinks.map(({ icon: Icon, url, color }, index) => (
                 <motion.a
                   key={index}
@@ -92,7 +95,7 @@ const HomePage = () => {
         {/* Sezione 2 */}
         <motion.section
           id="skills"
-          className="p-4 lg:p-8 my-10"
+          className="p-4 lg:p-8 my-10 border border-black"
           initial="hidden"
           animate="visible"
           transition={{
@@ -107,7 +110,7 @@ const HomePage = () => {
           </h2>
 
           <motion.div
-            className="flex flex-wrap justify-center gap-6"
+            className="flex flex-wrap justify-center gap-6 border border-black"
             initial="hidden"
             animate="visible"
             variants={{
@@ -125,7 +128,7 @@ const HomePage = () => {
               <motion.div
                 key={index}
                 variants={fadeIn}
-                className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border hover:border-gray-300"
+                className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border hover:border-gray-300  border-black"
                 aria-label={name}
               >
                 <Icon className={`${color} text-5xl lg:text-6xl`} />
@@ -138,7 +141,7 @@ const HomePage = () => {
         {/* Sezione 3 */}
         <motion.section
           id="projects"
-          className="p-4 lg:p-8 my-10"
+          className="p-4 lg:p-8 my-10 border border-black"
           initial="hidden"
           animate="visible"
           variants={fadeIn}
@@ -147,7 +150,7 @@ const HomePage = () => {
             Recent Projects
           </h2>
           <motion.div
-            className="flex flex-wrap gap-10 justify-center"
+            className="flex flex-wrap gap-10 justify-center border border-black"
             initial="hidden"
             animate="visible"
             variants={{
@@ -165,7 +168,7 @@ const HomePage = () => {
               href="https://todoapp-bice-two.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block"
+              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block border-black"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.8 }}
               aria-label="Visit ToDo-app"
@@ -174,17 +177,17 @@ const HomePage = () => {
               <img
                 src="/assets-images/projects-preview-images/Screenshot (2955).png"
                 alt="ToDo-app"
-                className="w-full h-40 object-cover mb-4 rounded-lg"
+                className="w-full h-40 object-cover mb-4 rounded-lg border border-black"
               />
               <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-                ToDo-app, JavaScript only
+                ToDo-App (JavaScript only)
               </h3>
               <p className="text-gray-700">
                 A brief description of what this project is about.
               </p>
               <a
                 href="https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER"
-                className="text-strong-cyan hover:underline mt-2 block"
+                className="text-strong-cyan hover:underline mt-2 block border border-black"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -196,7 +199,7 @@ const HomePage = () => {
               href="https://icescream-menu-app.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block"
+              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block border-black"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.8 }}
               aria-label="Visit Ice-Cream-App"
@@ -205,17 +208,17 @@ const HomePage = () => {
               <img
                 src="/assets-images/projects-preview-images/Screenshot (2957).png"
                 alt="Ice-Cream-App"
-                className="w-full h-40 object-cover mb-4 rounded-lg"
+                className="w-full h-40 object-cover mb-4 rounded-lg border border-black"
               />
               <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-                Ice-Cream-App Menu
+                Ice-Cream menù App (JavaScript only)
               </h3>
               <p className="text-gray-700">
                 A brief description of what this project is about.
               </p>
               <a
                 href="https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project"
-                className="text-strong-cyan hover:underline mt-2 block"
+                className="text-strong-cyan hover:underline mt-2 block border border-black"
                 target="_blank"
                 rel="noopener noreferrer"
               >
