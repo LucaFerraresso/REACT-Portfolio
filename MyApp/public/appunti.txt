@@ -1,0 +1,267 @@
+//gestisco  e miglioro la homepage + navabar e footer + animazioni e prestazioni applicativo
+
+//backup homepage:
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FaJsSquare,
+  FaReact,
+  FaNodeJs,
+  FaHtml5,
+  FaCss3Alt,
+} from "react-icons/fa";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+
+const imgPath = "/HomePageImg/myFoto.jpg";
+
+const HomePage = () => {
+  const fadeIn = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <>
+      <motion.section
+        id="about"
+        className="text-center my-10 px-4 sm:px-0"
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.5 }}
+        variants={fadeIn}
+      >
+        <motion.img
+          src={imgPath}
+          alt="Your Photo"
+          className="mx-auto rounded-full w-24 h-24 sm:w-32 sm:h-32 border-4 border-black mb-4"
+          variants={fadeIn}
+        />
+        <motion.h2 className="text-2xl sm:text-3xl font-bold" variants={fadeIn}>
+          Hello, I'am giovanni giorgio...but everyone call me Giorgio
+        </motion.h2>
+        <motion.p className="text-md sm:text-lg mt-4 mb-6" variants={fadeIn}>
+          Based in Venice, Italy, I am a React enthusiast and a web developer. I
+          love create beautiful and functional websites,i guess.
+        </motion.p>
+
+        <motion.div className="flex justify-center space-x-4" variants={fadeIn}>
+          <a
+            href="https://www.linkedin.com/in/tuo-profilo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLinkedin className="text-blue-600 text-4xl" />
+          </a>
+          <a
+            href="https://github.com/tuo-profilo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaGithub className="text-black text-4xl" />
+          </a>
+        </motion.div>
+      </motion.section>
+
+      <motion.section
+        id="skills"
+        className="my-10 px-4 sm:px-0"
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: 0.5, delayChildren: 0.5, staggerChildren: 0.2 }}
+        variants={fadeIn}
+      >
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+          Tech Stack
+        </h2>
+        <div className="flex justify-center space-x-4 sm:space-x-8">
+          <motion.div variants={fadeIn}>
+            <FaJsSquare className="text-yellow-500 text-5xl sm:text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaReact className="text-blue-500 text-5xl sm:text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaNodeJs className="text-green-500 text-5xl sm:text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaHtml5 className="text-red-500 text-5xl sm:text-6xl" />
+          </motion.div>
+          <motion.div variants={fadeIn}>
+            <FaCss3Alt className="text-blue-600 text-5xl sm:text-6xl" />
+          </motion.div>
+        </div>
+      </motion.section>
+    </>
+  );
+};
+
+export default HomePage;
+
+// backup navabarimport React from "react";
+
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
+import { toast } from "react-toastify"; // Importa la libreria toast
+import { logoutUser } from "../../API/firebaseAuth"; // Importa la funzione di logout
+import { FaUserCircle } from "react-icons/fa"; // Importa l'icona utente
+
+const menulist = [
+  { name: "Home", path: "/homepage" },
+  { name: "Projects", path: "/projects" },
+];
+
+const Navbar = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Logout effettuato!");
+      navigate("/homepage");
+    } catch (error) {
+      toast.error("Errore durante il logout: " + error.message);
+    }
+  };
+
+  const getNavBarStyles = () => {
+    if (location.pathname === "/homepage" || location.pathname === "/aboutme") {
+      return "bg-white text-black border-b border-gray-300";
+    }
+    return "bg-gray-800 text-white";
+  };
+
+  const getTextColor = () => {
+    return location.pathname === "/homepage" || location.pathname === "/aboutme"
+      ? "text-black"
+      : "text-white";
+  };
+
+  return (
+    <nav
+      className={`${getNavBarStyles()} p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
+    >
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menulist.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+      <div className="flex items-center space-x-4">
+        {!loading && user ? (
+          <>
+            <span className={getTextColor()}>
+              Benvenuto, {user.email.split("@")[0]}
+            </span>
+            <button onClick={handleLogout} className="text-red underline">
+              Logout
+            </button>
+          </>
+        ) : (
+          <NavLink to="/login">
+            <FaUserCircle className="text-3xl sm:text-4xl" />
+          </NavLink>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+//backup footer
+
+import { NavLink, useLocation } from "react-router-dom";
+
+const menuFooter = [
+  { name: "Contacts", path: "/contacts" },
+  { name: "About me", path: "/aboutme" },
+];
+
+const Footer = () => {
+  const location = useLocation();
+
+  // Funzione per ottenere lo stile del footer
+  const getFooterStyles = () => {
+    if (location.pathname === "/homepage" || location.pathname === "/aboutme") {
+      return {
+        container: "bg-white text-black border-t border-gray-300",
+        link: "text-black border-b-2 border-black",
+      };
+    }
+    return {
+      container: "bg-gray-800 text-white",
+      link: "text-white",
+    };
+  };
+
+  const { container, link } = getFooterStyles();
+
+  return (
+    <nav
+      className={`${container} p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
+    >
+      <p className="text-sm">&copy; 2024 MyPortfolio. All Rights Reserved.</p>
+      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+        {menuFooter.map((item, index) => (
+          <li key={index} className="text-center sm:text-left">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to={item.path}
+            >
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+export default Footer;
+
+
+////div social link animated 
+<motion.div
+              className="flex justify-center sm:justify-start space-x-6 mt-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0, y: -20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    staggerChildren: 0.5,
+                  },
+                },
+              }}
+            >
+              {socialLinks.map(({ icon: Icon, url, color }, index) => (
+                <motion.a
+                  key={index}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={fadeIn}
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ duration: 0.8 }}
+                  aria-label={`Visit ${
+                    url.includes("linkedin") ? "linkedin" : "github"
+                  }`}
+                >
+                  <Icon className={`${color} text-5xl`} />
+                </motion.a>
+              ))}
+            </motion.div>

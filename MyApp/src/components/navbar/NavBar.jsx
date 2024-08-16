@@ -1,9 +1,9 @@
 import React from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../useContext/AuthContext"; // Importa il contesto
-import { toast } from "react-toastify"; // Importa la libreria toast
-import { logoutUser } from "../../API/firebaseAuth"; // Importa la funzione di logout
-import { FaUserCircle } from "react-icons/fa"; // Importa l'icona utente
+import { useAuth } from "../../useContext/AuthContext";
+import { toast } from "react-toastify";
+import { logoutUser } from "../../API/firebaseAuth";
+import { FaUserCircle } from "react-icons/fa";
 
 const menulist = [
   { name: "Home", path: "/homepage" },
@@ -25,26 +25,23 @@ const Navbar = () => {
     }
   };
 
-  const getNavBarStyles = () => {
-    if (location.pathname === "/homepage" || location.pathname === "/aboutme") {
-      return "bg-white text-black border-b border-gray-300";
-    }
-    return "bg-gray-800 text-white";
-  };
+  const getNavBarStyles =
+    location.pathname === "/homepage" || location.pathname === "/aboutme"
+      ? "bg-white text-black border-b border-gray-300"
+      : "bg-gray-800 text-white";
 
-  const getTextColor = () => {
-    return location.pathname === "/homepage" || location.pathname === "/aboutme"
+  const textColor =
+    location.pathname === "/homepage" || location.pathname === "/aboutme"
       ? "text-black"
       : "text-white";
-  };
 
   return (
     <nav
-      className={`${getNavBarStyles()} p-4 flex flex-col sm:flex-row justify-between items-center text-lg sm:text-2xl`}
+      className={`${getNavBarStyles} p-4 flex justify-between items-center text-lg sm:text-2xl`}
     >
-      <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 m-0 w-full sm:w-auto">
+      <ul className="flex space-x-6">
         {menulist.map((item, index) => (
-          <li key={index} className="text-center sm:text-left">
+          <li key={index}>
             <NavLink
               className={({ isActive }) =>
                 isActive ? "font-bold text-green underline" : ""
@@ -59,7 +56,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         {!loading && user ? (
           <>
-            <span className={getTextColor()}>
+            <span className={textColor}>
               Benvenuto, {user.email.split("@")[0]}
             </span>
             <button onClick={handleLogout} className="text-red underline">
@@ -68,7 +65,7 @@ const Navbar = () => {
           </>
         ) : (
           <NavLink to="/login">
-            <FaUserCircle className="text-3xl sm:text-4xl" />
+            <FaUserCircle className="text-4xl" />
           </NavLink>
         )}
       </div>
