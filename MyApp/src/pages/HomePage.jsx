@@ -37,176 +37,194 @@ const HomePage = () => {
 
   return (
     <>
-      <motion.section
-        id="about"
-        className=" grid grid-cols-1 sm:grid-cols-2 gap-8 items-center my-10 px-4 sm:px-0 font-montserrat "
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-      >
-        <div className="p-6  flex justify-center ">
-          <motion.img
-            src={imgPath}
-            alt="Your Photo"
-            loading="lazy"
-            className=" rounded-lg w-48 h-48 sm:w-56 sm:h-56 mb-6 sm:mb-0  shadow-lg border-4 border-gradient-to-r from-green to-blue-500 hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-        <div className="p-5  text-center sm:text-left">
-          <motion.h2 className="text-4xl sm:text-5xl font-bold ">
-            Hi, my name is Luca Ferraresso, I'm a Web Developer.
-          </motion.h2>
+      <div className="flex flex-col min-h-screen">
+        {/* Sezione 1 */}
+        <motion.section
+          id="about"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8 my-10"
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+        >
+          {/* Sezione immagine */}
+          <div className="flex justify-center items-center h-1/2 lg:h-full">
+            <motion.img
+              src={imgPath}
+              alt="Your Photo"
+              loading="lazy"
+              className="rounded-lg w-48 h-48 lg:w-3/4 lg:h-auto mb-6 lg:mb-0 shadow-lg border-4 border-gradient-to-r from-green to-blue-500 hover:scale-105 transition-transform duration-500"
+            />
+          </div>
 
-          <motion.p className="text-lg sm:text-xl mt-4 mb-6 text-gray-700">
-            Based in Venice, Italy, I am a React enthusiast and i love create
-            beautiful and functional websites,i guess.
-          </motion.p>
+          {/* Sezione About Me */}
+          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-1/2 lg:h-full">
+            <motion.h2 className="text-4xl lg:text-5xl font-bold">
+              Hi, my name is Luca Ferraresso, I'm a Web Developer.
+            </motion.h2>
 
-          <motion.div className="flex justify-center sm:justify-start space-x-6 mt-6">
-            {socialLinks.map(({ icon: Icon, url, color }, index) => (
-              <motion.a
+            <motion.p className="text-lg lg:text-xl mt-4 mb-6 text-gray-700">
+              Based in Venice, Italy, I am a React enthusiast and I love to
+              create beautiful and functional websites, I guess.
+            </motion.p>
+
+            <motion.div className="flex justify-center lg:justify-start space-x-6 mt-6">
+              {socialLinks.map(({ icon: Icon, url, color }, index) => (
+                <motion.a
+                  key={index}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={fadeIn}
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ duration: 0.8 }}
+                  className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300"
+                  aria-label={`Visit ${
+                    url.includes("linkedin") ? "LinkedIn" : "GitHub"
+                  }`}
+                >
+                  <Icon className={`${color} text-5xl`} />
+                </motion.a>
+              ))}
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Sezione 2 */}
+        <motion.section
+          id="skills"
+          className="p-4 lg:p-8 my-10"
+          initial="hidden"
+          animate="visible"
+          transition={{
+            duration: 0.5,
+            delayChildren: 0.5,
+            staggerChildren: 1,
+          }}
+          variants={fadeIn}
+        >
+          <h2 className="text-2xl lg:text-3xl font-bold text-center mb-6">
+            Tech Stack
+          </h2>
+
+          <motion.div
+            className="flex flex-wrap justify-center gap-6"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: -20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  staggerChildren: 0.5,
+                },
+              },
+            }}
+          >
+            {techIcons.map(({ icon: Icon, color, name }, index) => (
+              <motion.div
                 key={index}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
                 variants={fadeIn}
-                whileHover={{ scale: 1.2 }}
-                transition={{ duration: 0.8 }}
-                className=" p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 "
-                aria-label={`Visit ${
-                  url.includes("linkedin") ? "Linkedin" : "GitHub"
-                }`}
+                className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border hover:border-gray-300"
+                aria-label={name}
               >
-                <Icon className={`${color} text-5xl`} />
-              </motion.a>
+                <Icon className={`${color} text-5xl lg:text-6xl`} />
+                <h1 className="mt-2 text-lg font-semibold">{name}</h1>
+              </motion.div>
             ))}
           </motion.div>
-        </div>
-      </motion.section>
+        </motion.section>
 
-      <motion.section
-        id="skills"
-        className="my-10 px-4 sm:px-0  "
-        initial="hidden"
-        animate="visible"
-        transition={{
-          duration: 0.5,
-          delayChildren: 0.5,
-          staggerChildren: 1,
-        }}
-        variants={fadeIn}
-      >
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
-          Tech Stack
-        </h2>
-
-        <motion.div
-          className="flex flex-row flex-wrap items-center gap-6 justify-center "
+        {/* Sezione 3 */}
+        <motion.section
+          id="projects"
+          className="p-4 lg:p-8 my-10"
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: { opacity: 0, y: -20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
+          variants={fadeIn}
         >
-          {techIcons.map(({ icon: Icon, color, name }, index) => (
-            <motion.div
-              key={index}
-              variants={fadeIn}
-              className=" p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border hover:border-gray-300 "
-              aria-label={name}
-            >
-              <Icon className={`${color} text-5xl sm:text-6xl`} />
-              <h1 className="mt-2 text-lg font-semibold">{name}</h1>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.section>
-
-      <motion.section
-        id="projects"
-        className="my-10 px-4 sm:px-8  "
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-      >
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 text-dark-blue">
-          Recent Projects
-        </h2>
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-10 ml-6 mr-6"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0, y: -20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                staggerChildren: 0.5,
+          <h2 className="text-2xl lg:text-3xl font-bold text-center mb-6 text-dark-blue">
+            Recent Projects
+          </h2>
+          <motion.div
+            className="flex flex-wrap gap-10 justify-center"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: -20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  staggerChildren: 0.5,
+                },
               },
-            },
-          }}
-        >
-          <motion.div className=" p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300  ">
-            <img
-              src="/assets-images/projects-preview-images/Screenshot (2955).png"
-              alt="https://todoapp-bice-two.vercel.app/"
-              className="w-full h-40 object-cover mb-4 rounded-lg"
-            />
-            <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-              ToDo-app , JavaScript only
-            </h3>
-            <p className="text-gray-700">
-              A brief description of what this project is about.
-            </p>
-            <a
-              href="https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER"
-              className="text-strong-cyan hover:underline mt-2 block"
-            >
-              View on GitHub
-            </a>
-            <a
+            }}
+          >
+            <motion.a
               href="https://todoapp-bice-two.vercel.app/"
-              className="text-dark-grayish-blue hover:underline mt-2 block"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.8 }}
+              aria-label="Visit ToDo-app"
+              variants={fadeIn}
             >
-              View on vercel
-            </a>
-          </motion.div>
+              <img
+                src="/assets-images/projects-preview-images/Screenshot (2955).png"
+                alt="ToDo-app"
+                className="w-full h-40 object-cover mb-4 rounded-lg"
+              />
+              <h3 className="text-xl font-semibold mb-2 text-dark-blue">
+                ToDo-app, JavaScript only
+              </h3>
+              <p className="text-gray-700">
+                A brief description of what this project is about.
+              </p>
+              <a
+                href="https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER"
+                className="text-strong-cyan hover:underline mt-2 block"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            </motion.a>
 
-          <motion.div className="  p-6 rounded-lg shodow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300  ">
-            <img
-              src="/assets-images/projects-preview-images/Screenshot (2957).png"
-              alt="https://icescream-menu-app.vercel.app/"
-              className="w-full h-40 object-cover mb-4 rounded-lg"
-            />
-            <h3 className="text-xl font-semibold mb-2 text-dark-blue">
-              Ice-Cream-App menù
-            </h3>
-            <p className="text-gray-700">
-              A brief description of what this project is about.
-            </p>
-            <a
-              href="https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project"
-              className="text-strong-cyan hover:underline mt-2 block"
-            >
-              View on GitHub
-            </a>
-            <a
+            <motion.a
               href="https://icescream-menu-app.vercel.app/"
-              className="text-dark-grayish-blue hover:underline mt-2 block"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300 block"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.8 }}
+              aria-label="Visit Ice-Cream-App"
+              variants={fadeIn}
             >
-              View on vercel
-            </a>
+              <img
+                src="/assets-images/projects-preview-images/Screenshot (2957).png"
+                alt="Ice-Cream-App"
+                className="w-full h-40 object-cover mb-4 rounded-lg"
+              />
+              <h3 className="text-xl font-semibold mb-2 text-dark-blue">
+                Ice-Cream-App Menu
+              </h3>
+              <p className="text-gray-700">
+                A brief description of what this project is about.
+              </p>
+              <a
+                href="https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project"
+                className="text-strong-cyan hover:underline mt-2 block"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            </motion.a>
           </motion.div>
-        </motion.div>
-      </motion.section>
+        </motion.section>
+      </div>
     </>
   );
 };
