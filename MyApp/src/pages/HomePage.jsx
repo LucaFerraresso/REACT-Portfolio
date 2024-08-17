@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-//importare l'icona di facebook e gmail
 import {
   FaJsSquare,
   FaReact,
@@ -40,55 +39,53 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen border border-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Sezione 1 */}
         <motion.section
           id="about"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 lg:p-8 my-10 border border-black"
           initial="hidden"
           animate="visible"
           variants={fadeIn}
         >
-          {/* Sezione immagine */}
-          <div className="flex justify-center items-center h-1/2 lg:h-full border border-black">
-            <motion.img
-              src={imgPath}
-              alt="Your Photo"
-              loading="lazy"
-              className="rounded-tr-3xl rounded-bl-3xl w-48 h-48 lg:w-3/4 lg:h-auto mb-6 lg:mb-0 shadow-lg border-4 border-gradient-to-r from-green to-blue-500 hover:scale-105 transition-transform duration-500"
-            />
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8  border border-black">
+            {/* Sezione immagine */}
+            <div className="flex justify-center items-center  border-black">
+              <motion.img
+                src={imgPath}
+                alt="Your Photo"
+                loading="lazy"
+                className="rounded-tr-3xl rounded-bl-3xl w-full max-w-xs ls:max-w-lg"
+              />
+            </div>
 
-          {/* Sezione About Me */}
-          <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-1/2 lg:h-full border border-black">
-            <motion.h2 className="text-4xl lg:text-5xl font-bold">
-              Hi, my name is Luca Ferraresso, I'm a Web Developer.
-            </motion.h2>
+            {/* Sezione About Me */}
+            <div className="flex flex-col justify-center items-center lg:items-left  border border-black">
+              <motion.h2 className="text-4xl lg:text-5xl font-bold">
+                Hi, my name is Luca Ferraresso, I'm a Web Developer.
+              </motion.h2>
 
-            <motion.p className="text-lg lg:text-xl mt-4 mb-6 text-gray-700 border border-black">
-              Based in Venice, Italy, I am a React enthusiast and I love to
-              create beautiful and functional websites, I guess.
-            </motion.p>
+              <motion.p className="text-lg lg:text-xl mt-4  text-gray-700 border border-black">
+                Based in Venice, Italy, I am a React enthusiast and I love to
+                create beautiful and functional websites, I guess.
+              </motion.p>
 
-            <motion.div className="flex justify-center lg:justify-start space-x-6 mt-6 border border-black">
-              {socialLinks.map(({ icon: Icon, url, color }, index) => (
-                <motion.a
-                  key={index}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variants={fadeIn}
-                  whileHover={{ scale: 1.2 }}
-                  transition={{ duration: 0.8 }}
-                  className="p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-gray-300"
-                  aria-label={`Visit ${
-                    url.includes("linkedin") ? "LinkedIn" : "GitHub"
-                  }`}
-                >
-                  <Icon className={`${color} text-5xl`} />
-                </motion.a>
-              ))}
-            </motion.div>
+              <motion.div className="flex justify-center lg:justify-start space-x-6 border border-black">
+                {socialLinks.map(({ icon: Icon, url, color }, index) => (
+                  <motion.a
+                    key={index}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variants={fadeIn}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.6 }}
+                    className={`text-4xl ${color} p-2`}
+                  >
+                    <Icon className={`text-4xl ${color} p-2`} />
+                  </motion.a>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </motion.section>
 
