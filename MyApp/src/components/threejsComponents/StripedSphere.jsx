@@ -31,8 +31,8 @@ const StripedSphere = ({ position }) => {
       size / 2,
       size / 2
     );
-    gradient.addColorStop(0, "hsl(59, 50%, 65%)");
-    gradient.addColorStop(1, "hsl(259, 100%, 65%)");
+    gradient.addColorStop(0, "hsl(200, 100%, 50%)");
+    gradient.addColorStop(1, "hsl(120, 100%, 50%)");
 
     context.fillStyle = gradient;
     context.fillRect(0, 0, size, size);

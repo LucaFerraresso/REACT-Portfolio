@@ -1,6 +1,7 @@
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//svg
 import LinkedInSvg from "../components/svg/LinkedInSvg";
 import FacebookSvg from "../components/svg/FacebookSvg";
 import GmailSvg from "../components/svg/GmailSvg";
@@ -32,11 +33,21 @@ const ContactPage = () => {
             <p>Email: lucaferraresso96@gmail.com</p>
           </div>
           <div className="flex p-2 gap-2 justify-center space-x-4 mt-4 mb-4">
-            <LinkedInSvg className="border border-black rounded-full hover:text-blue-500 transition-colors duration-300 ease-in-out p-2" />
-            <FacebookSvg className="border border-black rounded-full hover:text-blue-700 transition-colors duration-300 ease-in-out p-2 " />
-            <GmailSvg className="border border-black rounded-full hover:text-red transition-colors duration-300 ease-in-out p-2 " />
-            <GitHubSvg className="border border-black rounded-full hover:text-gray-900 transition-colors duration-300 ease-in-out p-2 " />
-            <TwitterSvg className="border border-black rounded-full hover:text-blue-400 transition-colors duration-300 ease-in-out p-2 " />
+            <a>
+              <LinkedInSvg />
+            </a>
+            <a>
+              <FacebookSvg />
+            </a>
+            <a>
+              <GmailSvg />
+            </a>
+            <a>
+              <GitHubSvg />
+            </a>
+            <a>
+              <TwitterSvg />
+            </a>
           </div>
         </div>
 

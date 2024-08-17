@@ -5,7 +5,7 @@ const GroundPlane = () => {
   return (
     <>
       <Plane
-        args={[20, 20]}
+        args={[22, 22]}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, -1.35, 0]}
         receiveShadow={true}
@@ -14,18 +14,18 @@ const GroundPlane = () => {
       </Plane>
       {/* laterale d sinistra */}
       <Plane
-        args={[20, 10]}
+        args={[22, 10]}
         rotation={[0, Math.PI / 2, 0]}
-        position={[-10, 3.65, 0]}
+        position={[-11, 3.65, 0]}
         receiveShadow={true}
       >
         <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
       </Plane>
       {/* laterale di destra */}
       <Plane
-        args={[10, 20]}
+        args={[10, 22]}
         rotation={[0, 0, Math.PI / 2]}
-        position={[0, 3.65, -10]}
+        position={[0, 3.65, -11]}
         receiveShadow={true}
       >
         <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}

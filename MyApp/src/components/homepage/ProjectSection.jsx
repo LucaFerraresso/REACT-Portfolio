@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import HomePageProjectCard from "../atoms/HomePageProjectCard";
+import HomePageProjectCard from "../homepage/HomePageProjectCard";
 
 // Varianti di animazione
 const fadeIn = {

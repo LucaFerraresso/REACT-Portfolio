@@ -37,10 +37,10 @@ const iconVariants = {
 
 const SkillsSection = ({ techIcons }) => {
   return (
-    <section className="py-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-gray-100">
+    <section className="py-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100 ">
       <motion.section
         id="skills"
-        className="p-4 sm:p-6 md:p-8 lg:p-10 border border-black rounded-lg bg-white"
+        className="p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg bg-gray-100"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
@@ -58,7 +58,7 @@ const SkillsSection = ({ techIcons }) => {
               key={index}
               variants={iconVariants}
               custom={index} // Passa l'indice per il ritardo
-              className="p-3 sm:p-4 md:p-5 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border hover:border-gray-300 border-black"
+              className="p-3 sm:p-4 md:p-5 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border  bg-white  hover:border-gray-300"
               aria-label={name}
             >
               {/* Icona con una dimensione responsive */}

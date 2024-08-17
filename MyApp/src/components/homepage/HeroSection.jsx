@@ -1,5 +1,5 @@
 import React from "react";
-import { delay, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 // Varianti di animazione
 const fadeIn = {
@@ -88,9 +88,9 @@ const HeroSection = ({ imgPath, socialLinks }) => {
                 variants={socialLinkVariants}
                 custom={index}
                 whileHover={{ scale: 1.05 }}
-                className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color}`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} `}
               >
-                <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
+                <Icon className="w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
               </motion.a>
             ))}
           </motion.div>

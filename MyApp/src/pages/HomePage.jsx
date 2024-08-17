@@ -10,14 +10,30 @@ import {
   FaFacebook,
 } from "react-icons/fa";
 
-import SkillsSection from "../components/atoms/SkillSection";
-import HeroSection from "../components/atoms/HeroSection";
-import ProjectsSection from "../components/atoms/ProjectSection";
+import LinkedInSvg from "../components/svg/LinkedInSvg";
+import GitHubSvg from "../components/svg/GitHubSvg";
+import FacebookSvg from "../components/svg/FacebookSvg";
+
+import SkillsSection from "../components/homepage/SkillSection";
+import HeroSection from "../components/homepage/HeroSection";
+import ProjectsSection from "../components/homepage/ProjectSection";
 
 const socialLinks = [
-  { icon: FaLinkedin, url: "https://www.linkedin.com", color: "text-blue-600" },
-  { icon: FaGithub, url: "https://github.com", color: "text-black" },
-  { icon: FaFacebook, url: "https://facebook.com", color: "text-blue-600" },
+  {
+    icon: FaLinkedin,
+    url: "https://www.linkedin.com",
+    color: "text-blue-600",
+  },
+  {
+    icon: FaGithub,
+    url: "https://github.com",
+    color: "text-black",
+  },
+  {
+    icon: FaFacebook,
+    url: "https://facebook.com",
+    color: "text-blue-600",
+  },
 ];
 
 const techIcons = [

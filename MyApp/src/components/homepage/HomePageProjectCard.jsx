@@ -34,7 +34,7 @@ const HomePageProjectCard = ({ title, image, description, github, vercel }) => {
             href={vercel}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-500 hover:underline"
+            className="text-cyan hover:underline"
           >
             Live Demo
           </a>
@@ -42,7 +42,7 @@ const HomePageProjectCard = ({ title, image, description, github, vercel }) => {
             href={github}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-500 hover:underline"
+            className="text-red hover:underline"
           >
             GitHub
           </a>
