@@ -50,7 +50,7 @@ const HeroSection = ({ imgPath, socialLinks }) => {
             src={imgPath}
             alt="Your Photo"
             loading="lazy"
-            className="rounded-tr-3xl rounded-bl-3xl w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px] xl:max-w-[450px] 2xl:max-w-[500px]"
+            className="rounded-tr-3xl rounded-bl-3xl w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px] "
             variants={fadeIn}
           />
         </div>
