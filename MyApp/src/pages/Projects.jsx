@@ -124,16 +124,7 @@ const Projects = () => {
         "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
       initialRating: 0,
     },
-    {
-      id: "MongoDB-implementation",
-      title: "MongoDB implementation",
-      description:
-        "A Mongo-DB database implementation exercise involves designing,creating and populating a NoSQL database",
-      link: "/exercise/mongodbimplementation",
-      backgroundImage:
-        "/Exercises/mongodb-implementation/design/desktop-preview-main.jpg",
-      initialRating: 0,
-    },
+
     {
       id: "Three.js-Project",
       title: "Three.js Mini Project",
@@ -141,16 +132,6 @@ const Projects = () => {
         "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls.  ",
       link: "/exercise/threejsproject",
       backgroundImage: "/Exercises/threejs-project/images/desktop-preview.jpg",
-      initialRating: 0,
-    },
-    {
-      id: "OpenAI-Api",
-      title: "OpenAI API Project",
-      description:
-        "An API project that utilizes the OpenAI API to generate images and texts based on user input.",
-      link: "/exercise/openaiapi",
-      backgroundImage:
-        "/Exercises/openAi-api-exercise/images/desktop-preview-openai.jpg.jpg",
       initialRating: 0,
     },
   ];
