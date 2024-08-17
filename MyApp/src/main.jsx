@@ -26,6 +26,7 @@ import ExpensesChartComponent from "./pages/ExpensesChartComponent.jsx";
 import RockPaperScissors from "./pages/RockPaperScissors.jsx";
 import MongoDbImplementation from "./pages/MongoDbImplementation.jsx";
 import ThreeJsProject from "./pages/ThreeJsProject.jsx";
+import OpenAiProject from "./pages/OpenAiProjects.jsx";
 //navbar and footer links
 import Login from "./pages/Login.jsx";
 import Contacts from "./pages/Contacts.jsx";
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
       {
         path: "/exercise/threejsproject",
         element: <ThreeJsProject />,
+      },
+      {
+        path: "/exercise/openaiapi",
+        element: <OpenAiProject />,
       },
 
       {

@@ -143,6 +143,16 @@ const Projects = () => {
       backgroundImage: "/Exercises/threejs-project/images/desktop-preview.jpg",
       initialRating: 0,
     },
+    {
+      id: "OpenAI-Api",
+      title: "OpenAI API Project",
+      description:
+        "An API project that utilizes the OpenAI API to generate images and texts based on user input.",
+      link: "/exercise/openaiapi",
+      backgroundImage:
+        "/Exercises/openAi-api-exercise/images/desktop-preview-openai.jpg.jpg",
+      initialRating: 0,
+    },
   ];
 
   // Funzione di animazione per il titolo
