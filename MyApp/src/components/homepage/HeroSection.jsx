@@ -8,7 +8,7 @@ const fadeIn = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 2,
     },
   },
 };
@@ -18,7 +18,7 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerContainer: 0.3,
+      staggerContainer: 0.5,
     },
   },
 };
@@ -50,7 +50,7 @@ const HeroSection = ({ imgPath, socialLinks }) => {
             src={imgPath}
             alt="Your Photo"
             loading="lazy"
-            className="rounded-tr-3xl rounded-bl-3xl w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px] "
+            className="rounded-3xl  w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px]    "
             variants={fadeIn}
           />
         </div>

@@ -18,7 +18,7 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.3,
+      staggerChildren: 0.5,
     },
   },
 };
@@ -30,7 +30,7 @@ const iconVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      delay: custom * 0.3, // Ritardo personalizzato per ogni icona
+      delay: custom * 0.5, // Ritardo personalizzato per ogni icona
     },
   }),
 };

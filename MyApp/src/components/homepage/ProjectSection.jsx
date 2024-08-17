@@ -9,8 +9,7 @@ const fadeIn = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      staggerChildren: 0.3, // Ritardo personalizzato per ogni card
+      duration: 2,
     },
   },
 };
@@ -22,7 +21,7 @@ const cardVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      delay: custom * 0.3, // Ritardo personalizzato per ogni card
+      delay: custom * 0.5, // Ritardo personalizzato per ogni card
     },
   }),
 };
@@ -53,6 +52,7 @@ const ProjectsSection = ({ projects }) => {
               <HomePageProjectCard {...project} />
             </motion.div>
           ))}
+          <h2>Coming soon.....</h2>
         </div>
       </motion.div>
     </section>
