@@ -15,7 +15,7 @@ const HomePageProjectCard = ({ title, image, description, github, vercel }) => {
   return (
     <motion.div
       variants={fadeIn}
-      className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center border border-gray-300 bg-white"
+      className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border border-gray-300 bg-white"
     >
       <img
         src={image}

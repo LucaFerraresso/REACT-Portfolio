@@ -35,7 +35,7 @@ const socialLinks = [
 const techIcons = [
   { icon: FaJsSquare, color: "text-yellow-500", name: "JavaScript" },
   { icon: FaReact, color: "text-blue-500", name: "React" },
-  { icon: FaNodeJs, color: "text-green", name: "Node.js" },
+  //{ icon: FaNodeJs, color: "text-green", name: "Node.js" },
   { icon: FaHtml5, color: "text-red", name: "HTML5" },
   { icon: FaCss3Alt, color: "text-blue-600", name: "CSS3" },
 ];
