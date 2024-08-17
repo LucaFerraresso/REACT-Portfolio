@@ -124,7 +124,6 @@ const Projects = () => {
         "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
       initialRating: 0,
     },
-
     {
       id: "Three.js-Project",
       title: "Three.js Mini Project",
