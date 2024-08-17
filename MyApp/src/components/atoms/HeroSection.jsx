@@ -37,7 +37,7 @@ const socialLinkVariants = {
 
 const HeroSection = ({ imgPath, socialLinks }) => {
   return (
-    <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-white">
+    <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100">
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
         variants={staggerContainer}
