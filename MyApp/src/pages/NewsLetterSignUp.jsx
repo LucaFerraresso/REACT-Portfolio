@@ -26,7 +26,7 @@ const NewsletterSignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-light-grayish-violet p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-light-grayish-violet p-4 font-roboto">
       <div className="flex flex-col md:flex-row gap-4 md:justify-between md:items-center w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden p-6 md:p-8">
         <div className="flex flex-col justify-center md:w-1/2">
           <h1 className="text-2xl font-bold text-grayish-blue mb-4">

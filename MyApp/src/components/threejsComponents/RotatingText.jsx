@@ -21,7 +21,7 @@ const RotatingText = ({ radius = 4, speed = 0.05 }) => {
     <Float speed={1} rotationIntensity={1} floatIntensity={1}>
       <Text3D
         ref={textRef}
-        font="/fonts/helvetiker_regular.typeface.json"
+        font="/fonts-3D/helvetiker_regular.typeface.json"
         size={1.4}
         height={0.2}
         curveSegments={12}

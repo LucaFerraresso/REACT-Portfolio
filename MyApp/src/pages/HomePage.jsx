@@ -59,13 +59,6 @@ const projects = [
       "https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER",
     vercel: "https://icescream-menu-app.vercel.app/",
   },
-  {
-    title: "Coming soon",
-    image: "/assets-images/projects-preview-images/coming-soon.jpg",
-    description: "New exiting projects are on the way",
-    github: "#",
-    vercel: "#",
-  },
 ];
 
 const imgPath = "/assets-images/HomePageImg/myFoto.jpg";
@@ -73,12 +66,14 @@ const imgPath = "/assets-images/HomePageImg/myFoto.jpg";
 const HomePage = () => {
   return (
     <>
-      {/* Sezione 1 */}
-      <HeroSection imgPath={imgPath} socialLinks={socialLinks} />
-      {/* Sezione 2 */}
-      <SkillsSection techIcons={techIcons} />
-      {/* Sezione 3 */}
-      <ProjectsSection projects={projects} />
+      <div className="font-montserrat">
+        {/* Sezione 1 */}
+        <HeroSection imgPath={imgPath} socialLinks={socialLinks} />
+        {/* Sezione 2 */}
+        <SkillsSection techIcons={techIcons} />
+        {/* Sezione 3 */}
+        <ProjectsSection projects={projects} />
+      </div>
     </>
   );
 };

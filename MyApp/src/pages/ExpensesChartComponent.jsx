@@ -52,7 +52,7 @@ const ExpensesChart = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center font-dm-sans">
       <div className="flex flex-col items-center justify-center max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-very-pale-orange p-6 rounded-lg shadow-lg">
         <h1 className="text-dark-brown text-2xl font-bold mb-10">
           Spending - Last 7 days
