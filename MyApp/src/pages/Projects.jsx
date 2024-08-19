@@ -1,6 +1,6 @@
 import React from "react";
 import { useSpring, animated } from "@react-spring/web";
-import ProjectCard from "../components/atoms/ProjectCard";
+import ProjectCard from "../components/projects-page/ProjectCard";
 
 const Projects = () => {
   const Exercises = [

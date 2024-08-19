@@ -2,10 +2,10 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
-import Button3D from "../components/threejsComponents/Button3D";
-import StripedSphere from "../components/threejsComponents/StripedSphere";
-import RotatingText from "../components/threejsComponents/RotatingText";
-import GroundPlane from "../components/threejsComponents/GroundPlane";
+import Button3D from "../components/threejs-project-page/Button3D";
+import StripedSphere from "../components/threejs-project-page/StripedSphere";
+import RotatingText from "../components/threejs-project-page/RotatingText";
+import GroundPlane from "../components/threejs-project-page/GroundPlane";
 
 const ThreeJsProject = () => {
   const navigate = useNavigate();

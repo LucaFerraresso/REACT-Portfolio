@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import EcommerceCard from "../components/atoms/EcommerceCard";
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const FakeEcommerce = () => {
     setLoading(true);
     try {
       const data = await getProductsFireStore();
-      console.log(data);
+      //console.log(data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);

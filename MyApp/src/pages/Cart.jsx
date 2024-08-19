@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCart } from "../useContext/CartContext";
 import { getProductsFireStore } from "../API/firestore.js";
 
-import EcommerceCard from "../components/atoms/EcommerceCard";
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
