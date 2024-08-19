@@ -46,7 +46,7 @@ const Button3D = ({ onClick, label, position, rotation, color }) => {
         {/* Cilindro con altezza media */}
         <meshStandardMaterial color={color} />
         <Text3D
-          font="/fonts/helvetiker_regular.typeface.json"
+          font="/fonts-3D/helvetiker_regular.typeface.json"
           size={0.3}
           height={0.05}
           position={[-0.8, 0.5, 0.26]}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSpring, animated } from "@react-spring/web";
-import Card from "../components/atoms/Card";
+import ProjectCard from "../components/atoms/ProjectCard";
 
 const Projects = () => {
   const Exercises = [
@@ -160,7 +160,7 @@ const Projects = () => {
 
           return (
             <animated.div style={cardSpring} key={index}>
-              <Card
+              <ProjectCard
                 title={exercise.title}
                 description={exercise.description}
                 link={exercise.link}

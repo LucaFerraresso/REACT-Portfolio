@@ -11,7 +11,13 @@ import {
   getAllVotes,
 } from "../../API/firestore";
 
-const Card = ({ title, description, link, backgroundImage, projectId }) => {
+const ProjectCard = ({
+  title,
+  description,
+  link,
+  backgroundImage,
+  projectId,
+}) => {
   const [rating, setRating] = useState(0);
   const [selectedVote, setSelectedVote] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -222,4 +228,4 @@ const Card = ({ title, description, link, backgroundImage, projectId }) => {
   );
 };
 
-export default Card;
+export default ProjectCard;
