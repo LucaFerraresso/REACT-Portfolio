@@ -5,10 +5,7 @@ import { toast } from "react-toastify";
 import { logoutUser } from "../../API/firebaseAuth";
 import { FaUserCircle } from "react-icons/fa";
 
-const menulist = [
-  { name: "Home", path: "/homepage" },
-  { name: "Projects", path: "/projects" },
-];
+const menulist = [{ name: "Home", path: "/homepage" }];
 
 const Navbar = () => {
   const { user, loading } = useAuth();

@@ -16,7 +16,7 @@ const ThreeJsProject = () => {
 
   return (
     <div className="w-full h-screen bg-slate-500">
-      <Canvas camera={{ position: [0, 10, 20], fov: 60 }} shadows={true}>
+      <Canvas camera={{ position: [0, 10, 20], fov: 30 }} shadows={true}>
         {/* Luce ambientale e direzionale */}
         <ambientLight intensity={0.5} />
         <directionalLight
@@ -34,7 +34,7 @@ const ThreeJsProject = () => {
         />
 
         {/* Controlli di rotazione */}
-        <OrbitControls enableZoom={true} />
+        <OrbitControls enableZoom={false} />
 
         {/* Sfera */}
         <StripedSphere position={[0, 4, 0]} castShadow={true} />

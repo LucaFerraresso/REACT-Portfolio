@@ -27,6 +27,9 @@ const cardVariants = {
 };
 
 const ProjectsSection = ({ projects }) => {
+  const goToProjects = () => {
+    window.location.href = "/projects";
+  };
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-gray-100">
       <motion.div
@@ -52,6 +55,14 @@ const ProjectsSection = ({ projects }) => {
               <HomePageProjectCard {...project} />
             </motion.div>
           ))}
+        </div>
+        <div className="flex justify-center items-center ">
+          <button
+            onClick={goToProjects}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8 w-[300px]"
+          >
+            View All Projects
+          </button>
         </div>
       </motion.div>
     </section>
