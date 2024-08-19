@@ -2,12 +2,42 @@ import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
-// SVG Imports
-import LinkedInSvg from "../components/svg/LinkedInSvg";
-import FacebookSvg from "../components/svg/FacebookSvg";
-import GmailSvg from "../components/svg/GmailSvg";
-import GitHubSvg from "../components/svg/GitHubSvg";
-import TwitterSvg from "../components/svg/TwitterSvg";
+
+import {
+  FaLinkedin,
+  FaGithub,
+  FaTwitter,
+  FaFacebook,
+  FaMailBulk,
+} from "react-icons/fa";
+
+const socialLinksContact = [
+  {
+    icon: FaLinkedin,
+    url: "https://www.linkedin.com/in/luca-ferraresso-493a63305/",
+    color: "text-blue-600",
+  },
+  {
+    icon: FaGithub,
+    url: "https://github.com/LucaFerraresso/",
+    color: "text-black",
+  },
+  {
+    icon: FaFacebook,
+    url: "https://www.facebook.com/luca.ferraresso",
+    color: "text-blue-600",
+  },
+  {
+    icon: FaMailBulk,
+    url: "https://gmail.com",
+    color: "text-red",
+  },
+  {
+    icon: FaTwitter,
+    url: "https://x.com/FerraressoLuca",
+    color: "text-blue-400",
+  },
+];
 
 // Varianti di animazione
 const fadeIn = {
@@ -48,7 +78,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-main-bg p-6 font-montserrat">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6 font-montserrat">
       <motion.div
         className="flex flex-col lg:flex-row items-center justify-center w-full lg:w-2/3 bg-white rounded-lg shadow-lg p-8"
         variants={staggerContainer}
@@ -79,22 +109,21 @@ const ContactPage = () => {
             initial="hidden"
             animate="visible"
           >
-            {[LinkedInSvg, FacebookSvg, GmailSvg, GitHubSvg, TwitterSvg].map(
-              (IconComponent, index) => (
-                <motion.a
-                  key={index}
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variants={socialLinkVariants}
-                  custom={index}
-                  whileHover={{ scale: 1.2 }}
-                  className="w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full hover:bg-gray-300 transition-colors duration-300 "
-                >
-                  <IconComponent className="w-6 h-6 sm:w-8 sm:h-8" />
-                </motion.a>
-              )
-            )}
+            {socialLinksContact.map(({ icon: Icon, url, color }, index) => (
+              <motion.a
+                key={index}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={socialLinkVariants}
+                custom={index}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Icon
+                  className={`text-3xl  hover:scale-150 transition:scale-150 duration-300 ${color}`}
+                />
+              </motion.a>
+            ))}
           </motion.div>
         </motion.div>
 

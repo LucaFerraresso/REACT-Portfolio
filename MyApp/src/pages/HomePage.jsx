@@ -17,17 +17,17 @@ import ProjectsSection from "../components/homepage/ProjectSection";
 const socialLinks = [
   {
     icon: FaLinkedin,
-    url: "https://www.linkedin.com",
+    url: "https://www.linkedin.com/in/luca-ferraresso-493a63305/",
     color: "text-blue-600",
   },
   {
     icon: FaGithub,
-    url: "https://github.com",
+    url: "https://github.com/LucaFerraresso/",
     color: "text-black",
   },
   {
     icon: FaFacebook,
-    url: "https://facebook.com",
+    url: "https://www.facebook.com/luca.ferraresso",
     color: "text-blue-600",
   },
 ];
