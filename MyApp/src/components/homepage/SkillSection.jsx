@@ -37,20 +37,20 @@ const iconVariants = {
 
 const SkillsSection = ({ techIcons }) => {
   return (
-    <section className="flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100 ">
+    <section className="flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8  bg-gray-100 ">
       <motion.section
         id="skills"
-        className="p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg bg-gray-100"
+        className="w-full max-w-7xl p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-100"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-center mb-8">
           Tech Stack
         </h2>
 
         <motion.div
-          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 "
+          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 justify-items-center "
           variants={staggerContainer}
         >
           {techIcons.map(({ icon: Icon, color, name }, index) => (
@@ -58,14 +58,14 @@ const SkillsSection = ({ techIcons }) => {
               key={index}
               variants={iconVariants}
               custom={index}
-              className="  p-3 sm:p-4 md:p-5 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border  bg-white  hover:border-gray-300"
+              className="  w-full max-w-[200px] p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border  bg-white  hover:border-gray-300"
               aria-label={name}
             >
               {/* Icona con una dimensione responsive */}
               <Icon
-                className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl ${color}`}
+                className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl ${color}`}
               />
-              <h1 className="mt-2 text-sm sm:text-base md:text-lg font-semibold text-center">
+              <h1 className="mt-3 text-sm sm:text-base md:text-lg font-semibold text-center">
                 {name}
               </h1>
             </motion.div>

@@ -35,27 +35,36 @@ const socialLinks = [
 const techIcons = [
   { icon: FaJsSquare, color: "text-yellow-500", name: "JavaScript" },
   { icon: FaReact, color: "text-blue-500", name: "React" },
-  //{ icon: FaNodeJs, color: "text-green", name: "Node.js" },
   { icon: FaHtml5, color: "text-red", name: "HTML5" },
   { icon: FaCss3Alt, color: "text-blue-600", name: "CSS3" },
+  { icon: FaNodeJs, color: "text-green", name: "Coming soon" },
 ];
 
 const projects = [
   {
-    title: "ToDo-App (JavaScript only)",
-    image: "/assets-images/projects-preview-images/Screenshot (2955).png",
-    description: "A brief description of what this project is about.",
+    title: "ToDo-App",
+    image: "/assets-images/projects-preview-images/todoapp-preview1.png",
+    description:
+      "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
     github:
       "https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project",
     vercel: "https://todoapp-bice-two.vercel.app/",
   },
   {
-    title: "Ice-Cream menù App (JavaScript only)",
-    image: "/assets-images/projects-preview-images/Screenshot (2957).png",
-    description: "A brief description of what this project is about.",
+    title: "Ice-Cream menù App",
+    image: "/assets-images/projects-preview-images/ice-cream-menu-preview1.png",
+    description:
+      "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
     github:
       "https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER",
     vercel: "https://icescream-menu-app.vercel.app/",
+  },
+  {
+    title: "Coming soon",
+    image: "/assets-images/projects-preview-images/coming-soon.jpg",
+    description: "New exiting projects are on the way",
+    github: "#",
+    vercel: "#",
   },
 ];
 

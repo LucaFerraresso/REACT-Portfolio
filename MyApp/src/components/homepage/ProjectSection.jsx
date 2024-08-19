@@ -41,7 +41,7 @@ const ProjectsSection = ({ projects }) => {
         </h2>
 
         {/* Griglia dei progetti */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+        <div className="flex flex-wrap justify-center items-center gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={index}
@@ -52,7 +52,6 @@ const ProjectsSection = ({ projects }) => {
               <HomePageProjectCard {...project} />
             </motion.div>
           ))}
-          <h2>Coming soon.....</h2>
         </div>
       </motion.div>
     </section>
