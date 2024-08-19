@@ -61,7 +61,7 @@ const projects = [
   },
 ];
 
-const imgPath = "/assets-images/HomePageImg/myFoto.jpg";
+const imgPath = "/assets-images/homepage-img/myFoto.jpg";
 
 const HomePage = () => {
   return (
