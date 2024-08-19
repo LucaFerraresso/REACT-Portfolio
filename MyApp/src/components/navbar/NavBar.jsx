@@ -15,6 +15,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isHomepageOrAbout = [
+    "/homepage",
+    "/aboutme",
+    "/contacts",
+    "/projects",
+  ].includes(location.pathname);
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -25,19 +32,13 @@ const Navbar = () => {
     }
   };
 
-  const getNavBarStyles =
-    location.pathname === "/homepage" || location.pathname === "/aboutme"
-      ? "bg-white text-black border-b border-gray-300"
-      : "bg-gray-800 text-white";
-
-  const textColor =
-    location.pathname === "/homepage" || location.pathname === "/aboutme"
-      ? "text-black"
-      : "text-white";
-
   return (
     <nav
-      className={`${getNavBarStyles} p-4 flex justify-between items-center text-lg sm:text-2xl`}
+      className={`${
+        isHomepageOrAbout
+          ? "bg-white text-black border-b border-gray-300"
+          : "bg-gray-800 text-white"
+      } p-4 flex justify-between items-center text-lg sm:text-2xl`}
     >
       <ul className="flex space-x-6">
         {menulist.map((item, index) => (
@@ -56,7 +57,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         {!loading && user ? (
           <>
-            <span className={textColor}>
+            <span className={isHomepageOrAbout ? "text-black" : "text-white"}>
               Benvenuto, {user.email.split("@")[0]}
             </span>
             <button onClick={handleLogout} className="text-red underline">
