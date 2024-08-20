@@ -1,5 +1,6 @@
 import React from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { motion } from "framer-motion";
+
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
@@ -10,12 +11,6 @@ const EcommerceCard = ({
   onDecrease,
   onAddToCart,
 }) => {
-  const springProps = useSpring({
-    to: { opacity: 1, transform: "translateY(0px)" },
-    from: { opacity: 0, transform: "translateY(20px)" },
-    config: { tension: 200, friction: 20 },
-  });
-
   const handleAddToCart = () => {
     const message =
       quantity > 1
@@ -37,10 +32,7 @@ const EcommerceCard = ({
   };
 
   return (
-    <animated.div
-      style={springProps}
-      className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto"
-    >
+    <motion.div className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto">
       <Link to={`/exercise/fakeecommerce/${product.id}`}>
         <img
           src={product.image}
@@ -80,7 +72,7 @@ const EcommerceCard = ({
           Add to Cart
         </button>
       </div>
-    </animated.div>
+    </motion.div>
   );
 };
 

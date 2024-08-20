@@ -1,6 +1,6 @@
 import React from "react";
-import { useSpring, animated } from "@react-spring/web";
 import ProjectCard from "../components/projects-page/ProjectCard";
+import { motion } from "framer-motion";
 
 const Projects = () => {
   const Exercises = [
@@ -135,31 +135,15 @@ const Projects = () => {
     },
   ];
 
-  // Funzione di animazione per il titolo
-  const headerSpring = useSpring({
-    from: { opacity: 0, transform: "translate3d(0,-20px,0)" },
-    to: { opacity: 1, transform: "translate3d(0,0,0)" },
-    config: { tension: 150, friction: 15 },
-  });
-
   return (
     <>
-      <animated.h1
-        style={headerSpring}
-        className="text-4xl font-bold text-off-black text-center py-6 bg-gray-50"
-      >
+      <motion.h1 className="text-4xl font-bold text-off-black text-center py-6 ">
         Projects
-      </animated.h1>
-      <div className="min-h-screen bg-gray-50 flex flex-wrap p-4 gap-6 justify-center">
+      </motion.h1>
+      <motion.div className="min-h-screen  flex flex-wrap p-4 gap-6 justify-center">
         {Exercises.map((exercise, index) => {
-          const cardSpring = useSpring({
-            from: { opacity: 0, transform: "scale(0.9)" },
-            to: { opacity: 1, transform: "scale(1)" },
-            delay: index * 100,
-          });
-
           return (
-            <animated.div style={cardSpring} key={index}>
+            <motion.div key={index}>
               <ProjectCard
                 title={exercise.title}
                 description={exercise.description}
@@ -168,10 +152,11 @@ const Projects = () => {
                 initialRating={exercise.initialRating}
                 projectId={exercise.id}
               />
-            </animated.div>
+            </motion.div>
           );
         })}
-      </div>
+        ;
+      </motion.div>
     </>
   );
 };

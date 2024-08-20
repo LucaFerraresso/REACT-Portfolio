@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { fadeIn } from "../assets/animations/motions";
-import { staggerContainer } from "../assets/animations/motions";
+import { fadeIn, staggerContainer } from "../assets/animations/motions";
 
 const AboutMe = () => {
   return (
