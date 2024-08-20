@@ -4,16 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import ContactInfo from "../components/contacts-page/ContactInfo";
 import ContactForm from "../components/contacts-page/ContactPageForm";
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
+import { staggerContainer } from "../assets/animations/motions";
 
 const ContactPage = () => {
   return (

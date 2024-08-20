@@ -18,81 +18,82 @@ const ProjectCard = ({
   backgroundImage,
   projectId,
 }) => {
-  const [rating, setRating] = useState(0);
-  const [selectedVote, setSelectedVote] = useState(0);
-  const [totalVotes, setTotalVotes] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [voteData, setVoteData] = useState({
+    rating: 0,
+    selectedVote: 0,
+    totalVotes: 0,
+    averageRating: 0,
+    hasVoted: false,
+  });
+
   const { user } = useAuth();
 
   const handleStarClick = (value) => {
     if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-      return;
+      return toast.error("Devi effettuare il login per votare!");
     }
-
-    setSelectedVote(value);
+    setVoteData((prevState) => ({ ...prevState, selectedVote: value }));
   };
 
   const handleVote = async () => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-      return;
-    }
-
-    if (selectedVote === 0) {
-      toast.error("Seleziona un voto prima di votare!");
-      return;
-    }
+    if (!user) return toast.error("Devi effettuare il login per votare!");
+    if (voteData.selectedVote === 0)
+      return toast.error("Seleziona un voto prima di votare!");
 
     try {
-      await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
-      setRating(selectedVote); // Aggiorna il rating con il voto selezionato
+      await saveVoteToFirestore(projectId, user.uid, voteData.selectedVote);
       toast.success("Voto registrato con successo!");
 
-      const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
-      setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
-      updateAverageRating();
-      setHasVoted(true); // Disabilita subito il pulsante dopo il voto
+      const updatedTotalVotes = await getTotalVotes(projectId);
+      const votes = await getAllVotes(projectId);
+      const totalVotesCount = votes.length;
+      const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
+      const average =
+        totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
+
+      setVoteData({
+        rating: voteData.selectedVote,
+        selectedVote: voteData.selectedVote,
+        totalVotes: updatedTotalVotes,
+        averageRating: average,
+        hasVoted: true,
+      });
     } catch (error) {
       toast.error("Errore durante la registrazione del voto.");
-      //console.error("Errore nel salvataggio del voto:", error);
     }
   };
-
-  const updateAverageRating = async () => {
-    const votes = await getAllVotes(projectId); // Ottieni tutti i voti
-    const totalVotesCount = votes.length; // Numero totale di voti
-    const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0); // Somma dei voti
-    const average = totalVotesCount > 0 ? sumOfVotes / totalVotesCount : 0; // Calcola la media
-    setAverageRating(average.toFixed(1)); // Imposta la media, con una cifra decimale
-  };
+  const technologies = [
+    { text: "HTML", color: "text-blue-300" },
+    { text: "CSS", color: "text-red" },
+    { text: "JS", color: "text-yellow-400" },
+  ];
 
   useEffect(() => {
     const fetchVotes = async () => {
-      if (user) {
-        try {
-          const savedVote = await getVotesFromFirestore(projectId, user.uid);
-          if (savedVote !== null) {
-            setRating(savedVote);
-            setSelectedVote(savedVote);
-            setHasVoted(true);
-          } else {
-            setRating(0);
-            setSelectedVote(0);
-            setHasVoted(false);
-          }
-        } catch (error) {
-          console.error("Errore nel recupero del voto:", error);
-        }
-      }
-
       try {
+        if (user) {
+          const savedVote = await getVotesFromFirestore(projectId, user.uid);
+          setVoteData((prevState) => ({
+            ...prevState,
+            rating: savedVote || 0,
+            selectedVote: savedVote || 0,
+            hasVoted: savedVote !== null,
+          }));
+        }
         const votesCount = await getTotalVotes(projectId);
-        setTotalVotes(votesCount);
-        updateAverageRating();
+        const votes = await getAllVotes(projectId);
+        const totalVotesCount = votes.length;
+        const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
+        const average =
+          totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
+
+        setVoteData((prevState) => ({
+          ...prevState,
+          totalVotes: votesCount,
+          averageRating: average,
+        }));
       } catch (error) {
-        console.error("Errore nel recupero del totale voti:", error);
+        console.error("Errore nel recupero dei voti:", error);
       }
     };
 
@@ -105,26 +106,27 @@ const ProjectCard = ({
   }));
 
   return (
-    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
+    <div className="relative w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg border border-black flex flex-col bg-white">
       {/* Sezione Immagine */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+      <div className="relative overflow-hidden h-1/2">
         <Link to={link}>
-          <animated.img
-            src={backgroundImage}
-            alt="Background"
-            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
+          <animated.div
+            className="relative w-full h-full cursor-pointer"
             style={imageProps}
             onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
             onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
-          />
+          >
+            <animated.img
+              src={backgroundImage}
+              alt="Background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100 bg-black bg-opacity-60 transition-opacity duration-300">
+              <span className="text-white text-lg font-bold">View Project</span>
+            </div>
+          </animated.div>
         </Link>
-        <div
-          className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
-          style={{
-            textShadow:
-              "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-          }}
-        >
+        <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black text-shadow-sm">
           FREE
         </div>
       </div>
@@ -138,7 +140,7 @@ const ProjectCard = ({
         </div>
 
         {/* Sezione di voto condizionata */}
-        {user && !hasVoted && (
+        {user && !voteData.hasVoted && (
           <div className="mb-4">
             <div className="flex items-center space-x-1 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -147,28 +149,27 @@ const ProjectCard = ({
                   size={24}
                   onClick={() => handleStarClick(star)}
                   color={
-                    star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
+                    star <= (voteData.selectedVote || voteData.rating)
+                      ? "#ffc107"
+                      : "#e4e5e9"
                   }
-                  style={{
-                    cursor: "pointer",
-                    transition: "color 200ms",
-                  }}
+                  className="cursor-pointer transition-colors duration-200"
                 />
               ))}
             </div>
             <button
               onClick={handleVote}
               className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
-                selectedVote === 0 || hasVoted
+                !voteData.selectedVote || voteData.hasVoted
                   ? "opacity-50 cursor-not-allowed"
                   : ""
               }`}
-              disabled={selectedVote === 0 || hasVoted}
+              disabled={!voteData.selectedVote || voteData.hasVoted}
             >
               Vota
             </button>
             <div className="text-gray-700 text-base mb-2">
-              Punteggio attuale: {rating} ({totalVotes} voti)
+              Punteggio attuale: {voteData.rating} ({voteData.totalVotes} voti)
             </div>
           </div>
         )}
@@ -176,51 +177,34 @@ const ProjectCard = ({
         {/* Media voti e linguaggi */}
         <div className="mt-auto">
           <div className="text-gray-700 text-base mb-2">
-            Media voti: {averageRating} ({totalVotes} voti)
+            Media voti: {voteData.averageRating} ({voteData.totalVotes} voti)
           </div>
           <div className="flex items-center space-x-1 mb-4">
-            {Array.from({ length: Math.round(averageRating) }, (_, index) => (
-              <FaStar key={index} size={24} color="#ffc107" />
+            {Array.from({ length: 5 }, (_, index) => (
+              <FaStar
+                key={index}
+                size={24}
+                color={
+                  index < Math.round(voteData.averageRating)
+                    ? "#ffc107"
+                    : "#e4e5e9"
+                }
+              />
             ))}
-            {Array.from(
-              { length: 5 - Math.round(averageRating) },
-              (_, index) => (
-                <FaStar
-                  key={index + Math.round(averageRating)}
-                  size={24}
-                  color="#e4e5e9"
-                />
-              )
-            )}
           </div>
           <div className="flex items-center space-x-2">
-            <span
-              className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              HTML
-            </span>
-            <span
-              className="text-blue-800 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              CSS
-            </span>
-            <span
-              className="text-pink-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              JS
-            </span>
+            {technologies.map((tech, index) => (
+              <span
+                key={index}
+                className={`${tech.color} text-2xl font-semibold px-2.5 py-0.5 rounded border border-black`}
+                style={{
+                  textShadow:
+                    "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+                }}
+              >
+                {tech.text}
+              </span>
+            ))}
           </div>
         </div>
       </div>

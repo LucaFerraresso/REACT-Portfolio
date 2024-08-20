@@ -1,4 +1,202 @@
 //migliorare le animazioni in aboutme.jsx
+/////////////////////////////////////////////////////////////////////////////////////
+card per progetti ,sezione progetti,ottimizzata nella logica, PERFEZIONE
+
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSpring, animated } from "@react-spring/web";
+import { useAuth } from "../../useContext/AuthContext";
+import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
+import {
+  saveVoteToFirestore,
+  getVotesFromFirestore,
+  getTotalVotes,
+  getAllVotes,
+} from "../../API/firestore";
+
+const ProjectCard = ({
+  title,
+  description,
+  link,
+  backgroundImage,
+  projectId,
+}) => {
+  const [voteData, setVoteData] = useState({
+    rating: 0,
+    selectedVote: 0,
+    totalVotes: 0,
+    averageRating: 0,
+    hasVoted: false,
+  });
+
+  const { user } = useAuth();
+
+  const handleStarClick = (value) => {
+    if (!user) {
+      return toast.error("Devi effettuare il login per votare!");
+    }
+    setVoteData((prevState) => ({ ...prevState, selectedVote: value }));
+  };
+
+  const handleVote = async () => {
+    if (!user) return toast.error("Devi effettuare il login per votare!");
+    if (voteData.selectedVote === 0)
+      return toast.error("Seleziona un voto prima di votare!");
+
+    try {
+      await saveVoteToFirestore(projectId, user.uid, voteData.selectedVote);
+      toast.success("Voto registrato con successo!");
+
+      const updatedTotalVotes = await getTotalVotes(projectId);
+      const votes = await getAllVotes(projectId);
+      const totalVotesCount = votes.length;
+      const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
+      const average =
+        totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
+
+      setVoteData({
+        rating: voteData.selectedVote,
+        selectedVote: voteData.selectedVote,
+        totalVotes: updatedTotalVotes,
+        averageRating: average,
+        hasVoted: true,
+      });
+    } catch (error) {
+      toast.error("Errore durante la registrazione del voto.");
+    }
+  };
+
+  useEffect(() => {
+    const fetchVotes = async () => {
+      try {
+        if (user) {
+          const savedVote = await getVotesFromFirestore(projectId, user.uid);
+          setVoteData((prevState) => ({
+            ...prevState,
+            rating: savedVote || 0,
+            selectedVote: savedVote || 0,
+            hasVoted: savedVote !== null,
+          }));
+        }
+        const votesCount = await getTotalVotes(projectId);
+        const votes = await getAllVotes(projectId);
+        const totalVotesCount = votes.length;
+        const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
+        const average =
+          totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
+
+        setVoteData((prevState) => ({
+          ...prevState,
+          totalVotes: votesCount,
+          averageRating: average,
+        }));
+      } catch (error) {
+        console.error("Errore nel recupero dei voti:", error);
+      }
+    };
+
+    fetchVotes();
+  }, [user, projectId]);
+
+  const [imageProps, imageApi] = useSpring(() => ({
+    transform: "scale(1)",
+    config: { tension: 200, friction: 20 },
+  }));
+
+  return (
+    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
+      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+        <Link to={link}>
+          <animated.img
+            src={backgroundImage}
+            alt="Background"
+            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
+            style={imageProps}
+            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
+            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
+          />
+        </Link>
+        <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black text-shadow-sm">
+          FREE
+        </div>
+      </div>
+
+      <div className="flex flex-col flex-grow p-4 justify-between">
+        <div className="flex-grow">
+          <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
+          <p className="text-gray-700 text-base mb-4">{description}</p>
+        </div>
+
+        {user && !voteData.hasVoted && (
+          <div className="mb-4">
+            <div className="flex items-center space-x-1 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  size={24}
+                  onClick={() => handleStarClick(star)}
+                  color={
+                    star <= (voteData.selectedVote || voteData.rating)
+                      ? "#ffc107"
+                      : "#e4e5e9"
+                  }
+                  className="cursor-pointer transition-colors duration-200"
+                />
+              ))}
+            </div>
+            <button
+              onClick={handleVote}
+              className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
+                !voteData.selectedVote || voteData.hasVoted
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={!voteData.selectedVote || voteData.hasVoted}
+            >
+              Vota
+            </button>
+            <div className="text-gray-700 text-base mb-2">
+              Punteggio attuale: {voteData.rating} ({voteData.totalVotes} voti)
+            </div>
+          </div>
+        )}
+
+        <div className="mt-auto">
+          <div className="text-gray-700 text-base mb-2">
+            Media voti: {voteData.averageRating} ({voteData.totalVotes} voti)
+          </div>
+          <div className="flex items-center space-x-1 mb-4">
+            {Array.from({ length: 5 }, (_, index) => (
+              <FaStar
+                key={index}
+                size={24}
+                color={
+                  index < Math.round(voteData.averageRating)
+                    ? "#ffc107"
+                    : "#e4e5e9"
+                }
+              />
+            ))}
+          </div>
+          <div className="flex items-center space-x-2">
+            {["HTML", "CSS", "JS"].map((tech, index) => (
+              <span
+                key={index}
+                className={`text-${tech.toLowerCase()}-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black text-shadow-sm`}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCard;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 backup herosection.jsx con animazioni motion
 
@@ -407,3 +605,437 @@ Unused devDependencies
 Missing dependencies
 * @react-spring/three: .\src\components\threejs-project-page\Button3D.jsx
 
+import React from "react";
+import ProjectCard from "../components/projects-page/ProjectCard";
+import { motion } from "framer-motion";
+import { Exercises } from "../components/projects-page/exercisesList";
+import { fadeIn, staggerContainer } from "../assets/animations/motions";
+
+const Projects = () => {
+  return (
+    <>
+      <motion.div>
+        <motion.h1 className="text-4xl font-bold text-off-black text-center py-6 ">
+          Projects
+        </motion.h1>
+        <motion.div className="min-h-screen  flex flex-wrap p-4 gap-6 justify-center">
+          {Exercises.map((exercise, index) => {
+            return (
+              <ProjectCard
+                key={exercise.id}
+                title={exercise.title}
+                description={exercise.description}
+                link={exercise.link}
+                backgroundImage={exercise.backgroundImage}
+                initialRating={exercise.initialRating}
+                projectId={exercise.id}
+              />
+            );
+          })}
+          ;
+        </motion.div>
+      </motion.div>
+    </>
+  );
+};
+
+export default Projects;
+
+import React from "react";
+import { motion } from "framer-motion";
+import { fadeIn, motionContainer } from "../assets/animations/motions";
+
+const AboutMe = () => {
+  return (
+    <div className="bg-gray-100 min-h-screen py-10 font-montserrat">
+      <motion.section
+        id="about"
+        className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 md:px-10"
+        variants={motionContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Primo blocco */}
+        <motion.div
+          className="flex justify-center items-center"
+          variants={fadeIn}
+        >
+          <motion.img
+            src="/assets-images/aboutme-img/poligonalbackground.jpg"
+            alt="About me"
+            className="rounded-lg shadow-lg max-w-full h-auto"
+            variants={fadeIn}
+          />
+        </motion.div>
+        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
+            Hello, I'm Ferraresso Luca, and I've been working as a Frontend
+            Developer for the past six months. Although I'm relatively new to
+            the field, my passion for technology and design drives me to
+            continuously learn and improve every day.
+          </p>
+        </motion.div>
+
+        {/* Secondo blocco */}
+        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
+            From the moment I wrote my first line of code, I was captivated by
+            the power of technology to create engaging and intuitive user
+            experiences. I enjoy taking on the challenge of turning complex
+            ideas into visually appealing, functional websites that users love
+            to interact with.
+          </p>
+        </motion.div>
+        <motion.div
+          className="flex justify-center items-center"
+          variants={fadeIn}
+        >
+          <motion.img
+            src="/assets-images/aboutme-img/codebackground.jpg"
+            alt="Coding"
+            className="rounded-lg shadow-lg max-w-full h-auto"
+            variants={fadeIn}
+          />
+        </motion.div>
+
+        {/* Terzo blocco */}
+        <motion.div
+          className="flex justify-center items-center"
+          variants={fadeIn}
+        >
+          <motion.img
+            src="/assets-images/aboutme-img/languagespics.jpg"
+            alt="Design and development"
+            className="rounded-lg shadow-lg max-w-full h-auto"
+            variants={fadeIn}
+          />
+        </motion.div>
+        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
+            I have a strong interest in the intersection of design and
+            development, where creativity meets functionality. Whether it's
+            through crafting responsive layouts, experimenting with animations,
+            or optimizing performance, I'm dedicated to bringing design concepts
+            to life on the web.
+          </p>
+        </motion.div>
+
+        {/* Quarto blocco */}
+        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
+            I'm excited about the journey ahead, eager to contribute to
+            innovative projects, and committed to growing as a developer. I'm
+            looking forward to building more amazing things and connecting with
+            others who share my enthusiasm for technology and design.
+          </p>
+        </motion.div>
+        <motion.div
+          className="flex justify-center items-center"
+          variants={fadeIn}
+        >
+          <motion.img
+            src="/assets-images/aboutme-img/codebackground2.jpg"
+            alt="Future projects"
+            className="rounded-lg shadow-lg max-w-full h-auto"
+            variants={fadeIn}
+          />
+        </motion.div>
+      </motion.section>
+    </div>
+  );
+};
+
+export default AboutMe;
+
+//aboutme diviso in componenti
+
+import React from "react";
+import { motion } from "framer-motion";
+import { motionContainer } from "../assets/animations/motions";
+import Section from "../components/aboutme-page/Section";
+import { sectionsData } from "../components/aboutme-page/sectionData";
+
+const AboutMe = () => {
+  return (
+    <div className="bg-gray-100 min-h-screen py-10 font-montserrat">
+      <motion.section
+        id="about"
+        className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 md:px-10"
+        variants={motionContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {sectionsData.map((section, index) => (
+          <Section
+            key={index}
+            imageSrc={section.imageSrc}
+            altText={section.altText}
+            paragraph={section.paragraph}
+          />
+        ))}
+      </motion.section>
+    </div>
+  );
+};
+
+export default AboutMe;
+
+import React from "react";
+import { motion } from "framer-motion";
+import { fadeIn } from "../../assets/animations/motions";
+
+const Section = ({ imageSrc, altText, paragraph, reverse }) => {
+  return (
+    <>
+      <motion.div variants={fadeIn}>
+        <motion.img
+          src={imageSrc}
+          alt={altText}
+          className="rounded-lg shadow-lg max-w-full h-auto"
+          variants={fadeIn}
+        />
+      </motion.div>
+      <motion.div className="flex flex-col justify-center" variants={fadeIn}>
+        <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
+          {paragraph}
+        </p>
+      </motion.div>
+    </>
+  );
+};
+
+export default Section;
+
+///////////////////////////////////////////////card fondamentale progetto projects page
+
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSpring, animated } from "@react-spring/web";
+import { useAuth } from "../../useContext/AuthContext";
+import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
+import {
+  saveVoteToFirestore,
+  getVotesFromFirestore,
+  getTotalVotes,
+  getAllVotes,
+} from "../../API/firestore";
+
+const ProjectCard = ({
+  title,
+  description,
+  link,
+  backgroundImage,
+  projectId,
+}) => {
+  const [rating, setRating] = useState(0);
+  const [selectedVote, setSelectedVote] = useState(0);
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [hasVoted, setHasVoted] = useState(false);
+  const { user } = useAuth();
+
+  const handleStarClick = (value) => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
+    }
+
+    setSelectedVote(value);
+  };
+
+  const handleVote = async () => {
+    if (!user) {
+      toast.error("Devi effettuare il login per votare!");
+      return;
+    }
+
+    if (selectedVote === 0) {
+      toast.error("Seleziona un voto prima di votare!");
+      return;
+    }
+
+    try {
+      await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
+      setRating(selectedVote); // Aggiorna il rating con il voto selezionato
+      toast.success("Voto registrato con successo!");
+
+      const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
+      setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
+      updateAverageRating();
+      setHasVoted(true); // Disabilita subito il pulsante dopo il voto
+    } catch (error) {
+      toast.error("Errore durante la registrazione del voto.");
+      //console.error("Errore nel salvataggio del voto:", error);
+    }
+  };
+
+  const updateAverageRating = async () => {
+    const votes = await getAllVotes(projectId); // Ottieni tutti i voti
+    const totalVotesCount = votes.length; // Numero totale di voti
+    const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0); // Somma dei voti
+    const average = totalVotesCount > 0 ? sumOfVotes / totalVotesCount : 0; // Calcola la media
+    setAverageRating(average.toFixed(1)); // Imposta la media, con una cifra decimale
+  };
+
+  useEffect(() => {
+    const fetchVotes = async () => {
+      if (user) {
+        try {
+          const savedVote = await getVotesFromFirestore(projectId, user.uid);
+          if (savedVote !== null) {
+            setRating(savedVote);
+            setSelectedVote(savedVote);
+            setHasVoted(true);
+          } else {
+            setRating(0);
+            setSelectedVote(0);
+            setHasVoted(false);
+          }
+        } catch (error) {
+          console.error("Errore nel recupero del voto:", error);
+        }
+      }
+
+      try {
+        const votesCount = await getTotalVotes(projectId);
+        setTotalVotes(votesCount);
+        updateAverageRating();
+      } catch (error) {
+        console.error("Errore nel recupero del totale voti:", error);
+      }
+    };
+
+    fetchVotes();
+  }, [user, projectId]);
+
+  const [imageProps, imageApi] = useSpring(() => ({
+    transform: "scale(1)",
+    config: { tension: 200, friction: 20 },
+  }));
+
+  return (
+    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
+      {/* Sezione Immagine */}
+      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+        <Link to={link}>
+          <animated.img
+            src={backgroundImage}
+            alt="Background"
+            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
+            style={imageProps}
+            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
+            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
+          />
+        </Link>
+        <div
+          className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
+          style={{
+            textShadow:
+              "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+          }}
+        >
+          FREE
+        </div>
+      </div>
+
+      {/* Sezione Contenuto */}
+      <div className="flex flex-col flex-grow p-4 justify-between">
+        {/* Titolo e Descrizione */}
+        <div className="flex-grow">
+          <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
+          <p className="text-gray-700 text-base mb-4">{description}</p>
+        </div>
+
+        {/* Sezione di voto condizionata */}
+        {user && !hasVoted && (
+          <div className="mb-4">
+            <div className="flex items-center space-x-1 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  size={24}
+                  onClick={() => handleStarClick(star)}
+                  color={
+                    star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
+                  }
+                  style={{
+                    cursor: "pointer",
+                    transition: "color 200ms",
+                  }}
+                />
+              ))}
+            </div>
+            <button
+              onClick={handleVote}
+              className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
+                selectedVote === 0 || hasVoted
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={selectedVote === 0 || hasVoted}
+            >
+              Vota
+            </button>
+            <div className="text-gray-700 text-base mb-2">
+              Punteggio attuale: {rating} ({totalVotes} voti)
+            </div>
+          </div>
+        )}
+
+        {/* Media voti e linguaggi */}
+        <div className="mt-auto">
+          <div className="text-gray-700 text-base mb-2">
+            Media voti: {averageRating} ({totalVotes} voti)
+          </div>
+          <div className="flex items-center space-x-1 mb-4">
+            {Array.from({ length: Math.round(averageRating) }, (_, index) => (
+              <FaStar key={index} size={24} color="#ffc107" />
+            ))}
+            {Array.from(
+              { length: 5 - Math.round(averageRating) },
+              (_, index) => (
+                <FaStar
+                  key={index + Math.round(averageRating)}
+                  size={24}
+                  color="#e4e5e9"
+                />
+              )
+            )}
+          </div>
+          <div className="flex items-center space-x-2">
+            <span
+              className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
+              style={{
+                textShadow:
+                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+              }}
+            >
+              HTML
+            </span>
+            <span
+              className="text-blue-800 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
+              style={{
+                textShadow:
+                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+              }}
+            >
+              CSS
+            </span>
+            <span
+              className="text-pink-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
+              style={{
+                textShadow:
+                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+              }}
+            >
+              JS
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCard;
