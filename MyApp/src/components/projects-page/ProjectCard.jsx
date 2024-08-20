@@ -102,6 +102,12 @@ const ProjectCard = ({
   const handleMouseEnter = () => imageApi.start({ transform: "scale(1.1)" });
   const handleMouseLeave = () => imageApi.start({ transform: "scale(1)" });
 
+  const technologies = [
+    { text: "HTML", color: "text-blue-300" },
+    { text: "CSS", color: "text-red" },
+    { text: "JS", color: "text-yellow-400" },
+  ];
+
   return (
     <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
       <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
@@ -176,6 +182,16 @@ const ProjectCard = ({
                     : "#e4e5e9"
                 }
               />
+            ))}
+          </div>
+          <div className="flex items-center space-x-2">
+            {technologies.map((tech, index) => (
+              <span
+                key={index}
+                className={`${tech.color} text-2xl font-bold px-2.5 py-0.5 rounded border border-black`}
+              >
+                {tech.text}
+              </span>
             ))}
           </div>
         </div>
