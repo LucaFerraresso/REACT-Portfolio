@@ -103,7 +103,6 @@ const ContactInfo = () => {
             rel="noopener noreferrer"
             variants={socialLinkVariants}
             custom={index}
-            whileHover={{ scale: 1.05 }}
           >
             <Icon
               className={`text-3xl hover:scale-150 transition:scale-150 duration-300 ${color}`}

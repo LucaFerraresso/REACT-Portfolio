@@ -15,7 +15,7 @@ const HomePageProjectCard = ({ title, image, description, github, vercel }) => {
   return (
     <motion.div
       variants={fadeIn}
-      className="flex flex-col flex-1 justify-between w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300   border border-gray-300 bg-white   sm:min-h-[400px] md:min-h-[450px] lg:min-h-[600px]"
+      className="flex flex-col flex-1 justify-between w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300   border border-gray-300 bg-white   sm:min-h-[400px] md:min-h-[450px] lg:min-h-[600px] "
     >
       <img
         src={image}

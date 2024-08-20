@@ -65,7 +65,7 @@ const AboutMe = () => {
           />
         </motion.div>
         <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6">
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
             Hello, I'm Ferraresso Luca, and I've been working as a Frontend
             Developer for the past six months. Although I'm relatively new to
             the field, my passion for technology and design drives me to
@@ -75,7 +75,7 @@ const AboutMe = () => {
 
         {/* Secondo blocco */}
         <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6">
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
             From the moment I wrote my first line of code, I was captivated by
             the power of technology to create engaging and intuitive user
             experiences. I enjoy taking on the challenge of turning complex
@@ -108,7 +108,7 @@ const AboutMe = () => {
           />
         </motion.div>
         <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6">
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
             I have a strong interest in the intersection of design and
             development, where creativity meets functionality. Whether it's
             through crafting responsive layouts, experimenting with animations,
@@ -119,7 +119,7 @@ const AboutMe = () => {
 
         {/* Quarto blocco */}
         <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6">
+          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
             I'm excited about the journey ahead, eager to contribute to
             innovative projects, and committed to growing as a developer. I'm
             looking forward to building more amazing things and connecting with

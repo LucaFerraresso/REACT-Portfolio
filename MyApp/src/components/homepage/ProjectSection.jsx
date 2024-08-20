@@ -56,10 +56,11 @@ const ProjectsSection = ({ projects }) => {
             </motion.div>
           ))}
         </div>
-        <div className="flex justify-center items-center ">
+
+        <div className="flex justify-center items-center">
           <button
             onClick={goToProjects}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8 w-[300px]"
+            className="relative border bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-[300px] transform transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-xl border-gradient"
           >
             View All Projects
           </button>

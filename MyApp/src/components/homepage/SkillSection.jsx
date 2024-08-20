@@ -58,7 +58,7 @@ const SkillsSection = ({ techIcons }) => {
               key={index}
               variants={iconVariants}
               custom={index}
-              className="  w-full max-w-[200px] p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border  bg-white  hover:border-gray-300"
+              className="  w-full max-w-[200px] p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border border-gray-300 bg-white "
               aria-label={name}
             >
               {/* Icona con una dimensione responsive */}

@@ -50,7 +50,7 @@ const HeroSection = ({ imgPath, socialLinks }) => {
             src={imgPath}
             alt="Your Photo"
             loading="lazy"
-            className="rounded-3xl  w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px]    "
+            className="rounded-3xl  w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px] border border-gray-300"
             variants={fadeIn}
           />
         </div>
@@ -87,10 +87,9 @@ const HeroSection = ({ imgPath, socialLinks }) => {
                 rel="noopener noreferrer"
                 variants={socialLinkVariants}
                 custom={index}
-                whileHover={{ scale: 1.05 }}
                 className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} `}
               >
-                <Icon className="w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
+                <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
               </motion.a>
             ))}
           </motion.div>
