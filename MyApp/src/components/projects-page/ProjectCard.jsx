@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 import { useSpring, animated } from "@react-spring/web";
 import { useAuth } from "../../useContext/AuthContext";
 import { toast } from "react-toastify";
-import { FaStar } from "react-icons/fa";
 import {
   saveVoteToFirestore,
   getVotesFromFirestore,
@@ -25,9 +24,6 @@ const ProjectCard = ({
     averageRating: 0,
     hasVoted: false,
   });
-
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [hasClicked, setHasClicked] = useState(false);
 
   const { user } = useAuth();
 
@@ -65,11 +61,6 @@ const ProjectCard = ({
       toast.error("Errore durante la registrazione del voto.");
     }
   };
-  const technologies = [
-    { text: "HTML", color: "text-blue-300" },
-    { text: "CSS", color: "text-red" },
-    { text: "JS", color: "text-yellow-400" },
-  ];
 
   useEffect(() => {
     const fetchVotes = async () => {
@@ -108,65 +99,38 @@ const ProjectCard = ({
     config: { tension: 200, friction: 20 },
   }));
 
-  const handleMouseEnter = () => {
-    imageApi.start({ transform: "scale(1.1)" });
-    if (!hasClicked) setShowOverlay(true);
-  };
-
-  const handleMouseLeave = () => {
-    imageApi.start({ transform: "scale(1)" });
-    if (!hasClicked) setShowOverlay(false);
-  };
-
-  const handleClick = () => {
-    if (hasClicked) {
-      window.location.href = link;
-    } else {
-      setShowOverlay(true);
-      setHasClicked(true);
-    }
-  };
+  const handleMouseEnter = () => imageApi.start({ transform: "scale(1.1)" });
+  const handleMouseLeave = () => imageApi.start({ transform: "scale(1)" });
 
   return (
-    <div className="relative w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg border border-black flex flex-col bg-white">
-      {/* Sezione Immagine */}
-      <div className="relative overflow-hidden h-1/2">
-        <Link to={link}>
-          <animated.div
-            className="relative w-full h-full cursor-pointer"
-            style={imageProps}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleClick}
-          >
-            <animated.img
-              src={backgroundImage}
-              alt="Background"
-              className="w-full h-full object-cover"
-            />
-            {showOverlay && (
-              <div className="absolute inset-0 flex justify-center items-center opacity-100 bg-black bg-opacity-60 transition-opacity duration-300">
-                <span className="text-white text-lg font-bold">
-                  View Project
-                </span>
-              </div>
-            )}
-          </animated.div>
-        </Link>
+    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
+      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
+        <animated.div
+          className="relative w-full h-full cursor-pointer"
+          style={imageProps}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => (window.location.href = link)}
+        >
+          <animated.img
+            src={backgroundImage}
+            alt="Background"
+            className="w-full h-full object-cover"
+          />
+        </animated.div>
         <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black text-shadow-sm">
           FREE
         </div>
       </div>
-
-      {/* Sezione Contenuto */}
-      <div className="flex flex-col flex-grow p-4 justify-between">
-        {/* Titolo e Descrizione */}
+      <div
+        className={`flex flex-col flex-grow p-4 justify-between ${
+          user ? "pt-2" : ""
+        }`}
+      >
         <div className="flex-grow">
           <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
           <p className="text-gray-700 text-base mb-4">{description}</p>
         </div>
-
-        {/* Sezione di voto condizionata */}
         {user && !voteData.hasVoted && (
           <div className="mb-4">
             <div className="flex items-center space-x-1 mb-4">
@@ -195,13 +159,8 @@ const ProjectCard = ({
             >
               Vota
             </button>
-            <div className="text-gray-700 text-base mb-2">
-              Punteggio attuale: {voteData.rating} ({voteData.totalVotes} voti)
-            </div>
           </div>
         )}
-
-        {/* Media voti e linguaggi */}
         <div className="mt-auto">
           <div className="text-gray-700 text-base mb-2">
             Media voti: {voteData.averageRating} ({voteData.totalVotes} voti)
@@ -217,20 +176,6 @@ const ProjectCard = ({
                     : "#e4e5e9"
                 }
               />
-            ))}
-          </div>
-          <div className="flex items-center space-x-2">
-            {technologies.map((tech, index) => (
-              <span
-                key={index}
-                className={`${tech.color} text-2xl font-semibold px-2.5 py-0.5 rounded border border-black`}
-                style={{
-                  textShadow:
-                    "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-                }}
-              >
-                {tech.text}
-              </span>
             ))}
           </div>
         </div>
