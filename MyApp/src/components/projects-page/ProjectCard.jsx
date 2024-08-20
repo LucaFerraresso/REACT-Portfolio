@@ -26,6 +26,9 @@ const ProjectCard = ({
     hasVoted: false,
   });
 
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+
   const { user } = useAuth();
 
   const handleStarClick = (value) => {
@@ -105,6 +108,25 @@ const ProjectCard = ({
     config: { tension: 200, friction: 20 },
   }));
 
+  const handleMouseEnter = () => {
+    imageApi.start({ transform: "scale(1.1)" });
+    if (!hasClicked) setShowOverlay(true);
+  };
+
+  const handleMouseLeave = () => {
+    imageApi.start({ transform: "scale(1)" });
+    if (!hasClicked) setShowOverlay(false);
+  };
+
+  const handleClick = () => {
+    if (hasClicked) {
+      window.location.href = link;
+    } else {
+      setShowOverlay(true);
+      setHasClicked(true);
+    }
+  };
+
   return (
     <div className="relative w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg border border-black flex flex-col bg-white">
       {/* Sezione Immagine */}
@@ -113,17 +135,22 @@ const ProjectCard = ({
           <animated.div
             className="relative w-full h-full cursor-pointer"
             style={imageProps}
-            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
-            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
           >
             <animated.img
               src={backgroundImage}
               alt="Background"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100 bg-black bg-opacity-60 transition-opacity duration-300">
-              <span className="text-white text-lg font-bold">View Project</span>
-            </div>
+            {showOverlay && (
+              <div className="absolute inset-0 flex justify-center items-center opacity-100 bg-black bg-opacity-60 transition-opacity duration-300">
+                <span className="text-white text-lg font-bold">
+                  View Project
+                </span>
+              </div>
+            )}
           </animated.div>
         </Link>
         <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black text-shadow-sm">
