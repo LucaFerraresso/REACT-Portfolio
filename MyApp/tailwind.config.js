@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -83,27 +82,6 @@ export default {
         roboto: ["Roboto", "sans-serif"],
         "dm-sans": ["DM Sans", "sans-serif"],
       },
-      animation: {
-        "fade-in": "fadeIn 0.5s ease-in-out",
-        flip: "flipCard 0.6s ease-in-out forwards",
-      },
-      flipCard: {
-        "0%": { transform: "rotateX(0deg)" },
-        "100%": { transform: "rotateX(180deg)" },
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-      },
-      backgroundImage: {
-        stars:
-          "url('/Exercises/launch-countdown-timer-main/images/bg.stars.svg')",
-        hills:
-          "url('/Exercises/launch-countdown-timer-main/images/pattern-hills.svg')",
-      },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
 };

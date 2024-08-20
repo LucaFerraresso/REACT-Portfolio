@@ -1,30 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { fadeIn, motionIcon } from "../../assets/animations/motions";
 import HomePageProjectCard from "../homepage/HomePageProjectCard";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 2,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5, // Ritardo personalizzato per ogni card
-    },
-  }),
-};
 
 const ProjectsSection = ({ projects }) => {
   const goToProjects = () => {
@@ -48,7 +25,7 @@ const ProjectsSection = ({ projects }) => {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              variants={cardVariants}
+              variants={motionIcon}
               custom={index} // Passa l'indice per il ritardo
               className="w-full max-w-xs sm:max-w-sm md:max-w-md"
             >
@@ -56,11 +33,10 @@ const ProjectsSection = ({ projects }) => {
             </motion.div>
           ))}
         </div>
-
         <div className="flex justify-center items-center">
           <button
             onClick={goToProjects}
-            className="relative border bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-[300px] transform transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-xl border-gradient"
+            className=" border border-gray-300 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-[300px] hover:bg-blue-700 transition-colors duration-300"
           >
             View All Projects
           </button>

@@ -1,39 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 2,
-    },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 1, // Ritardo tra le sezioni
-    },
-  },
-};
-
-const socialLinkVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5,
-    },
-  }),
-};
+import { fadeIn } from "../assets/animations/motions";
+import { staggerContainer } from "../assets/animations/motions";
 
 const AboutMe = () => {
   return (

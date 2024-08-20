@@ -1,46 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 2,
-    },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerContainer: 0.5,
-    },
-  },
-};
-
-const socialLinkVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5,
-    },
-  }),
-};
+import {
+  motionContainer,
+  fadeIn,
+  motionIcon,
+} from "../../assets/animations/motions";
 
 const HeroSection = ({ imgPath, socialLinks }) => {
   return (
     <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100">
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
-        variants={staggerContainer}
+        variants={motionContainer}
         initial="hidden"
         animate="visible"
       >
@@ -85,11 +56,11 @@ const HeroSection = ({ imgPath, socialLinks }) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                variants={socialLinkVariants}
+                variants={motionIcon}
                 custom={index}
                 className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} `}
               >
-                <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
+                <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300" />
               </motion.a>
             ))}
           </motion.div>

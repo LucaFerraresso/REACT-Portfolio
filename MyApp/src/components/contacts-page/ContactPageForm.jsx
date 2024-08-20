@@ -1,15 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.5 },
-  },
-};
+import { fadeIn } from "../../assets/animations/motions";
 
 const ContactForm = () => {
   const handleSubmit = (e) => {

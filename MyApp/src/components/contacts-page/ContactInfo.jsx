@@ -7,6 +7,11 @@ import {
   FaFacebook,
   FaMailBulk,
 } from "react-icons/fa";
+import {
+  motionContainer,
+  fadeIn,
+  motionIcon,
+} from "../../assets/animations/motions";
 
 // Array di social links con icone e colori
 const socialLinksContact = [
@@ -37,38 +42,6 @@ const socialLinksContact = [
   },
 ];
 
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.5 },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
-
-const socialLinkVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5,
-    },
-  }),
-};
-
 const ContactInfo = () => {
   return (
     <motion.div
@@ -91,7 +64,7 @@ const ContactInfo = () => {
       </div>
       <motion.div
         className="flex p-2 gap-2 justify-center space-x-4 mt-4 mb-4"
-        variants={staggerContainer}
+        variants={motionContainer}
         initial="hidden"
         animate="visible"
       >
@@ -101,7 +74,7 @@ const ContactInfo = () => {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            variants={socialLinkVariants}
+            variants={motionIcon}
             custom={index}
           >
             <Icon

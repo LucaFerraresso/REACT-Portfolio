@@ -1,3 +1,384 @@
 //migliorare le animazioni in aboutme.jsx
 
+backup herosection.jsx con animazioni motion
+
+import React from "react";
+import { motion } from "framer-motion";
+
+// Varianti di animazione
+const fadeIn = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 2,
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerContainer: 0.5,
+    },
+  },
+};
+
+const socialLinkVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: (custom) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      delay: custom * 0.5,
+    },
+  }),
+};
+
+const HeroSection = ({ imgPath, socialLinks }) => {
+  return (
+    <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100">
+      <motion.div
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Immagine del profilo */}
+        <div className="flex justify-center items-center">
+          <motion.img
+            src={imgPath}
+            alt="Your Photo"
+            loading="lazy"
+            className="rounded-3xl  w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px] border border-gray-300"
+            variants={fadeIn}
+          />
+        </div>
+
+        {/* Testo di presentazione */}
+        <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+          <motion.h2
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark-blue"
+            variants={fadeIn}
+          >
+            Hi, I'm Luca Ferraresso.
+          </motion.h2>
+          <motion.p
+            className="text-md sm:text-lg md:text-xl mt-4 text-grayish-blue"
+            variants={fadeIn}
+          >
+            I’m an enthusiastic Front-End Developer based in Venice, Italy. My
+            expertise lies in React and JavaScript, and I'm dedicated to
+            crafting responsive, engaging web experiences. I thrive on turning
+            complex challenges into intuitive, user-friendly solutions and am
+            always excited to explore new technologies and techniques.
+          </motion.p>
+
+          {/* Link ai Social Media */}
+          <motion.div
+            className="flex space-x-4 sm:space-x-6 mt-6"
+            variants={fadeIn}
+          >
+            {socialLinks.map(({ icon: Icon, url, color }, index) => (
+              <motion.a
+                key={index}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={socialLinkVariants}
+                custom={index}
+                className={w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} }
+              >
+                <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
+              </motion.a>
+            ))}
+          </motion.div>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+export default HeroSection;
+
+//skill section con animazioni motion
+
+import React from "react";
+import { motion } from "framer-motion";
+
+// Varianti di animazione
+const fadeIn = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.5,
+    },
+  },
+};
+
+const iconVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: (custom) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      delay: custom * 0.5, // Ritardo personalizzato per ogni icona
+    },
+  }),
+};
+
+const SkillsSection = ({ techIcons }) => {
+  return (
+    <section className="flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8  bg-gray-100 ">
+      <motion.section
+        id="skills"
+        className="w-full max-w-7xl p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-100"
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+      >
+        <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-center mb-8">
+          Tech Stack
+        </h2>
+
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 justify-items-center "
+          variants={staggerContainer}
+        >
+          {techIcons.map(({ icon: Icon, color, name }, index) => (
+            <motion.div
+              key={index}
+              variants={iconVariants}
+              custom={index}
+              className="  w-full max-w-[200px] p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border border-gray-300 bg-white "
+              aria-label={name}
+            >
+              {/* Icona con una dimensione responsive */}
+              <Icon
+                className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl ${color}`}
+              />
+              <h1 className="mt-3 text-sm sm:text-base md:text-lg font-semibold text-center">
+                {name}
+              </h1>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.section>
+    </section>
+  );
+};
+
+export default SkillsSection;
+
+// project section con animazioni motion
+
+import React from "react";
+import { motion } from "framer-motion";
+import HomePageProjectCard from "../homepage/HomePageProjectCard";
+
+// Varianti di animazione
+const fadeIn = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 2,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: (custom) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      delay: custom * 0.5, // Ritardo personalizzato per ogni card
+    },
+  }),
+};
+
+const ProjectsSection = ({ projects }) => {
+  const goToProjects = () => {
+    window.location.href = "/projects";
+  };
+  return (
+    <section className="py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-gray-100">
+      <motion.div
+        className="flex flex-col justify-center gap-8"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+      >
+        {/* Titolo */}
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-6">
+          Recent Projects
+        </h2>
+
+        {/* Griglia dei progetti */}
+        <div className="flex flex-wrap justify-center items-center gap-8">
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              variants={cardVariants}
+              custom={index} // Passa l'indice per il ritardo
+              className="w-full max-w-xs sm:max-w-sm md:max-w-md"
+            >
+              <HomePageProjectCard {...project} />
+            </motion.div>
+          ))}
+        </div>
+        <div className="flex justify-center items-center">
+          <button
+            onClick={goToProjects}
+            className=" border-2 border-gray-300 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-[300px] hover:animate-pulse"
+          >
+            View All Projects
+          </button>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+export default ProjectsSection;
+
+//backup tailwind.config.jsx
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        "soft-red": "hsl(10, 79%, 65%)",
+        cyan: "hsl(186, 34%, 60%)",
+        "dark-brown": "hsl(25, 47%, 15%)",
+        "medium-brown": "hsl(28, 10%, 53%)",
+        cream: "hsl(27, 66%, 92%)",
+        "very-pale-orange": "hsl(33, 100%, 98%)",
+        "dark-blue": "hsl(231, 16%, 20%)",
+        "light-pink": "hsl(347, 100%, 64%)",
+        "grayish-blue": "hsl(237, 18%, 59%)",
+        "soft-red": "hsl(345, 95%, 68%)",
+        "dark-desaturated-blue": "hsl(236, 21%, 26%)",
+        "very-dark-blue": "hsl(235, 16%, 14%)",
+        "very-dark-almost-black-blue": "hsl(234, 17%, 12%)",
+        "light-cyan": "hsl(193, 38%, 86%)",
+        "neon-green": "hsl(150, 100%, 66%)",
+        "grayish-blue": "hsl(217, 19%, 38%)",
+        "dark-grayish-blue": "hsl(217, 19%, 24%)",
+        "dark-blue": "hsl(218, 23%, 16%)",
+        purple: "hsl(259, 100%, 65%)",
+        "light-red": "hsl(0, 100%, 67%)",
+        white: "hsl(0, 0%, 100%)",
+        "off-white": "hsl(0, 0%, 94%)",
+        "light-grey": "hsl(0, 0%, 86%)",
+        "smokey-grey": "hsl(0, 1%, 44%)",
+        "off-black": "hsl(0, 0%, 8%)",
+        "green-200": "hsl(148, 38%, 91%)",
+        "green-600": "hsl(169, 82%, 27%)",
+        red: "hsl(0, 100%, 66%)",
+        "grey-500": "hsl(186, 15%, 59%)",
+        "grey-900": "hsl(187, 24%, 22%)",
+        lime: "hsl(61, 70%, 52%)",
+        slate100: "hsl(202, 86%, 94%)",
+        slate300: "hsl(203, 41%, 72%)",
+        slate500: "hsl(200, 26%, 54%)",
+        slate700: "hsl(200, 24%, 40%)",
+        slate900: "hsl(202, 55%, 16%)",
+        green: "hsl(159, 69%, 38%)",
+        "rose-50": "hsl(20, 50%, 98%)",
+        "rose-100": "hsl(13, 31%, 94%)",
+        "light-grayish-violet": "hsl(270, 3%, 87%)",
+        "dark-grayish-violet": "hsl(279, 6%, 55%)",
+        "very-dark-violet": "hsl(278, 68%, 11%)",
+        "strong-cyan": "hsl(172, 67%, 45%)",
+        "very-dark-cyan": "hsl(183, 100%, 15%)",
+        "dark-grayish-cyan": "hsl(186, 14%, 43%)",
+        "grayish-cyan": "hsl(184, 14%, 56%)",
+        "light-grayish-cyan": "hsl(185, 41%, 84%)",
+        "very-light-grayish-cyan": "hsl(189, 41%, 97%)",
+        "soft-cyan": "hsl(174, 77%, 80%)",
+        "slider-background": "hsl(174, 86%, 45%)",
+        "discount-background": "hsl(14, 92%, 95%)",
+        "discount-text": "hsl(15, 100%, 70%)",
+        "cta-text": "hsl(226, 100%, 87%)",
+        "pricing-bg": "hsl(0, 0%, 100%)",
+        "main-bg": "hsl(230, 100%, 99%)",
+        "empty-slider": "hsl(224, 65%, 95%)",
+        "toggle-bg": "hsl(223, 50%, 87%)",
+        "text-grayish-blue": "hsl(225, 20%, 60%)",
+        "text-dark-desaturated-blue": "hsl(227, 35%, 25%)",
+        "very-pale-blue": "hsl(230, 100%, 99%)",
+        tomato: "hsl(4, 100%, 67%)",
+        primary: {
+          "linear-gradient":
+            "linear-gradient(135deg, hsl(249, 99%, 64%) 0%, hsl(278, 94%, 30%) 100%)",
+          "input-border": "hsl(249, 99%, 64%)",
+        },
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        karla: ["Karla", "sans-serif"],
+        "red-hat": ["Red Hat Text", "sans-serif"],
+        "plus-jakarta": ["Plus Jakarta Sans", "sans-serif"],
+        spaceGrotesk: ["Space Grotesk", "sans-serif"],
+        sans: ["Manrope", "sans-serif"],
+        spaceMono: ["Space Mono", "monospace"],
+        manrope: ["Manrope", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+        "dm-sans": ["DM Sans", "sans-serif"],
+      },
+      animation: {
+        "fade-in": "fadeIn 2s ease-in-out",
+        flip: "flipCard 0.6s ease-in-out forwards",
+        "flip-back": "flipCard 0.6s ease-in-out reverse forwards",
+        "slide-in-right": "slideInRight 0.5s ease-in-out forwards",
+        "slide-in-left": "slideInLeft 0.5s ease-in-out forwards",
+        "bounce-in": "bounceIn 0.5s ease-in-out forwards",
+        "scale-up": "scaleUp 0.5s ease-in-out forwards",
+        "scale-down": "scaleDown 0.5s ease-in-out forwards",
+      },
+      flipCard: {
+        "0%": { transform: "rotateX(0deg)" },
+        "100%": { transform: "rotateX(180deg)" },
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+      },
+      backgroundImage: {
+        stars:
+          "url('/Exercises/launch-countdown-timer-main/images/bg.stars.svg')",
+        hills:
+          "url('/Exercises/launch-countdown-timer-main/images/pattern-hills.svg')",
+      },
+    },
+  },
+  plugins: [require("@tailwindcss/forms")],
+};
+
+
 
