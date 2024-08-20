@@ -380,5 +380,30 @@ export default {
   plugins: [require("@tailwindcss/forms")],
 };
 
-
+//depcheck
+@mantine/core      
+* @mantine/hooks     
+* @react-three/rapier
+* @tailwindcss/forms 
+* bcryptjs
+* cors
+* dotenv
+* express
+* jsonwebtoken       
+* mongodb
+* mongoose
+* openai
+* passport
+* passport-google-oauth20
+* react-flip-toolkit
+* three-stdlib
+Unused devDependencies
+* @types/react
+* @types/react-dom
+* autoprefixer
+* nodemon
+* postcss
+* tailwindcss-animated
+Missing dependencies
+* @react-spring/three: .\src\components\threejs-project-page\Button3D.jsx
 
