@@ -6,7 +6,7 @@ export const sectionsData = [
       "Hello, I'm Ferraresso Luca, and I've been working as a Frontend Developer for the past six months. Although I'm relatively new to the field, my passion for technology and design drives me to continuously learn and improve every day.",
   },
   {
-    imageSrc: "/assets/images/aboutme//codebackground.jpg",
+    imageSrc: "/assets/images/aboutme/codebackground.jpg",
     altText: "Coding",
     paragraph:
       "From the moment I wrote my first line of code, I was captivated by the power of technology to create engaging and intuitive user experiences. I enjoy taking on the challenge of turning complex ideas into visually appealing, functional websites that users love to interact with.",
