@@ -19,15 +19,7 @@ export const Exercises = [
       "/Exercises/age-calculator-app-main/design/desktop-preview.jpg",
     initialRating: 0,
   },
-  {
-    id: "contact-form",
-    title: "Contact Form",
-    description:
-      "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice building a form with several input types and validation.",
-    link: "/exercise/contactform",
-    backgroundImage: "/Exercises/contact-form-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
+
   {
     id: "mortgage-calculator",
     title: "Mortgage Calculator",
@@ -48,16 +40,7 @@ export const Exercises = [
       "/Exercises/product-list-with-cart-main/design/desktop-design-selected.jpg",
     initialRating: 0,
   },
-  {
-    id: "interactive-card-details-form",
-    title: "Interactive Credit Card Details Form",
-    description:
-      "This fun project will be an excellent way to practice DOM manipulation and form validation while also putting your HTML and CSS skills to the test.",
-    link: "/exercise/interactivecardform",
-    backgroundImage:
-      "/Exercises/interactive-card-details-form-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
+
   {
     id: "tip-calculator",
     title: "Tip Calculator",
@@ -68,16 +51,7 @@ export const Exercises = [
       "/Exercises/tip-calculator-app-main/design/desktop-preview.jpg",
     initialRating: 0,
   },
-  {
-    id: "interactive-pricing-components",
-    title: "Interactive Pricing Components",
-    description:
-      "In this project, you'll build out an interactive pricing component complete with custom range input slider and pricing toggle. A perfect way to test your JS skills!",
-    link: "/exercise/pricingslider",
-    backgroundImage:
-      "/Exercises/interactive-pricing-component-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
+
   {
     id: "news-letter-sign-up",
     title: "NewsLetter Sign Up",
@@ -98,16 +72,7 @@ export const Exercises = [
       "/Exercises/launch-countdown-timer-main/design/desktop-preview.jpg",
     initialRating: 0,
   },
-  {
-    id: "expenses-chart-component",
-    title: "Expenses Chart Component",
-    description:
-      "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
-    link: "/exercise/expenseschartcomponent",
-    backgroundImage:
-      "/Exercises/expenses-chart-component-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
+
   {
     id: "rock-paper-scissors-master",
     title: "Rock Paper Scissors Master",
