@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   FaJsSquare,
   FaReact,
@@ -10,9 +10,12 @@ import {
   FaFacebook,
 } from "react-icons/fa";
 
-import SkillsSection from "../components/homepage/SkillSection";
 import HeroSection from "../components/homepage/HeroSection";
+import HeroSectionSkeleton from "../components/homepage/HeroSectionSkeleton";
+import SkillsSection from "../components/homepage/SkillSection";
+import SkillSectionSkeleton from "../components/homepage/SkillSectionSkeleton";
 import ProjectsSection from "../components/homepage/ProjectSection";
+import ProjectSectionSkeleton from "../components/homepage/ProjectSectionSkeleton";
 
 const socialLinks = [
   {
@@ -64,6 +67,21 @@ const projects = [
 const imgPath = "/assets/images/homepage/myFoto.jpg";
 
 const HomePage = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+  }, []);
+  if (isLoading) {
+    return (
+      <div className="font-montserrat">
+        <HeroSectionSkeleton />
+        <SkillSectionSkeleton />
+        <ProjectSectionSkeleton />
+      </div>
+    );
+  }
   return (
     <>
       <div className="font-montserrat">
