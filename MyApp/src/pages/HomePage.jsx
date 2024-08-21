@@ -43,7 +43,7 @@ const techIcons = [
 const projects = [
   {
     title: "ToDo-App",
-    image: "src/assets/images/homepage/todoapp-preview1.png",
+    image: "/assets/images/homepage/todoapp-preview1.png",
     description:
       "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
     github:
@@ -52,7 +52,7 @@ const projects = [
   },
   {
     title: "Ice-Cream menù App",
-    image: "src/assets/images/homepage/ice-cream-menu-preview1.png",
+    image: "/assets/images/homepage/ice-cream-menu-preview1.png",
     description:
       "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
     github:
@@ -61,7 +61,7 @@ const projects = [
   },
 ];
 
-const imgPath = "src/assets/images/homepage/myFoto.jpg";
+const imgPath = "/assets/images/homepage/myFoto.jpg";
 
 const HomePage = () => {
   return (
