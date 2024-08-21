@@ -132,94 +132,237 @@ export const Exercises = [
 ];
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-import React, { useState } from "react";
-import successIcon from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/icon-success.svg";
-import listIcon from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/icon-list.svg";
-import desktopIllustration from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/illustration-sign-up-desktop.svg";
-import mobileIllustration from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/illustration-sign-up-mobile.svg";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
-const NewsletterSignUp = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+const choices = [
+  {
+    name: "rock",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-rock.svg",
+    color: "red",
+  },
+  {
+    name: "paper",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-paper.svg",
+    color: "blue",
+  },
+  {
+    name: "scissors",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-scissors.svg",
+    color: "yellow",
+  },
+  {
+    name: "lizard",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-lizard.svg",
+    color: "green",
+  },
+  {
+    name: "spock",
+    image: "/Exercises/rock-paper-scissors-master/images/icon-spock.svg",
+    color: "purple",
+  },
+];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
+const winConditions = {
+  rock: ["scissors", "lizard"],
+  paper: ["rock", "spock"],
+  scissors: ["paper", "lizard"],
+  lizard: ["spock", "paper"],
+  spock: ["scissors", "rock"],
+};
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      setError("Email field cannot be empty");
-      return;
-    } else if (!emailPattern.test(email)) {
-      setError("Please provide a valid email address");
-      return;
-    }
+const ChoiceButton = ({ choice, onClick }) => (
+  <motion.div
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.9 }}
+    className="relative cursor-pointer m-2 border border-white rounded-full shadow-lg transform"
+    onClick={() => onClick(choice.name)}
+    style={{ padding: "10px", backgroundColor: choice.color }}
+  >
+    <div className="bg-white p-2 rounded-full">
+      <img
+        src={choice.image}
+        alt={choice.name}
+        className="w-20 h-20 sm:w-28 sm:h-28 transition-transform duration-300 ease-in-out"
+        style={{ filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.5))" }}
+      />
+    </div>
+  </motion.div>
+);
 
-    setSubmitted(true);
+const RockPaperScissors = () => {
+  const [gameState, setGameState] = useState({
+    playerChoice: "",
+    computerChoice: "",
+    result: "",
+    score: 0,
+    showRules: false,
+    isStandardMode: true,
+  });
+
+  const availableChoices = gameState.isStandardMode
+    ? choices.slice(0, 3)
+    : choices;
+
+  const getRandomChoice = () =>
+    availableChoices[Math.floor(Math.random() * availableChoices.length)];
+
+  const handlePlayerChoice = (choice) => {
+    const computer = getRandomChoice().name;
+    const playerWins = winConditions[choice].includes(computer);
+    const newScore = playerWins ? gameState.score + 1 : gameState.score - 1;
+
+    setGameState((prevState) => ({
+      ...prevState,
+      playerChoice: choice,
+      computerChoice: computer,
+      result: playerWins
+        ? "You win!"
+        : choice === computer
+        ? "It's a tie!"
+        : "You lose!",
+      score: newScore,
+    }));
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-light-grayish-violet p-4 font-roboto">
-      <div className="flex flex-col md:flex-row gap-4 md:justify-between md:items-center w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden p-6 md:p-8">
-        <div className="flex flex-col justify-center md:w-1/2">
-          <h1 className="text-2xl font-bold text-grayish-blue mb-4">
-            Sign up for our newsletter
-          </h1>
-          <p className="text-grayish-blue mb-4">
-            Stay updated with our latest news and offers. Enter your email
-            address below to receive our newsletter.
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32] px-4 font-barlow">
+      <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+        Rock Paper Scissors
+      </h1>
+      <h2 className="text-xl sm:text-2xl text-white mb-4">
+        Score: {gameState.score}
+      </h2>
+
+      <motion.div
+        layout
+        className="flex flex-wrap justify-center mb-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {availableChoices.map((choice) => (
+          <ChoiceButton
+            key={choice.name}
+            choice={choice}
+            onClick={handlePlayerChoice}
+          />
+        ))}
+      </motion.div>
+
+      <div className="text-center text-lg text-white mb-4">
+        {gameState.playerChoice && (
+          <p className="mb-1">
+            You chose:{" "}
+            <span className="font-bold">{gameState.playerChoice}</span>
           </p>
-
-          {submitted ? (
-            <div className="flex flex-col items-center">
-              <img src={successIcon} alt="Success" className="mb-4" />
-              <p className="text-green-600 text-lg">
-                Thanks for subscribing! You’ll hear from us soon.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="w-full mt-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className={`border ${
-                  error ? "border-red" : "border-gray-300"
-                } p-2 w-full rounded mb-2 focus:outline-none focus:ring-2 focus:ring-primary-input-border transition duration-200`}
-              />
-              {error && <p className="text-red text-sm mb-2">{error}</p>}
-              <button
-                type="submit"
-                className="bg-red mb-2 text-white font-bold py-2 px-4 rounded w-full hover:bg-opacity-90 transition duration-200"
-              >
-                Sign Up
-              </button>
-            </form>
-          )}
-        </div>
-
-        <div className="hidden md:block md:w-1/2">
-          <img
-            src={desktopIllustration}
-            alt="Sign Up Illustration"
-            className="w-full"
-          />
-        </div>
-        <div className="md:hidden">
-          <img
-            src={mobileIllustration}
-            alt="Sign Up Illustration"
-            className="w-full"
-          />
-        </div>
+        )}
+        {gameState.computerChoice && (
+          <p className="mb-1">
+            Computer chose:{" "}
+            <span className="font-bold">{gameState.computerChoice}</span>
+          </p>
+        )}
+        {gameState.result && (
+          <p
+            className={`font-bold ${
+              gameState.result === "You win!"
+                ? "text-green"
+                : gameState.result === "It's a tie!"
+                ? "text-yellow"
+                : "text-red"
+            }`}
+          >
+            {gameState.result}
+          </p>
+        )}
       </div>
+
+      <motion.button
+        onClick={() =>
+          setGameState((prevState) => ({ ...prevState, showRules: true }))
+        }
+        className="mt-4 px-6 py-2 bg-blue-500 text-white font-bold rounded transition duration-300 hover:bg-blue-600"
+        whileHover={{ scale: 1.05 }}
+      >
+        Show Rules
+      </motion.button>
+      <motion.button
+        onClick={() =>
+          setGameState((prevState) => ({
+            ...prevState,
+            isStandardMode: !prevState.isStandardMode,
+          }))
+        }
+        className="mt-4 px-6 py-2 bg-gray-500 text-white font-bold rounded transition duration-300 hover:bg-gray-600"
+        whileHover={{ scale: 1.05 }}
+      >
+        {gameState.isStandardMode
+          ? "Switch to Advanced Mode"
+          : "Switch to Standard Mode"}
+      </motion.button>
+
+      {gameState.showRules && (
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
+        >
+          <div className="flex flex-col bg-white p-4 rounded-lg shadow-lg max-w-xs w-full mx-6 my-4">
+            <button
+              onClick={() =>
+                setGameState((prevState) => ({
+                  ...prevState,
+                  showRules: false,
+                }))
+              }
+              className="absolute top-2 right-2 text-black text-lg font-bold"
+            >
+              X
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-center">Game Rules</h2>
+
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold mb-2">Standard Rules:</h3>
+              <img
+                src="/Exercises/rock-paper-scissors-master/images/image-rules.svg"
+                alt="Standard Game Rules"
+                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
+              />
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold mb-2">Bonus Rules:</h3>
+              <img
+                src="/Exercises/rock-paper-scissors-master/images/image-rules-bonus.svg"
+                alt="Bonus Game Rules"
+                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
+              />
+            </div>
+
+            <motion.button
+              onClick={() =>
+                setGameState((prevState) => ({
+                  ...prevState,
+                  showRules: false,
+                }))
+              }
+              className="mt-4 px-4 py-2 bg-gray-300 text-black font-bold rounded transition duration-300 hover:bg-gray-400"
+              whileHover={{ scale: 1.05 }}
+            >
+              Close
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
 
-export default NewsletterSignUp;
+export default RockPaperScissors;
+
+
 
 
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+
 const CountdownTimer = () => {
   const initialState = {
     days: "99",
@@ -10,37 +11,29 @@ const CountdownTimer = () => {
 
   const getInitialTime = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const days = urlParams.get("days") || initialState.days;
-    const hours = urlParams.get("hours") || initialState.hours;
-    const minutes = urlParams.get("minutes") || initialState.minutes;
-    const seconds = urlParams.get("seconds") || initialState.seconds;
-
-    return { days, hours, minutes, seconds };
+    return {
+      days: urlParams.get("days") || initialState.days,
+      hours: urlParams.get("hours") || initialState.hours,
+      minutes: urlParams.get("minutes") || initialState.minutes,
+      seconds: urlParams.get("seconds") || initialState.seconds,
+    };
   };
 
   const [time, setTime] = useState(getInitialTime);
   const [isRunning, setIsRunning] = useState(true);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inputValues, setInputValues] = useState({
-    days: "",
-    hours: "",
-    minutes: "",
-    seconds: "",
-  });
+  const [inputValues, setInputValues] = useState(initialState);
 
   useEffect(() => {
     let interval;
-
     if (isRunning && !isCompleted) {
       interval = setInterval(() => {
-        const { days, hours, minutes, seconds } = time;
-
         if (
-          days === "00" &&
-          hours === "00" &&
-          minutes === "00" &&
-          seconds === "00"
+          time.days === "00" &&
+          time.hours === "00" &&
+          time.minutes === "00" &&
+          time.seconds === "00"
         ) {
           clearInterval(interval);
           setIsRunning(false);
@@ -50,13 +43,11 @@ const CountdownTimer = () => {
         }
       }, 1000);
     }
-
     return () => clearInterval(interval);
   }, [time, isRunning, isCompleted]);
 
   const updateTime = () => {
     const { days, hours, minutes, seconds } = time;
-
     let newSeconds = parseInt(seconds) - 1;
     let newMinutes = parseInt(minutes);
     let newHours = parseInt(hours);
@@ -65,11 +56,9 @@ const CountdownTimer = () => {
     if (newSeconds < 0) {
       newSeconds = 59;
       newMinutes--;
-
       if (newMinutes < 0) {
         newMinutes = 59;
         newHours--;
-
         if (newHours < 0) {
           newHours = 23;
           newDays--;
@@ -87,18 +76,12 @@ const CountdownTimer = () => {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTime({
-      days: "00",
-      hours: "00",
-      minutes: "00",
-      seconds: "00",
-    });
+    setTime(initialState);
     setIsRunning(true);
     setIsCompleted(false);
   };
 
   const handleSetTimer = () => {
-    setIsRunning(false);
     const updatedTime = {
       days: inputValues.days.toString().padStart(2, "0"),
       hours: inputValues.hours.toString().padStart(2, "0"),
@@ -110,28 +93,18 @@ const CountdownTimer = () => {
     setIsRunning(true);
     setIsCompleted(false);
     setIsModalOpen(false);
-    setInputValues({
-      days: "",
-      hours: "",
-      minutes: "",
-      seconds: "",
-    });
   };
 
   const updateURL = (updatedTime) => {
-    const { days, hours, minutes, seconds } = updatedTime;
     const url = new URL(window.location);
-    url.searchParams.set("days", days);
-    url.searchParams.set("hours", hours);
-    url.searchParams.set("minutes", minutes);
-    url.searchParams.set("seconds", seconds);
+    Object.entries(updatedTime).forEach(([key, value]) =>
+      url.searchParams.set(key, value)
+    );
     window.history.pushState({}, "", url);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setInputValues({ ...inputValues, [name]: value });
-  };
+  const handleInputChange = (e) =>
+    setInputValues({ ...inputValues, [e.target.name]: e.target.value });
 
   return (
     <div
@@ -143,114 +116,37 @@ const CountdownTimer = () => {
         {isCompleted ? "Time's up! Set a new timer." : "We're launching soon"}
       </h1>
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
-        <TimeBox label="Days" value={time.days} />
-        <TimeBox label="Hours" value={time.hours} />
-        <TimeBox label="Minutes" value={time.minutes} />
-        <TimeBox label="Seconds" value={time.seconds} />
+        {Object.entries(time).map(([label, value]) => (
+          <TimeBox
+            key={label}
+            label={label.charAt(0).toUpperCase() + label.slice(1)}
+            value={value}
+          />
+        ))}
       </div>
       <div className="mt-4 mb-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-        <button
-          onClick={resetTimer}
-          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
-        >
-          Reset Timer
-        </button>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
-        >
-          Set Timer
-        </button>
+        <Button onClick={resetTimer} label="Reset Timer" />
+        <Button onClick={() => setIsModalOpen(true)} label="Set Timer" />
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex flex-row items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-1/3">
-            <div className="flex flex-col space-y-4">
-              <h2 className="text-xl font-bold mb-4 text-black">
-                Imposta Timer
-              </h2>
-              <input
-                type="number"
-                name="days"
-                placeholder="Giorni"
-                value={inputValues.days}
-                onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded text-black"
-                style={{ backgroundColor: "#f9f9f9" }}
-              />
-              <input
-                type="number"
-                name="hours"
-                placeholder="Ore"
-                value={inputValues.hours}
-                onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded text-black"
-                style={{ backgroundColor: "#f9f9f9" }}
-              />
-              <input
-                type="number"
-                name="minutes"
-                placeholder="Minuti"
-                value={inputValues.minutes}
-                onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded text-black"
-                style={{ backgroundColor: "#f9f9f9" }}
-              />
-              <input
-                type="number"
-                name="seconds"
-                placeholder="Secondi"
-                value={inputValues.seconds}
-                onChange={handleInputChange}
-                className="border border-gray-400 p-2 rounded text-black"
-                style={{ backgroundColor: "#f9f9f9" }}
-              />
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={handleSetTimer}
-                className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
-              >
-                Imposta
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-300 p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105 ml-2"
-              >
-                Annulla
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          onSetTimer={handleSetTimer}
+        >
+          {Object.keys(inputValues).map((key) => (
+            <InputField
+              key={key}
+              name={key}
+              value={inputValues[key]}
+              onChange={handleInputChange}
+            />
+          ))}
+        </Modal>
       )}
 
-      <div className="mt-4 flex space-x-4 mb-4">
-        <a
-          href="https://www.facebook.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-light-pink hover:text-white"
-        >
-          <FaFacebook size={24} />
-        </a>
-        <a
-          href="https://www.twitter.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-light-pink hover:text-white"
-        >
-          <FaTwitter size={24} />
-        </a>
-        <a
-          href="https://www.instagram.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-light-pink hover:text-white"
-        >
-          <FaInstagram size={24} />
-        </a>
-      </div>
+      <SocialIcons />
+
       {isCompleted && (
         <div className="mb-4 p-4 bg-soft-red text-dark-blue rounded-lg animate-fade-in">
           <p className="text-center">
@@ -269,6 +165,63 @@ const TimeBox = ({ label, value }) => (
     </span>
     <p className="uppercase text-xs sm:text-sm mt-2 tracking-widest">{label}</p>
   </div>
+);
+
+const Button = ({ onClick, label }) => (
+  <button
+    onClick={onClick}
+    className="bg-light-pink p-2 rounded-lg text-sm sm:text-base transform transition-transform hover:scale-105"
+  >
+    {label}
+  </button>
+);
+
+const Modal = ({ onClose, onSetTimer, children }) => (
+  <div className="fixed inset-0 flex flex-row items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-dark-blue p-6 rounded-lg shadow-lg w-11/12 sm:w-1/3">
+      <div className="flex flex-col space-y-4">
+        <h2 className="text-xl font-bold mb-4 text-light-pink">
+          Imposta Timer
+        </h2>
+        {children}
+      </div>
+      <div className="mt-4 flex justify-end gap-2">
+        <Button onClick={onSetTimer} label="Imposta" />
+        <Button onClick={onClose} label="Annulla" />
+      </div>
+    </div>
+  </div>
+);
+
+const InputField = ({ name, value, onChange }) => (
+  <input
+    type="number"
+    name={name}
+    placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
+    value={value}
+    onChange={onChange}
+    className="border border-gray-400 p-2 rounded text-black"
+    style={{ backgroundColor: "#f9f9f9" }}
+  />
+);
+
+const SocialIcons = () => (
+  <div className="mt-4 flex space-x-4 mb-4">
+    <SocialIcon href="https://www.facebook.com" Icon={FaFacebook} />
+    <SocialIcon href="https://www.twitter.com" Icon={FaTwitter} />
+    <SocialIcon href="https://www.instagram.com" Icon={FaInstagram} />
+  </div>
+);
+
+const SocialIcon = ({ href, Icon }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-light-pink hover:text-white"
+  >
+    <Icon size={24} />
+  </a>
 );
 
 export default CountdownTimer;
