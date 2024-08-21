@@ -148,7 +148,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-    <ToastContainer />
     <AuthProvider>
       <CartProvider>
         <RouterProvider router={router} />
