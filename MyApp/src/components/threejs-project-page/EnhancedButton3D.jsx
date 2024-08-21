@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Text3D } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 
-const Button3D = ({ onClick, label, position, rotation, color }) => {
+const EnhancedButton3D = ({ onClick, label, position, rotation, color }) => {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  const { scale, positionSpring } = useSpring({
-    scale: clicked ? 0.95 : hovered ? 1.05 : 1,
+  const { scale, positionSpring, colorSpring } = useSpring({
+    scale: clicked ? 0.95 : hovered ? 1.1 : 1,
     position: clicked ? [0, -0.1, 0] : [0, 0, 0],
-    config: { tension: 300, friction: 20 },
+    color: hovered ? "hsl(50, 100%, 60%)" : color,
+    config: { tension: 300, friction: 15 },
   });
 
   return (
@@ -28,11 +29,11 @@ const Button3D = ({ onClick, label, position, rotation, color }) => {
     >
       <mesh position={[0, -0.3, 0]} scale={[1.2, 1.2, 1.2]}>
         <cylinderGeometry args={[1.2, 1.2, 0.1, 32]} />
-        <meshStandardMaterial color="lightgrey" />
+        <animated.meshStandardMaterial color={colorSpring} />
       </mesh>
       <animated.mesh scale={scale} position={positionSpring}>
         <cylinderGeometry args={[1, 1, 0.4, 32]} />
-        <meshStandardMaterial color={color} />
+        <animated.meshStandardMaterial color={colorSpring} />
         <Text3D
           font="/fonts-3D/helvetiker_regular.typeface.json"
           size={0.5}
@@ -47,4 +48,4 @@ const Button3D = ({ onClick, label, position, rotation, color }) => {
   );
 };
 
-export default Button3D;
+export default EnhancedButton3D;

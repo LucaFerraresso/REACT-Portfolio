@@ -1,78 +1,65 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useNavigate } from "react-router-dom";
 import Button3D from "../components/threejs-project-page/Button3D";
 import StripedSphere from "../components/threejs-project-page/StripedSphere";
 import RotatingText from "../components/threejs-project-page/RotatingText";
 import GroundPlane from "../components/threejs-project-page/GroundPlane";
+import EnhancedButton3D from "../components/threejs-project-page/EnhancedButton3D";
+import FogEffect from "../components/threejs-project-page/FogEffect";
+import StarsBackground from "../components/threejs-project-page/StarsBackground";
+import PlanetarySphere from "../components/threejs-project-page/PlanetarySphere";
+import { useNavigate } from "react-router-dom";
 
 const ThreeJsProject = () => {
   const navigate = useNavigate();
 
   const navigateTo = (path) => {
-    navigate(path); // Reindirizzamento dinamico
+    navigate(path);
   };
 
   return (
-    <div className="w-full h-screen bg-slate-500">
-      <Canvas camera={{ position: [0, 10, 20], fov: 60 }} shadows={true}>
-        {/* Luce ambientale e direzionale */}
-        <ambientLight intensity={0.5} />
+    <div className="w-full h-screen bg-slate-500 overflow-hidden">
+      <Canvas camera={{ position: [0, 10, 20], fov: 75 }} shadows>
+        <ambientLight intensity={0.4} />
         <directionalLight
-          position={[0, 10, 5]}
-          intensity={1.5}
-          color={"#fff"}
-          castShadow={true}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
+          position={[5, 10, 5]}
+          intensity={1}
+          color={"#ffffff"}
+          castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
         />
-
-        {/* Controlli di rotazione */}
-        <OrbitControls enableZoom={false} />
-
-        {/* Sfera */}
-        <StripedSphere position={[0, 4, 0]} castShadow={true} />
-
-        {/* Testo rotante attorno alla sfera */}
-        <RotatingText radius={6} speed={0.01} castShadow={true} />
-
-        {/* Bottoni 3D posizionati a semicerchio */}
-        <Button3D
-          label="Home"
-          onClick={() => setTimeout(() => navigateTo("/homepage"), 500)}
-          position={[-4, -1, 2]}
-          rotation={[0, 0.3, 0]}
-          color="hsl(207, 90%, 54%)" // Blu accattivante
-        />
-        <Button3D
-          label="Projects"
-          onClick={() => setTimeout(() => navigateTo("/projects"), 500)}
-          position={[-2, -1, 3]}
-          rotation={[0, 0.1, 0]}
-          color="hsl(120, 73%, 48%)" // Verde brillante
-        />
-        <Button3D
-          label="Contacts"
-          onClick={() => setTimeout(() => navigateTo("/contacts"), 500)}
-          position={[2, -1, 3]}
-          rotation={[0, -0.1, 0]}
-          color="hsl(341, 92%, 63%)" // Rosso vivace
-        />
-        <Button3D
-          label="About Me"
-          onClick={() => setTimeout(() => navigateTo("/aboutme"), 500)}
-          position={[4, -1, 2]}
-          rotation={[0, -0.3, 0]}
-          color="hsl(30, 100%, 66%)" // Arancione intenso
-        />
-        {/* Terreno e muri */}
-        <GroundPlane position={[0, -2, 0]} />
+        <OrbitControls enableZoom={true} />
+        <StripedSphere position={[0, 4, 0]} />
+        <RotatingText radius={6} speed={0.01} />
+        {["Home", "Projects", "Contacts", "About Me"].map((label, index) => (
+          <Button3D
+            key={label}
+            label={label}
+            onClick={() =>
+              setTimeout(
+                () => navigateTo(`/${label.toLowerCase().replace(" ", "")}`),
+                300
+              )
+            }
+            position={[
+              index % 2 === 0 ? -4 + index * 2 : 4 - index * 2,
+              -1,
+              2 + (index % 2) * 1,
+            ]}
+            rotation={[0, (index - 1) * 0.3, 0]}
+            color={
+              [
+                "hsl(207, 90%, 54%)",
+                "hsl(120, 73%, 48%)",
+                "hsl(341, 92%, 63%)",
+                "hsl(30, 100%, 66%)",
+              ][index]
+            }
+          />
+        ))}
+        <GroundPlane />
       </Canvas>
     </div>
   );

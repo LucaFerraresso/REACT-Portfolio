@@ -132,236 +132,326 @@ export const Exercises = [
 ];
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-import { useState } from "react";
-import { motion } from "framer-motion";
+backup tutti i componenti 3js e il progetto 3js.
 
-const choices = [
-  {
-    name: "rock",
-    image: "/Exercises/rock-paper-scissors-master/images/icon-rock.svg",
-    color: "red",
-  },
-  {
-    name: "paper",
-    image: "/Exercises/rock-paper-scissors-master/images/icon-paper.svg",
-    color: "blue",
-  },
-  {
-    name: "scissors",
-    image: "/Exercises/rock-paper-scissors-master/images/icon-scissors.svg",
-    color: "yellow",
-  },
-  {
-    name: "lizard",
-    image: "/Exercises/rock-paper-scissors-master/images/icon-lizard.svg",
-    color: "green",
-  },
-  {
-    name: "spock",
-    image: "/Exercises/rock-paper-scissors-master/images/icon-spock.svg",
-    color: "purple",
-  },
-];
+import React from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { useNavigate } from "react-router-dom";
+import Button3D from "../components/threejs-project-page/Button3D";
+import StripedSphere from "../components/threejs-project-page/StripedSphere";
+import RotatingText from "../components/threejs-project-page/RotatingText";
+import GroundPlane from "../components/threejs-project-page/GroundPlane";
 
-const winConditions = {
-  rock: ["scissors", "lizard"],
-  paper: ["rock", "spock"],
-  scissors: ["paper", "lizard"],
-  lizard: ["spock", "paper"],
-  spock: ["scissors", "rock"],
-};
+const ThreeJsProject = () => {
+  const navigate = useNavigate();
 
-const ChoiceButton = ({ choice, onClick }) => (
-  <motion.div
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.9 }}
-    className="relative cursor-pointer m-2 border border-white rounded-full shadow-lg transform"
-    onClick={() => onClick(choice.name)}
-    style={{ padding: "10px", backgroundColor: choice.color }}
-  >
-    <div className="bg-white p-2 rounded-full">
-      <img
-        src={choice.image}
-        alt={choice.name}
-        className="w-20 h-20 sm:w-28 sm:h-28 transition-transform duration-300 ease-in-out"
-        style={{ filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.5))" }}
-      />
-    </div>
-  </motion.div>
-);
-
-const RockPaperScissors = () => {
-  const [gameState, setGameState] = useState({
-    playerChoice: "",
-    computerChoice: "",
-    result: "",
-    score: 0,
-    showRules: false,
-    isStandardMode: true,
-  });
-
-  const availableChoices = gameState.isStandardMode
-    ? choices.slice(0, 3)
-    : choices;
-
-  const getRandomChoice = () =>
-    availableChoices[Math.floor(Math.random() * availableChoices.length)];
-
-  const handlePlayerChoice = (choice) => {
-    const computer = getRandomChoice().name;
-    const playerWins = winConditions[choice].includes(computer);
-    const newScore = playerWins ? gameState.score + 1 : gameState.score - 1;
-
-    setGameState((prevState) => ({
-      ...prevState,
-      playerChoice: choice,
-      computerChoice: computer,
-      result: playerWins
-        ? "You win!"
-        : choice === computer
-        ? "It's a tie!"
-        : "You lose!",
-      score: newScore,
-    }));
+  const navigateTo = (path) => {
+    navigate(path); // Reindirizzamento dinamico
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#2c2c54] to-[#1e1e32] px-4 font-barlow">
-      <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-        Rock Paper Scissors
-      </h1>
-      <h2 className="text-xl sm:text-2xl text-white mb-4">
-        Score: {gameState.score}
-      </h2>
+    <div className="w-full h-screen bg-slate-500">
+      <Canvas camera={{ position: [0, 10, 20], fov: 60 }} shadows={true}>
+        {/* Luce ambientale e direzionale */}
+        <ambientLight intensity={0.5} />
+        <directionalLight
+          position={[0, 10, 5]}
+          intensity={1.5}
+          color={"#fff"}
+          castShadow={true}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+          shadow-camera-far={50}
+          shadow-camera-left={-10}
+          shadow-camera-right={10}
+          shadow-camera-top={10}
+          shadow-camera-bottom={-10}
+        />
 
-      <motion.div
-        layout
-        className="flex flex-wrap justify-center mb-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {availableChoices.map((choice) => (
-          <ChoiceButton
-            key={choice.name}
-            choice={choice}
-            onClick={handlePlayerChoice}
-          />
-        ))}
-      </motion.div>
+        {/* Controlli di rotazione */}
+        <OrbitControls enableZoom={false} />
 
-      <div className="text-center text-lg text-white mb-4">
-        {gameState.playerChoice && (
-          <p className="mb-1">
-            You chose:{" "}
-            <span className="font-bold">{gameState.playerChoice}</span>
-          </p>
-        )}
-        {gameState.computerChoice && (
-          <p className="mb-1">
-            Computer chose:{" "}
-            <span className="font-bold">{gameState.computerChoice}</span>
-          </p>
-        )}
-        {gameState.result && (
-          <p
-            className={`font-bold ${
-              gameState.result === "You win!"
-                ? "text-green"
-                : gameState.result === "It's a tie!"
-                ? "text-yellow"
-                : "text-red"
-            }`}
-          >
-            {gameState.result}
-          </p>
-        )}
-      </div>
+        {/* Sfera */}
+        <StripedSphere position={[0, 4, 0]} castShadow={true} />
 
-      <motion.button
-        onClick={() =>
-          setGameState((prevState) => ({ ...prevState, showRules: true }))
-        }
-        className="mt-4 px-6 py-2 bg-blue-500 text-white font-bold rounded transition duration-300 hover:bg-blue-600"
-        whileHover={{ scale: 1.05 }}
-      >
-        Show Rules
-      </motion.button>
-      <motion.button
-        onClick={() =>
-          setGameState((prevState) => ({
-            ...prevState,
-            isStandardMode: !prevState.isStandardMode,
-          }))
-        }
-        className="mt-4 px-6 py-2 bg-gray-500 text-white font-bold rounded transition duration-300 hover:bg-gray-600"
-        whileHover={{ scale: 1.05 }}
-      >
-        {gameState.isStandardMode
-          ? "Switch to Advanced Mode"
-          : "Switch to Standard Mode"}
-      </motion.button>
+        {/* Testo rotante attorno alla sfera */}
+        <RotatingText radius={6} speed={0.01} castShadow={true} />
 
-      {gameState.showRules && (
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
-        >
-          <div className="flex flex-col bg-white p-4 rounded-lg shadow-lg max-w-xs w-full mx-6 my-4">
-            <button
-              onClick={() =>
-                setGameState((prevState) => ({
-                  ...prevState,
-                  showRules: false,
-                }))
-              }
-              className="absolute top-2 right-2 text-black text-lg font-bold"
-            >
-              X
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-center">Game Rules</h2>
-
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold mb-2">Standard Rules:</h3>
-              <img
-                src="/Exercises/rock-paper-scissors-master/images/image-rules.svg"
-                alt="Standard Game Rules"
-                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
-              />
-            </div>
-
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold mb-2">Bonus Rules:</h3>
-              <img
-                src="/Exercises/rock-paper-scissors-master/images/image-rules-bonus.svg"
-                alt="Bonus Game Rules"
-                className="w-full h-auto rounded-lg max-w-[200px] mx-auto"
-              />
-            </div>
-
-            <motion.button
-              onClick={() =>
-                setGameState((prevState) => ({
-                  ...prevState,
-                  showRules: false,
-                }))
-              }
-              className="mt-4 px-4 py-2 bg-gray-300 text-black font-bold rounded transition duration-300 hover:bg-gray-400"
-              whileHover={{ scale: 1.05 }}
-            >
-              Close
-            </motion.button>
-          </div>
-        </motion.div>
-      )}
+        {/* Bottoni 3D posizionati a semicerchio */}
+        <Button3D
+          label="Home"
+          onClick={() => setTimeout(() => navigateTo("/homepage"), 500)}
+          position={[-4, -1, 2]}
+          rotation={[0, 0.3, 0]}
+          color="hsl(207, 90%, 54%)" // Blu accattivante
+        />
+        <Button3D
+          label="Projects"
+          onClick={() => setTimeout(() => navigateTo("/projects"), 500)}
+          position={[-2, -1, 3]}
+          rotation={[0, 0.1, 0]}
+          color="hsl(120, 73%, 48%)" // Verde brillante
+        />
+        <Button3D
+          label="Contacts"
+          onClick={() => setTimeout(() => navigateTo("/contacts"), 500)}
+          position={[2, -1, 3]}
+          rotation={[0, -0.1, 0]}
+          color="hsl(341, 92%, 63%)" // Rosso vivace
+        />
+        <Button3D
+          label="About Me"
+          onClick={() => setTimeout(() => navigateTo("/aboutme"), 500)}
+          position={[4, -1, 2]}
+          rotation={[0, -0.3, 0]}
+          color="hsl(30, 100%, 66%)" // Arancione intenso
+        />
+        {/* Terreno e muri */}
+        <GroundPlane position={[0, -2, 0]} />
+      </Canvas>
     </div>
   );
 };
 
-export default RockPaperScissors;
+export default ThreeJsProject;
+//////////////////////////////////////////////////////////////////////////////////////////////
+import React, { useRef } from "react";
 
+import { Box, Cylinder, Cone } from "@react-three/drei";
+
+const Building = () => {
+  return (
+    <>
+      {/* Edificio: combinazione di cilindro e parallelepipedo */}
+      <Box args={[3, 5, 3]} position={[5, 2.5, -5]}>
+        <meshStandardMaterial color="hsl(202, 55%, 16%)" /> {/* Colore scuro */}
+      </Box>
+      <Cylinder args={[1.5, 1.5, 4, 32]} position={[5, 5, -5]}>
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" />{" "}
+        {/* Colore chiaro */}
+      </Cylinder>
+      <Cone args={[2, 3, 32]} position={[5, 8, -5]}>
+        <meshStandardMaterial color="hsl(30, 100%, 60%)" />{" "}
+        {/* Colore giallo */}
+      </Cone>
+    </>
+  );
+};
+
+export default Building;
+////////////////////////////////////////////////////////////////////////////////////////
+import React, { useState } from "react";
+import { Text3D } from "@react-three/drei";
+import { useSpring, animated } from "@react-spring/three";
+
+const Button3D = ({ onClick, label, position, rotation, color }) => {
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  // Animazioni per il cilindro superiore
+  const { scale, positionSpring } = useSpring({
+    scale: clicked ? 1 : hovered ? 1.1 : 1,
+    position: clicked ? [0, -0.05, 0] : [0, 0, 0],
+    config: { tension: 300, friction: 15 },
+  });
+
+  const handlePointerDown = () => setClicked(true);
+  const handlePointerUp = () => {
+    setClicked(false);
+    // Simula un breve ritardo prima di eseguire l'azione del clic
+    setTimeout(onClick, 150);
+  };
+
+  return (
+    <animated.group
+      position={position}
+      rotation={rotation}
+      onClick={handlePointerUp}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      onPointerDown={handlePointerDown}
+    >
+      {/* Base del pulsante */}
+      <mesh position={[0, -0.25, 0]} scale={[1.2, 1.2, 1.2]}>
+        <cylinderGeometry args={[1.2, 1.2, 0.1, 32]} />
+        <meshStandardMaterial color="lightgrey" />{" "}
+        {/* Colore grigio chiaro per la base */}
+      </mesh>
+
+      {/* Corpo del pulsante */}
+      <animated.mesh
+        scale={scale}
+        position={positionSpring}
+        receiveShadow={true}
+      >
+        <cylinderGeometry args={[1, 1, 0.4, 32]} />{" "}
+        {/* Cilindro con altezza media */}
+        <meshStandardMaterial color={color} />
+        <Text3D
+          font="/fonts-3D/helvetiker_regular.typeface.json"
+          size={0.3}
+          height={0.05}
+          position={[-0.8, 0.5, 0.26]}
+        >
+          {label}
+          <meshStandardMaterial color="black" />
+        </Text3D>
+      </animated.mesh>
+    </animated.group>
+  );
+};
+
+export default Button3D;
+////////////////////////////////////////////////////////////////////////////////
+import React, { useRef } from "react";
+import { Plane } from "@react-three/drei";
+
+const GroundPlane = () => {
+  return (
+    <>
+      <Plane
+        args={[22, 22]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.35, 0]}
+        receiveShadow={true}
+      >
+        <meshStandardMaterial color="hsl(140, 40%, 50%)" side={2} />{" "}
+      </Plane>
+      {/* laterale d sinistra */}
+      <Plane
+        args={[22, 10]}
+        rotation={[0, Math.PI / 2, 0]}
+        position={[-11, 3.65, 0]}
+        receiveShadow={true}
+      >
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
+      </Plane>
+      {/* laterale di destra */}
+      <Plane
+        args={[10, 22]}
+        rotation={[0, 0, Math.PI / 2]}
+        position={[0, 3.65, -11]}
+        receiveShadow={true}
+      >
+        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
+        {/* Azzurro */}
+      </Plane>
+    </>
+  );
+};
+
+export default GroundPlane;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+import React, { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Text3D, Float } from "@react-three/drei";
+
+const RotatingText = ({ radius = 4, speed = 0.05 }) => {
+  const textRef = useRef();
+  const angle = useRef(0);
+
+  useFrame(() => {
+    if (textRef.current) {
+      angle.current += speed;
+      const x = radius * Math.cos(angle.current);
+      const z = radius * Math.sin(angle.current);
+      textRef.current.position.set(x, 3, z);
+      textRef.current.rotation.y += 0.05; // Rotazione del testo attorno al proprio asse
+      //textRef.current.rotation.x += 0.05;
+    }
+  });
+
+  return (
+    <Float speed={1} rotationIntensity={1} floatIntensity={1}>
+      <Text3D
+        ref={textRef}
+        font="/fonts-3D/helvetiker_regular.typeface.json"
+        size={1.4}
+        height={0.2}
+        curveSegments={12}
+        bevelEnabled
+        bevelThickness={0.1}
+        bevelSize={0.02}
+        bevelSegments={5}
+        castShadow={true}
+      >
+        Luca
+        <meshStandardMaterial color="hsl(32, 100%, 50%)" /> {/* Arancione */}
+      </Text3D>
+    </Float>
+  );
+};
+
+export default RotatingText;
+///////////////////////////////////////////////////////////////////////////////
+import React, { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Sphere } from "@react-three/drei";
+import * as THREE from "three";
+
+const StripedSphere = ({ position }) => {
+  const sphereRef = useRef();
+
+  useFrame(() => {
+    if (sphereRef.current) {
+      // Rotazione continua attorno agli assi X e Y
+      sphereRef.current.rotation.y += 0.1;
+      sphereRef.current.rotation.x += 0.1;
+    }
+  });
+
+  // Crea un materiale con due colori usando un gradiente radiale
+  const createGradientMaterial = () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const size = 512; // Dimensioni della texture
+    canvas.width = size;
+    canvas.height = size;
+
+    // Crea un gradiente radiale
+    const gradient = context.createRadialGradient(
+      size / 2,
+      size / 2,
+      0,
+      size / 2,
+      size / 2,
+      size / 2
+    );
+    gradient.addColorStop(0, "hsl(200, 100%, 50%)");
+    gradient.addColorStop(1, "hsl(120, 100%, 50%)");
+
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, size, size);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(1, 1);
+
+    return new THREE.MeshStandardMaterial({
+      map: texture,
+      emissive: new THREE.Color("hsl(0, 100%, 66%)"),
+      emissiveIntensity: 0.5,
+      roughness: 0.6,
+      metalness: 0.2,
+    });
+  };
+
+  const gradientMaterial = createGradientMaterial();
+
+  return (
+    <Sphere
+      ref={sphereRef}
+      args={[1.5, 32, 32]}
+      position={position}
+      castShadow={true}
+    >
+      <primitive attach="material" object={gradientMaterial} />
+    </Sphere>
+  );
+};
+
+export default StripedSphere;
 
 
 
