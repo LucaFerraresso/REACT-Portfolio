@@ -22,7 +22,7 @@ const PlanetarySphere = ({ position }) => {
       map,
       bumpMap,
       bumpScale: 0.05,
-      emissive: new THREE.Color("hsl(0, 0%, 0%)"), // Nero per assenza di emissione
+      emissive: new THREE.Color("black"), // Usa colore puro
       emissiveIntensity: 0.1,
       roughness: 0.8,
       metalness: 0.2,

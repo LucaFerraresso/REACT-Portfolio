@@ -9,7 +9,7 @@ const EnhancedButton3D = ({ onClick, label, position, rotation, color }) => {
   const { scale, positionSpring, colorSpring } = useSpring({
     scale: clicked ? 0.95 : hovered ? 1.1 : 1,
     position: clicked ? [0, -0.1, 0] : [0, 0, 0],
-    color: hovered ? "hsl(50, 100%, 60%)" : color,
+    color: hovered ? "yellow" : color, // Colore per hover
     config: { tension: 300, friction: 15 },
   });
 
@@ -27,9 +27,10 @@ const EnhancedButton3D = ({ onClick, label, position, rotation, color }) => {
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <mesh position={[0, -0.3, 0]} scale={[1.2, 1.2, 1.2]}>
+      <mesh position={[0, -0.25, 0]} scale={[1.2, 1.2, 1.2]}>
         <cylinderGeometry args={[1.2, 1.2, 0.1, 32]} />
-        <animated.meshStandardMaterial color={colorSpring} />
+        <meshStandardMaterial color="lightgrey" />{" "}
+        {/* Colore grigio chiaro per la base */}
       </mesh>
       <animated.mesh scale={scale} position={positionSpring}>
         <cylinderGeometry args={[1, 1, 0.4, 32]} />
@@ -41,7 +42,7 @@ const EnhancedButton3D = ({ onClick, label, position, rotation, color }) => {
           position={[-0.5, 0.3, 0.26]}
         >
           {label}
-          <meshStandardMaterial color="black" />
+          <meshStandardMaterial color="black" /> {/* Usa colore puro */}
         </Text3D>
       </animated.mesh>
     </animated.group>

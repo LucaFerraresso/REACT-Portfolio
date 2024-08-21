@@ -1,6 +1,5 @@
 import React from "react";
-import { Fog } from "@react-three/drei";
 
-const FogEffect = () => <fog attach="fog" args={["#ffffff", 0, 100]} />;
+const FogEffect = () => <fog attach="fog" args={["#000000", 0, 100]} />;
 
 export default FogEffect;
