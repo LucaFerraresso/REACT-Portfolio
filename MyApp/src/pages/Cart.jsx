@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useCart } from "../useContext/CartContext";
 import { getProductsFireStore } from "../API/firestore.js";
-
 import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +11,7 @@ const Cart = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getItem = async () => {
+  const getItem = useCallback(async () => {
     setLoading(true);
     try {
       const response = await getProductsFireStore();
@@ -25,30 +24,35 @@ const Cart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [cart]);
 
   useEffect(() => {
     getItem();
-  }, [cart]);
+  }, [getItem]);
 
-  const handleRemove = (productId) => {
-    updateCart(productId, -1);
-    toast.error("Item removed from cart", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
-  const totalCost = products.reduce(
-    (total, product) => total + product.price * (cart[product.id] || 0),
-    0
+  const handleRemove = useCallback(
+    (productId) => {
+      updateCart(productId, -1);
+      toast.error("Item removed from cart", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    },
+    [updateCart]
   );
+
+  const totalCost = useMemo(() => {
+    return products.reduce(
+      (total, product) => total + product.price * (cart[product.id] || 0),
+      0
+    );
+  }, [products, cart]);
 
   return (
     <>
@@ -72,20 +76,19 @@ const Cart = () => {
           <p>Loading...</p>
         ) : (
           <div className="flex flex-wrap gap-6 p-4 justify-center">
-            {products &&
-              products.map((product) => (
-                <div key={product.id} className="relative w-full sm:w-60">
-                  <EcommerceCard
-                    product={product}
-                    quantity={cart[product.id]}
-                    onIncrease={() => updateCart(product.id, 1)}
-                    onDecrease={() => handleRemove(product.id)}
-                    onAddToCart={(product, quantity) =>
-                      updateCart(product.id, quantity)
-                    }
-                  />
-                </div>
-              ))}
+            {products.map((product) => (
+              <div key={product.id} className="relative w-full sm:w-60">
+                <EcommerceCard
+                  product={product}
+                  quantity={cart[product.id]}
+                  onIncrease={() => updateCart(product.id, 1)}
+                  onDecrease={() => handleRemove(product.id)}
+                  onAddToCart={(product, quantity) =>
+                    updateCart(product.id, quantity)
+                  }
+                />
+              </div>
+            ))}
           </div>
         )}
       </div>

@@ -1,43 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
-const EcommerceCard = ({
-  product,
-  quantity,
-  onIncrease,
-  onDecrease,
-  onAddToCart,
-}) => {
-  const handleAddToCart = () => {
-    const message =
-      quantity > 1
-        ? `${quantity} ${product.name} added to cart!`
-        : `${product.name} added to cart!`;
+const EcommerceCard = ({ product, onAddToCart }) => {
+  const [quantity, setQuantity] = useState(1);
 
-    toast.success(message, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const handleIncrease = () => {
+    setQuantity((prev) => prev + 1);
+  };
 
-    onAddToCart(product, quantity);
+  const handleDecrease = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
   };
 
   return (
-    <motion.div className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto">
+    <motion.div
+      className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto"
+      whileHover={{ scale: 1.05 }}
+    >
       <Link to={`/exercise/fakeecommerce/${product.id}`}>
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-48 object-cover mb-4 border border-black transition-transform duration-300 hover:scale-105"
+          className="w-full h-48 object-cover mb-4 border border-black rounded-t-lg"
           style={{ borderRadius: "0.5rem 0.5rem 0 0", marginBottom: "-1px" }}
         />
       </Link>
@@ -51,22 +36,22 @@ const EcommerceCard = ({
         </p>
         <div className="flex items-center mb-4">
           <button
-            onClick={onDecrease}
+            onClick={handleDecrease}
             className="bg-rose-500 text-white px-3 py-1 rounded-l border border-black hover:bg-rose-600 transition"
           >
             -
           </button>
           <span className="mx-2 text-lg font-medium">{quantity}</span>
           <button
-            onClick={onIncrease}
+            onClick={handleIncrease}
             className="bg-rose-500 text-white px-3 py-1 rounded-r border border-black hover:bg-rose-600 transition"
           >
             +
           </button>
         </div>
         <button
-          onClick={handleAddToCart}
-          className="w-full py-2 rounded-lg transition text-white font-bold border border-black bg-green hover:bg-green-600"
+          onClick={() => onAddToCart(quantity)}
+          className="w-full py-2 rounded-lg transition text-white font-bold border border-black bg-green-500 hover:bg-green-600"
           style={{ textShadow: "1px 1px 2px black" }}
         >
           Add to Cart

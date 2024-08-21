@@ -1,1041 +1,455 @@
-//migliorare le animazioni in aboutme.jsx
-/////////////////////////////////////////////////////////////////////////////////////
-card per progetti ,sezione progetti,ottimizzata nella logica, PERFEZIONE
+//backup fake ecommmerce conn ogni suo componente 
+//cart context // fakeecommerce.jsx // productpage.jsx // cart.jsx // ecommercecard.jsx 
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { useSpring, animated } from "@react-spring/web";
-import { useAuth } from "../../useContext/AuthContext";
-import { toast } from "react-toastify";
-import { FaStar } from "react-icons/fa";
-import {
-  saveVoteToFirestore,
-  getVotesFromFirestore,
-  getTotalVotes,
-  getAllVotes,
-} from "../../API/firestore";
+import { useCart } from "../useContext/CartContext";
+import { getProductsFireStore } from "../API/firestore";
 
-const ProjectCard = ({
-  title,
-  description,
-  link,
-  backgroundImage,
-  projectId,
-}) => {
-  const [voteData, setVoteData] = useState({
-    rating: 0,
-    selectedVote: 0,
-    totalVotes: 0,
-    averageRating: 0,
-    hasVoted: false,
+const FakeEcommerce = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
+  const { cart, addToCart } = useCart();
+
+  const getItems = async () => {
+    setLoading(true);
+    try {
+      const data = await getProductsFireStore();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddToCart = (product, quantity) => {
+    if (quantity > 0) {
+      addToCart(product.id, quantity);
+      setQuantities((prev) => ({ ...prev, [product.id]: 1 }));
+
+      // Toast management here
+      const message =
+        quantity > 1
+          ? `${quantity} ${product.name} added to cart!`
+          : `${product.name} added to cart!`;
+
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  const handleQuantityChange = (productId, change) => {
+    setQuantities((prev) => {
+      const currentQuantity = prev[productId] || 1;
+      const newQuantity = Math.max(1, currentQuantity + change);
+      return { ...prev, [productId]: newQuantity };
+    });
+  };
+
+  const totalItemsInCart = Object.values(cart).reduce(
+    (total, quantity) => total + quantity,
+    0
+  );
+
+  return (
+    <div className="min-h-screen bg-rose-50 p-4 text-center items-center font-red-hat">
+      <h1 className="text-center text-3xl font-bold text-rose-900 mb-6 flex justify-between items-center">
+        Fake Ecommerce
+        <Link to="/exercise/fakeecommerce/cart" className="relative">
+          <svg
+            className="w-8 h-8 text-rose-900"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 3h18l-1.5 9H6L3 3zm3 14h12a3 3 0 003-3H6a3 3 0 003 3z"
+            />
+          </svg>
+          {totalItemsInCart > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red text-white rounded-full text-xs px-1">
+              {totalItemsInCart}
+            </span>
+          )}
+        </Link>
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading
+          ? Array.from({ length: 9 }).map((_, index) => (
+              <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                <div className="w-full h-48 bg-gray-300 animate-pulse rounded-t-lg"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-300 animate-pulse rounded mb-2"></div>
+                  <div className="h-4 bg-gray-300 animate-pulse rounded mb-2"></div>
+                  <div className="h-6 bg-gray-300 animate-pulse rounded"></div>
+                </div>
+              </div>
+            ))
+          : products.map((product) => {
+              const productQuantity = quantities[product.id] || 1;
+
+              return (
+                <EcommerceCard
+                  key={product.id}
+                  product={product}
+                  quantity={productQuantity}
+                  onIncrease={() => handleQuantityChange(product.id, 1)}
+                  onDecrease={() => handleQuantityChange(product.id, -1)}
+                  onAddToCart={(product, quantity) =>
+                    handleAddToCart(product, quantity)
+                  }
+                />
+              );
+            })}
+      </div>
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default FakeEcommerce;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
+import { useSpring, animated } from "@react-spring/web";
+
+import { getProductsFireStore } from "../API/firestore";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    padding: "20px",
+    background: "white",
+    borderRadius: "10px",
+    outline: "none",
+    width: "90%",
+    maxWidth: "500px",
+    height: "auto",
+    maxHeight: "80vh",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    borderWidth: "1px",
+    borderColor: "#ddd",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+};
+
+const ProductPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const getProduct = async () => {
+    const response = await getProductsFireStore();
+    const product = response.find((product) => product.id == id);
+    const productWithImage = { ...product, image: product.image };
+
+    setProduct(productWithImage);
+    setModalIsOpen(true);
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  const springProps = useSpring({
+    opacity: modalIsOpen ? 1 : 0,
+    transform: modalIsOpen ? `scale(1)` : `scale(0.9)`,
+    config: { tension: 300, friction: 20 },
   });
 
-  const { user } = useAuth();
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
 
-  const handleStarClick = (value) => {
-    if (!user) {
-      return toast.error("Devi effettuare il login per votare!");
-    }
-    setVoteData((prevState) => ({ ...prevState, selectedVote: value }));
+    navigate("/exercise/fakeecommerce");
   };
 
-  const handleVote = async () => {
-    if (!user) return toast.error("Devi effettuare il login per votare!");
-    if (voteData.selectedVote === 0)
-      return toast.error("Seleziona un voto prima di votare!");
+  return (
+    <>
+      {product && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={handleCloseModal}
+          style={customStyles}
+          contentLabel="Product Details"
+          appElement={document.getElementById("root")}
+        >
+          <animated.div
+            style={springProps}
+            className="flex flex-col justify-center items-center h-full"
+          >
+            <div className="flex flex-col gap-2 w-[320px] h-[450px] overflow-hidden p-2 text-center">
+              <h1 className="text-rose-900  text-2xl font-bold">
+                {" "}
+                {product.name}
+              </h1>
+              <img
+                src={product.image}
+                alt={product.name}
+                className="rounded border border-black"
+              />
+              <p className="text-green-600 text-lg">Price: {product.price}$</p>
+              <p className="text-rose-500 text-sm">
+                Category: {product.category}
+              </p>
+            </div>
+            <button
+              onClick={handleCloseModal}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+            >
+              Close
+            </button>
+          </animated.div>
+        </Modal>
+      )}
+    </>
+  );
+};
 
+export default ProductPage;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+import React, { useEffect, useState } from "react";
+import { useCart } from "../useContext/CartContext";
+import { getProductsFireStore } from "../API/firestore.js";
+
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Cart = () => {
+  const { cart, updateCart } = useCart();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getItem = async () => {
+    setLoading(true);
     try {
-      await saveVoteToFirestore(projectId, user.uid, voteData.selectedVote);
-      toast.success("Voto registrato con successo!");
-
-      const updatedTotalVotes = await getTotalVotes(projectId);
-      const votes = await getAllVotes(projectId);
-      const totalVotesCount = votes.length;
-      const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
-      const average =
-        totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
-
-      setVoteData({
-        rating: voteData.selectedVote,
-        selectedVote: voteData.selectedVote,
-        totalVotes: updatedTotalVotes,
-        averageRating: average,
-        hasVoted: true,
-      });
+      const response = await getProductsFireStore();
+      const filteredCart = response.filter((product) =>
+        Object.keys(cart).includes(product.id.toString())
+      );
+      setProducts(filteredCart);
     } catch (error) {
-      toast.error("Errore durante la registrazione del voto.");
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchVotes = async () => {
-      try {
-        if (user) {
-          const savedVote = await getVotesFromFirestore(projectId, user.uid);
-          setVoteData((prevState) => ({
-            ...prevState,
-            rating: savedVote || 0,
-            selectedVote: savedVote || 0,
-            hasVoted: savedVote !== null,
-          }));
-        }
-        const votesCount = await getTotalVotes(projectId);
-        const votes = await getAllVotes(projectId);
-        const totalVotesCount = votes.length;
-        const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0);
-        const average =
-          totalVotesCount > 0 ? (sumOfVotes / totalVotesCount).toFixed(1) : 0;
+    getItem();
+  }, [cart]);
 
-        setVoteData((prevState) => ({
-          ...prevState,
-          totalVotes: votesCount,
-          averageRating: average,
-        }));
-      } catch (error) {
-        console.error("Errore nel recupero dei voti:", error);
-      }
-    };
+  const handleRemove = (productId) => {
+    updateCart(productId, -1);
+    toast.error("Item removed from cart", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
-    fetchVotes();
-  }, [user, projectId]);
-
-  const [imageProps, imageApi] = useSpring(() => ({
-    transform: "scale(1)",
-    config: { tension: 200, friction: 20 },
-  }));
+  const totalCost = products.reduce(
+    (total, product) => total + product.price * (cart[product.id] || 0),
+    0
+  );
 
   return (
-    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
-      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
-        <Link to={link}>
-          <animated.img
-            src={backgroundImage}
-            alt="Background"
-            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
-            style={imageProps}
-            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
-            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
-          />
+    <>
+      <div className="flex flex-col sm:flex-row p-4 items-center text-center justify-center gap-4 mt-4 mb-4 bg-white shadow-md rounded-lg">
+        <h1 className="text-3xl font-extrabold text-gray-800">Cart</h1>
+        <p className="text-lg text-gray-600">
+          Items in cart: {Object.keys(cart).length}
+        </p>
+        <p className="text-lg text-gray-600">
+          Total:{" "}
+          {Object.values(cart).reduce((total, quantity) => total + quantity, 0)}
+        </p>
+        <Link to="/exercise/fakeecommerce">
+          <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition transform hover:scale-105 shadow-md">
+            Back to Shop
+          </button>
         </Link>
-        <div className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black text-shadow-sm">
-          FREE
-        </div>
       </div>
-
-      <div className="flex flex-col flex-grow p-4 justify-between">
-        <div className="flex-grow">
-          <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
-          <p className="text-gray-700 text-base mb-4">{description}</p>
-        </div>
-
-        {user && !voteData.hasVoted && (
-          <div className="mb-4">
-            <div className="flex items-center space-x-1 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar
-                  key={star}
-                  size={24}
-                  onClick={() => handleStarClick(star)}
-                  color={
-                    star <= (voteData.selectedVote || voteData.rating)
-                      ? "#ffc107"
-                      : "#e4e5e9"
-                  }
-                  className="cursor-pointer transition-colors duration-200"
-                />
+      <div className="flex flex-wrap justify-center">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="flex flex-wrap gap-6 p-4 justify-center">
+            {products &&
+              products.map((product) => (
+                <div key={product.id} className="relative w-full sm:w-60">
+                  <EcommerceCard
+                    product={product}
+                    quantity={cart[product.id]}
+                    onIncrease={() => updateCart(product.id, 1)}
+                    onDecrease={() => handleRemove(product.id)}
+                    onAddToCart={(product, quantity) =>
+                      updateCart(product.id, quantity)
+                    }
+                  />
+                </div>
               ))}
-            </div>
-            <button
-              onClick={handleVote}
-              className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
-                !voteData.selectedVote || voteData.hasVoted
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              }`}
-              disabled={!voteData.selectedVote || voteData.hasVoted}
-            >
-              Vota
-            </button>
-            <div className="text-gray-700 text-base mb-2">
-              Punteggio attuale: {voteData.rating} ({voteData.totalVotes} voti)
-            </div>
           </div>
         )}
-
-        <div className="mt-auto">
-          <div className="text-gray-700 text-base mb-2">
-            Media voti: {voteData.averageRating} ({voteData.totalVotes} voti)
-          </div>
-          <div className="flex items-center space-x-1 mb-4">
-            {Array.from({ length: 5 }, (_, index) => (
-              <FaStar
-                key={index}
-                size={24}
-                color={
-                  index < Math.round(voteData.averageRating)
-                    ? "#ffc107"
-                    : "#e4e5e9"
-                }
-              />
-            ))}
-          </div>
-          <div className="flex items-center space-x-2">
-            {["HTML", "CSS", "JS"].map((tech, index) => (
-              <span
-                key={index}
-                className={`text-${tech.toLowerCase()}-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black text-shadow-sm`}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
-    </div>
-  );
-};
 
-export default ProjectCard;
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-backup herosection.jsx con animazioni motion
-
-import React from "react";
-import { motion } from "framer-motion";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 2,
-    },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerContainer: 0.5,
-    },
-  },
-};
-
-const socialLinkVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5,
-    },
-  }),
-};
-
-const HeroSection = ({ imgPath, socialLinks }) => {
-  return (
-    <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100">
-      <motion.div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Immagine del profilo */}
-        <div className="flex justify-center items-center">
-          <motion.img
-            src={imgPath}
-            alt="Your Photo"
-            loading="lazy"
-            className="rounded-3xl  w-full max-w-[230px] sm:max-w-[270px] md:max-w-[310px] lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[450px] border border-gray-300"
-            variants={fadeIn}
-          />
-        </div>
-
-        {/* Testo di presentazione */}
-        <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark-blue"
-            variants={fadeIn}
-          >
-            Hi, I'm Luca Ferraresso.
-          </motion.h2>
-          <motion.p
-            className="text-md sm:text-lg md:text-xl mt-4 text-grayish-blue"
-            variants={fadeIn}
-          >
-            I’m an enthusiastic Front-End Developer based in Venice, Italy. My
-            expertise lies in React and JavaScript, and I'm dedicated to
-            crafting responsive, engaging web experiences. I thrive on turning
-            complex challenges into intuitive, user-friendly solutions and am
-            always excited to explore new technologies and techniques.
-          </motion.p>
-
-          {/* Link ai Social Media */}
-          <motion.div
-            className="flex space-x-4 sm:space-x-6 mt-6"
-            variants={fadeIn}
-          >
-            {socialLinks.map(({ icon: Icon, url, color }, index) => (
-              <motion.a
-                key={index}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                variants={socialLinkVariants}
-                custom={index}
-                className={w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} }
-              >
-                <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300 " />
-              </motion.a>
-            ))}
-          </motion.div>
-        </div>
-      </motion.div>
-    </section>
-  );
-};
-
-export default HeroSection;
-
-//skill section con animazioni motion
-
-import React from "react";
-import { motion } from "framer-motion";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
-
-const iconVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5, // Ritardo personalizzato per ogni icona
-    },
-  }),
-};
-
-const SkillsSection = ({ techIcons }) => {
-  return (
-    <section className="flex justify-center items-center py-8 px-4 sm:px-6 lg:px-8  bg-gray-100 ">
-      <motion.section
-        id="skills"
-        className="w-full max-w-7xl p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-100"
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-      >
-        <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-center mb-8">
-          Tech Stack
-        </h2>
-
-        <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 justify-items-center "
-          variants={staggerContainer}
-        >
-          {techIcons.map(({ icon: Icon, color, name }, index) => (
-            <motion.div
-              key={index}
-              variants={iconVariants}
-              custom={index}
-              className="  w-full max-w-[200px] p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center border border-gray-300 bg-white "
-              aria-label={name}
-            >
-              {/* Icona con una dimensione responsive */}
-              <Icon
-                className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl ${color}`}
-              />
-              <h1 className="mt-3 text-sm sm:text-base md:text-lg font-semibold text-center">
-                {name}
-              </h1>
-            </motion.div>
+      <div className="mt-4 p-4 bg-gray-200 rounded shadow-md w-full max-w-md mx-auto">
+        <h2 className="text-xl font-bold">Summary</h2>
+        <ul className="list-disc list-inside">
+          {products.map((product) => (
+            <li key={product.id} className="truncate">
+              {product.title} - {cart[product.id]} x ${product.price} = $
+              {cart[product.id] * product.price}
+            </li>
           ))}
-        </motion.div>
-      </motion.section>
-    </section>
+        </ul>
+        <h3 className="text-lg font-bold mt-2">Total Cost: ${totalCost}</h3>
+      </div>
+      <ToastContainer />
+    </>
   );
 };
 
-export default SkillsSection;
+export default Cart;
+//////////////////////////////////////////////////////////////////////////////////////////
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-// project section con animazioni motion
+const CartContext = createContext();
 
-import React from "react";
-import { motion } from "framer-motion";
-import HomePageProjectCard from "../homepage/HomePageProjectCard";
-
-// Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 2,
-    },
-  },
+export const useCart = () => {
+  return useContext(CartContext);
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: (custom) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      delay: custom * 0.5, // Ritardo personalizzato per ogni card
-    },
-  }),
-};
+export const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : {};
+  });
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
-const ProjectsSection = ({ projects }) => {
-  const goToProjects = () => {
-    window.location.href = "/projects";
+  const addToCart = (productId, quantity) => {
+    setCart((prev) => ({
+      ...prev,
+      [productId]: (prev[productId] || 0) + quantity,
+    }));
   };
-  return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-gray-100">
-      <motion.div
-        className="flex flex-col justify-center gap-8"
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-      >
-        {/* Titolo */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-6">
-          Recent Projects
-        </h2>
 
-        {/* Griglia dei progetti */}
-        <div className="flex flex-wrap justify-center items-center gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              variants={cardVariants}
-              custom={index} // Passa l'indice per il ritardo
-              className="w-full max-w-xs sm:max-w-sm md:max-w-md"
-            >
-              <HomePageProjectCard {...project} />
-            </motion.div>
-          ))}
-        </div>
-        <div className="flex justify-center items-center">
+  const updateCart = (productId, quantityChange) => {
+    setCart((prev) => {
+      const newQuantity = (prev[productId] || 0) + quantityChange;
+      if (newQuantity <= 0) {
+        const newCart = { ...prev };
+        delete newCart[productId];
+        return newCart;
+      }
+      return { ...prev, [productId]: newQuantity };
+    });
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, updateCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////7
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+const EcommerceCard = ({
+  product,
+  quantity,
+  onIncrease,
+  onDecrease,
+  onAddToCart,
+}) => {
+  return (
+    <motion.div
+      className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto"
+      whileHover={{ scale: 1.05 }}
+    >
+      <Link to={`/exercise/fakeecommerce/${product.id}`}>
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-48 object-cover mb-4 border border-black rounded-t-lg"
+          style={{ borderRadius: "0.5rem 0.5rem 0 0", marginBottom: "-1px" }}
+        />
+      </Link>
+      <div className="p-2 flex flex-col items-center justify-center">
+        <h2 className="text-rose-900 text-lg font-semibold mb-1 border-b border-black pb-2 transition-colors duration-300 hover:text-rose-700">
+          {product.name}
+        </h2>
+        <p className="text-rose-500 mb-2">Category: {product.category}</p>
+        <p className="text-green-600 text-xl font-bold mb-4">
+          Price: ${product.price}
+        </p>
+        <div className="flex items-center mb-4">
           <button
-            onClick={goToProjects}
-            className=" border-2 border-gray-300 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-[300px] hover:animate-pulse"
+            onClick={onDecrease}
+            className="bg-rose-500 text-white px-3 py-1 rounded-l border border-black hover:bg-rose-600 transition"
           >
-            View All Projects
+            -
+          </button>
+          <span className="mx-2 text-lg font-medium">{quantity}</span>
+          <button
+            onClick={onIncrease}
+            className="bg-rose-500 text-white px-3 py-1 rounded-r border border-black hover:bg-rose-600 transition"
+          >
+            +
           </button>
         </div>
-      </motion.div>
-    </section>
-  );
-};
-
-export default ProjectsSection;
-
-//backup tailwind.config.jsx
-
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        "soft-red": "hsl(10, 79%, 65%)",
-        cyan: "hsl(186, 34%, 60%)",
-        "dark-brown": "hsl(25, 47%, 15%)",
-        "medium-brown": "hsl(28, 10%, 53%)",
-        cream: "hsl(27, 66%, 92%)",
-        "very-pale-orange": "hsl(33, 100%, 98%)",
-        "dark-blue": "hsl(231, 16%, 20%)",
-        "light-pink": "hsl(347, 100%, 64%)",
-        "grayish-blue": "hsl(237, 18%, 59%)",
-        "soft-red": "hsl(345, 95%, 68%)",
-        "dark-desaturated-blue": "hsl(236, 21%, 26%)",
-        "very-dark-blue": "hsl(235, 16%, 14%)",
-        "very-dark-almost-black-blue": "hsl(234, 17%, 12%)",
-        "light-cyan": "hsl(193, 38%, 86%)",
-        "neon-green": "hsl(150, 100%, 66%)",
-        "grayish-blue": "hsl(217, 19%, 38%)",
-        "dark-grayish-blue": "hsl(217, 19%, 24%)",
-        "dark-blue": "hsl(218, 23%, 16%)",
-        purple: "hsl(259, 100%, 65%)",
-        "light-red": "hsl(0, 100%, 67%)",
-        white: "hsl(0, 0%, 100%)",
-        "off-white": "hsl(0, 0%, 94%)",
-        "light-grey": "hsl(0, 0%, 86%)",
-        "smokey-grey": "hsl(0, 1%, 44%)",
-        "off-black": "hsl(0, 0%, 8%)",
-        "green-200": "hsl(148, 38%, 91%)",
-        "green-600": "hsl(169, 82%, 27%)",
-        red: "hsl(0, 100%, 66%)",
-        "grey-500": "hsl(186, 15%, 59%)",
-        "grey-900": "hsl(187, 24%, 22%)",
-        lime: "hsl(61, 70%, 52%)",
-        slate100: "hsl(202, 86%, 94%)",
-        slate300: "hsl(203, 41%, 72%)",
-        slate500: "hsl(200, 26%, 54%)",
-        slate700: "hsl(200, 24%, 40%)",
-        slate900: "hsl(202, 55%, 16%)",
-        green: "hsl(159, 69%, 38%)",
-        "rose-50": "hsl(20, 50%, 98%)",
-        "rose-100": "hsl(13, 31%, 94%)",
-        "light-grayish-violet": "hsl(270, 3%, 87%)",
-        "dark-grayish-violet": "hsl(279, 6%, 55%)",
-        "very-dark-violet": "hsl(278, 68%, 11%)",
-        "strong-cyan": "hsl(172, 67%, 45%)",
-        "very-dark-cyan": "hsl(183, 100%, 15%)",
-        "dark-grayish-cyan": "hsl(186, 14%, 43%)",
-        "grayish-cyan": "hsl(184, 14%, 56%)",
-        "light-grayish-cyan": "hsl(185, 41%, 84%)",
-        "very-light-grayish-cyan": "hsl(189, 41%, 97%)",
-        "soft-cyan": "hsl(174, 77%, 80%)",
-        "slider-background": "hsl(174, 86%, 45%)",
-        "discount-background": "hsl(14, 92%, 95%)",
-        "discount-text": "hsl(15, 100%, 70%)",
-        "cta-text": "hsl(226, 100%, 87%)",
-        "pricing-bg": "hsl(0, 0%, 100%)",
-        "main-bg": "hsl(230, 100%, 99%)",
-        "empty-slider": "hsl(224, 65%, 95%)",
-        "toggle-bg": "hsl(223, 50%, 87%)",
-        "text-grayish-blue": "hsl(225, 20%, 60%)",
-        "text-dark-desaturated-blue": "hsl(227, 35%, 25%)",
-        "very-pale-blue": "hsl(230, 100%, 99%)",
-        tomato: "hsl(4, 100%, 67%)",
-        primary: {
-          "linear-gradient":
-            "linear-gradient(135deg, hsl(249, 99%, 64%) 0%, hsl(278, 94%, 30%) 100%)",
-          "input-border": "hsl(249, 99%, 64%)",
-        },
-      },
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        karla: ["Karla", "sans-serif"],
-        "red-hat": ["Red Hat Text", "sans-serif"],
-        "plus-jakarta": ["Plus Jakarta Sans", "sans-serif"],
-        spaceGrotesk: ["Space Grotesk", "sans-serif"],
-        sans: ["Manrope", "sans-serif"],
-        spaceMono: ["Space Mono", "monospace"],
-        manrope: ["Manrope", "sans-serif"],
-        roboto: ["Roboto", "sans-serif"],
-        "dm-sans": ["DM Sans", "sans-serif"],
-      },
-      animation: {
-        "fade-in": "fadeIn 2s ease-in-out",
-        flip: "flipCard 0.6s ease-in-out forwards",
-        "flip-back": "flipCard 0.6s ease-in-out reverse forwards",
-        "slide-in-right": "slideInRight 0.5s ease-in-out forwards",
-        "slide-in-left": "slideInLeft 0.5s ease-in-out forwards",
-        "bounce-in": "bounceIn 0.5s ease-in-out forwards",
-        "scale-up": "scaleUp 0.5s ease-in-out forwards",
-        "scale-down": "scaleDown 0.5s ease-in-out forwards",
-      },
-      flipCard: {
-        "0%": { transform: "rotateX(0deg)" },
-        "100%": { transform: "rotateX(180deg)" },
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-      },
-      backgroundImage: {
-        stars:
-          "url('/Exercises/launch-countdown-timer-main/images/bg.stars.svg')",
-        hills:
-          "url('/Exercises/launch-countdown-timer-main/images/pattern-hills.svg')",
-      },
-    },
-  },
-  plugins: [require("@tailwindcss/forms")],
-};
-
-//depcheck
-@mantine/core      
-* @mantine/hooks     
-* @react-three/rapier
-* @tailwindcss/forms 
-* bcryptjs
-* cors
-* dotenv
-* express
-* jsonwebtoken       
-* mongodb
-* mongoose
-* openai
-* passport
-* passport-google-oauth20
-* react-flip-toolkit
-* three-stdlib
-Unused devDependencies
-* @types/react
-* @types/react-dom
-* autoprefixer
-* nodemon
-* postcss
-* tailwindcss-animated
-Missing dependencies
-* @react-spring/three: .\src\components\threejs-project-page\Button3D.jsx
-
-import React from "react";
-import ProjectCard from "../components/projects-page/ProjectCard";
-import { motion } from "framer-motion";
-import { Exercises } from "../components/projects-page/exercisesList";
-import { fadeIn, staggerContainer } from "../assets/animations/motions";
-
-const Projects = () => {
-  return (
-    <>
-      <motion.div>
-        <motion.h1 className="text-4xl font-bold text-off-black text-center py-6 ">
-          Projects
-        </motion.h1>
-        <motion.div className="min-h-screen  flex flex-wrap p-4 gap-6 justify-center">
-          {Exercises.map((exercise, index) => {
-            return (
-              <ProjectCard
-                key={exercise.id}
-                title={exercise.title}
-                description={exercise.description}
-                link={exercise.link}
-                backgroundImage={exercise.backgroundImage}
-                initialRating={exercise.initialRating}
-                projectId={exercise.id}
-              />
-            );
-          })}
-          ;
-        </motion.div>
-      </motion.div>
-    </>
-  );
-};
-
-export default Projects;
-
-import React from "react";
-import { motion } from "framer-motion";
-import { fadeIn, motionContainer } from "../assets/animations/motions";
-
-const AboutMe = () => {
-  return (
-    <div className="bg-gray-100 min-h-screen py-10 font-montserrat">
-      <motion.section
-        id="about"
-        className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 md:px-10"
-        variants={motionContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Primo blocco */}
-        <motion.div
-          className="flex justify-center items-center"
-          variants={fadeIn}
+        <button
+          onClick={() => onAddToCart(product, quantity)}
+          className="w-full py-2 rounded-lg transition text-white font-bold border border-black bg-green-500 hover:bg-green-600"
+          style={{ textShadow: "1px 1px 2px black" }}
         >
-          <motion.img
-            src="/assets-images/aboutme-img/poligonalbackground.jpg"
-            alt="About me"
-            className="rounded-lg shadow-lg max-w-full h-auto"
-            variants={fadeIn}
-          />
-        </motion.div>
-        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
-            Hello, I'm Ferraresso Luca, and I've been working as a Frontend
-            Developer for the past six months. Although I'm relatively new to
-            the field, my passion for technology and design drives me to
-            continuously learn and improve every day.
-          </p>
-        </motion.div>
-
-        {/* Secondo blocco */}
-        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
-            From the moment I wrote my first line of code, I was captivated by
-            the power of technology to create engaging and intuitive user
-            experiences. I enjoy taking on the challenge of turning complex
-            ideas into visually appealing, functional websites that users love
-            to interact with.
-          </p>
-        </motion.div>
-        <motion.div
-          className="flex justify-center items-center"
-          variants={fadeIn}
-        >
-          <motion.img
-            src="/assets-images/aboutme-img/codebackground.jpg"
-            alt="Coding"
-            className="rounded-lg shadow-lg max-w-full h-auto"
-            variants={fadeIn}
-          />
-        </motion.div>
-
-        {/* Terzo blocco */}
-        <motion.div
-          className="flex justify-center items-center"
-          variants={fadeIn}
-        >
-          <motion.img
-            src="/assets-images/aboutme-img/languagespics.jpg"
-            alt="Design and development"
-            className="rounded-lg shadow-lg max-w-full h-auto"
-            variants={fadeIn}
-          />
-        </motion.div>
-        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
-            I have a strong interest in the intersection of design and
-            development, where creativity meets functionality. Whether it's
-            through crafting responsive layouts, experimenting with animations,
-            or optimizing performance, I'm dedicated to bringing design concepts
-            to life on the web.
-          </p>
-        </motion.div>
-
-        {/* Quarto blocco */}
-        <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-          <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
-            I'm excited about the journey ahead, eager to contribute to
-            innovative projects, and committed to growing as a developer. I'm
-            looking forward to building more amazing things and connecting with
-            others who share my enthusiasm for technology and design.
-          </p>
-        </motion.div>
-        <motion.div
-          className="flex justify-center items-center"
-          variants={fadeIn}
-        >
-          <motion.img
-            src="/assets-images/aboutme-img/codebackground2.jpg"
-            alt="Future projects"
-            className="rounded-lg shadow-lg max-w-full h-auto"
-            variants={fadeIn}
-          />
-        </motion.div>
-      </motion.section>
-    </div>
-  );
-};
-
-export default AboutMe;
-
-//aboutme diviso in componenti
-
-import React from "react";
-import { motion } from "framer-motion";
-import { motionContainer } from "../assets/animations/motions";
-import Section from "../components/aboutme-page/Section";
-import { sectionsData } from "../components/aboutme-page/sectionData";
-
-const AboutMe = () => {
-  return (
-    <div className="bg-gray-100 min-h-screen py-10 font-montserrat">
-      <motion.section
-        id="about"
-        className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 md:px-10"
-        variants={motionContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        {sectionsData.map((section, index) => (
-          <Section
-            key={index}
-            imageSrc={section.imageSrc}
-            altText={section.altText}
-            paragraph={section.paragraph}
-          />
-        ))}
-      </motion.section>
-    </div>
-  );
-};
-
-export default AboutMe;
-
-import React from "react";
-import { motion } from "framer-motion";
-import { fadeIn } from "../../assets/animations/motions";
-
-const Section = ({ imageSrc, altText, paragraph, reverse }) => {
-  return (
-    <>
-      <motion.div variants={fadeIn}>
-        <motion.img
-          src={imageSrc}
-          alt={altText}
-          className="rounded-lg shadow-lg max-w-full h-auto"
-          variants={fadeIn}
-        />
-      </motion.div>
-      <motion.div className="flex flex-col justify-center" variants={fadeIn}>
-        <p className="text-md sm:text-lg mt-4 mb-6 bg-white text-black p-10 border border-gray-300 rounded-3xl">
-          {paragraph}
-        </p>
-      </motion.div>
-    </>
-  );
-};
-
-export default Section;
-
-///////////////////////////////////////////////card fondamentale progetto projects page
-
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSpring, animated } from "@react-spring/web";
-import { useAuth } from "../../useContext/AuthContext";
-import { toast } from "react-toastify";
-import { FaStar } from "react-icons/fa";
-import {
-  saveVoteToFirestore,
-  getVotesFromFirestore,
-  getTotalVotes,
-  getAllVotes,
-} from "../../API/firestore";
-
-const ProjectCard = ({
-  title,
-  description,
-  link,
-  backgroundImage,
-  projectId,
-}) => {
-  const [rating, setRating] = useState(0);
-  const [selectedVote, setSelectedVote] = useState(0);
-  const [totalVotes, setTotalVotes] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
-  const [hasVoted, setHasVoted] = useState(false);
-  const { user } = useAuth();
-
-  const handleStarClick = (value) => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-      return;
-    }
-
-    setSelectedVote(value);
-  };
-
-  const handleVote = async () => {
-    if (!user) {
-      toast.error("Devi effettuare il login per votare!");
-      return;
-    }
-
-    if (selectedVote === 0) {
-      toast.error("Seleziona un voto prima di votare!");
-      return;
-    }
-
-    try {
-      await saveVoteToFirestore(projectId, user.uid, selectedVote); // Salva il voto nel Firestore
-      setRating(selectedVote); // Aggiorna il rating con il voto selezionato
-      toast.success("Voto registrato con successo!");
-
-      const updatedTotalVotes = await getTotalVotes(projectId); // Aggiorna il totale dei voti
-      setTotalVotes(updatedTotalVotes); // Imposta il numero totale di voti
-      updateAverageRating();
-      setHasVoted(true); // Disabilita subito il pulsante dopo il voto
-    } catch (error) {
-      toast.error("Errore durante la registrazione del voto.");
-      //console.error("Errore nel salvataggio del voto:", error);
-    }
-  };
-
-  const updateAverageRating = async () => {
-    const votes = await getAllVotes(projectId); // Ottieni tutti i voti
-    const totalVotesCount = votes.length; // Numero totale di voti
-    const sumOfVotes = votes.reduce((sum, vote) => sum + vote, 0); // Somma dei voti
-    const average = totalVotesCount > 0 ? sumOfVotes / totalVotesCount : 0; // Calcola la media
-    setAverageRating(average.toFixed(1)); // Imposta la media, con una cifra decimale
-  };
-
-  useEffect(() => {
-    const fetchVotes = async () => {
-      if (user) {
-        try {
-          const savedVote = await getVotesFromFirestore(projectId, user.uid);
-          if (savedVote !== null) {
-            setRating(savedVote);
-            setSelectedVote(savedVote);
-            setHasVoted(true);
-          } else {
-            setRating(0);
-            setSelectedVote(0);
-            setHasVoted(false);
-          }
-        } catch (error) {
-          console.error("Errore nel recupero del voto:", error);
-        }
-      }
-
-      try {
-        const votesCount = await getTotalVotes(projectId);
-        setTotalVotes(votesCount);
-        updateAverageRating();
-      } catch (error) {
-        console.error("Errore nel recupero del totale voti:", error);
-      }
-    };
-
-    fetchVotes();
-  }, [user, projectId]);
-
-  const [imageProps, imageApi] = useSpring(() => ({
-    transform: "scale(1)",
-    config: { tension: 200, friction: 20 },
-  }));
-
-  return (
-    <div className="w-[300px] h-[500px] md:w-[350px] md:h-[550px] lg:w-[400px] lg:h-[600px] rounded-lg overflow-hidden shadow-lg bg-white border border-black flex flex-col">
-      {/* Sezione Immagine */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-light-cyan to-cream h-1/2">
-        <Link to={link}>
-          <animated.img
-            src={backgroundImage}
-            alt="Background"
-            className="w-full h-full object-cover transition-transform duration-300 cursor-pointer"
-            style={imageProps}
-            onMouseEnter={() => imageApi.start({ transform: "scale(1.1)" })}
-            onMouseLeave={() => imageApi.start({ transform: "scale(1)" })}
-          />
-        </Link>
-        <div
-          className="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded border border-black"
-          style={{
-            textShadow:
-              "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-          }}
-        >
-          FREE
-        </div>
+          Add to Cart
+        </button>
       </div>
-
-      {/* Sezione Contenuto */}
-      <div className="flex flex-col flex-grow p-4 justify-between">
-        {/* Titolo e Descrizione */}
-        <div className="flex-grow">
-          <h1 className="text-dark-brown text-xl font-bold mb-2">{title}</h1>
-          <p className="text-gray-700 text-base mb-4">{description}</p>
-        </div>
-
-        {/* Sezione di voto condizionata */}
-        {user && !hasVoted && (
-          <div className="mb-4">
-            <div className="flex items-center space-x-1 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar
-                  key={star}
-                  size={24}
-                  onClick={() => handleStarClick(star)}
-                  color={
-                    star <= (selectedVote || rating) ? "#ffc107" : "#e4e5e9"
-                  }
-                  style={{
-                    cursor: "pointer",
-                    transition: "color 200ms",
-                  }}
-                />
-              ))}
-            </div>
-            <button
-              onClick={handleVote}
-              className={`bg-green text-white py-1 px-2 rounded hover:bg-green-600 transition duration-200 ${
-                selectedVote === 0 || hasVoted
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              }`}
-              disabled={selectedVote === 0 || hasVoted}
-            >
-              Vota
-            </button>
-            <div className="text-gray-700 text-base mb-2">
-              Punteggio attuale: {rating} ({totalVotes} voti)
-            </div>
-          </div>
-        )}
-
-        {/* Media voti e linguaggi */}
-        <div className="mt-auto">
-          <div className="text-gray-700 text-base mb-2">
-            Media voti: {averageRating} ({totalVotes} voti)
-          </div>
-          <div className="flex items-center space-x-1 mb-4">
-            {Array.from({ length: Math.round(averageRating) }, (_, index) => (
-              <FaStar key={index} size={24} color="#ffc107" />
-            ))}
-            {Array.from(
-              { length: 5 - Math.round(averageRating) },
-              (_, index) => (
-                <FaStar
-                  key={index + Math.round(averageRating)}
-                  size={24}
-                  color="#e4e5e9"
-                />
-              )
-            )}
-          </div>
-          <div className="flex items-center space-x-2">
-            <span
-              className="text-blue-300 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              HTML
-            </span>
-            <span
-              className="text-blue-800 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              CSS
-            </span>
-            <span
-              className="text-pink-400 text-2xl font-semibold px-2.5 py-0.5 rounded border border-black"
-              style={{
-                textShadow:
-                  "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-              }}
-            >
-              JS
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default ProjectCard;
+export default EcommerceCard;
+
+

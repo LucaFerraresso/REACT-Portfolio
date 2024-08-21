@@ -1,54 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { useCart } from "../useContext/CartContext";
-//firestore
 import { getProductsFireStore } from "../API/firestore";
 
 const FakeEcommerce = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [quantities, setQuantities] = useState({});
   const { cart, addToCart } = useCart();
 
-  const getItems = async () => {
+  const getItems = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getProductsFireStore();
-      //console.log(data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleAddToCart = (productId, quantity) => {
+  const handleAddToCart = (product, quantity) => {
     if (quantity > 0) {
-      addToCart(productId, quantity);
-      setQuantities((prev) => ({ ...prev, [productId]: 1 }));
+      addToCart(product.id, quantity);
+      toast.success(`${quantity} ${product.name} added to cart!`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
   useEffect(() => {
     getItems();
-  }, []);
-
-  const handleQuantityChange = (productId, change) => {
-    setQuantities((prev) => {
-      const currentQuantity = prev[productId] || 1;
-      const newQuantity = Math.max(1, currentQuantity + change);
-      return { ...prev, [productId]: newQuantity };
-    });
-  };
-
-  const totalItemsInCart = Object.values(cart).reduce(
-    (total, quantity) => total + quantity,
-    0
-  );
+  }, [getItems]);
 
   return (
     <div className="min-h-screen bg-rose-50 p-4 text-center items-center font-red-hat">
@@ -69,9 +62,9 @@ const FakeEcommerce = () => {
               d="M3 3h18l-1.5 9H6L3 3zm3 14h12a3 3 0 003-3H6a3 3 0 003 3z"
             />
           </svg>
-          {totalItemsInCart > 0 && (
+          {Object.values(cart).reduce((total, qty) => total + qty, 0) > 0 && (
             <span className="absolute -top-1 -right-1 bg-red text-white rounded-full text-xs px-1">
-              {totalItemsInCart}
+              {Object.values(cart).reduce((total, qty) => total + qty, 0)}
             </span>
           )}
         </Link>
@@ -88,22 +81,13 @@ const FakeEcommerce = () => {
                 </div>
               </div>
             ))
-          : products.map((product) => {
-              const productQuantity = quantities[product.id] || 1;
-
-              return (
-                <EcommerceCard
-                  key={product.id}
-                  product={product}
-                  quantity={productQuantity}
-                  onIncrease={() => handleQuantityChange(product.id, 1)}
-                  onDecrease={() => handleQuantityChange(product.id, -1)}
-                  onAddToCart={() =>
-                    handleAddToCart(product.id, productQuantity)
-                  }
-                />
-              );
-            })}
+          : products.map((product) => (
+              <EcommerceCard
+                key={product.id}
+                product={product}
+                onAddToCart={(quantity) => handleAddToCart(product, quantity)}
+              />
+            ))}
       </div>
       <ToastContainer />
     </div>

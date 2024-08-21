@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { useSpring, animated } from "@react-spring/web";
-
 import { getProductsFireStore } from "../API/firestore";
 
 const customStyles = {
@@ -11,7 +10,6 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
-    marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     padding: "20px",
     background: "white",
@@ -19,11 +17,7 @@ const customStyles = {
     outline: "none",
     width: "90%",
     maxWidth: "500px",
-    height: "auto",
-    maxHeight: "80vh",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    borderWidth: "1px",
-    borderColor: "#ddd",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -37,68 +31,77 @@ const ProductPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const getProduct = async () => {
-    const response = await getProductsFireStore();
-    const product = response.find((product) => product.id == id);
-    const productWithImage = { ...product, image: product.image };
-    setProduct(productWithImage);
-    setModalIsOpen(true);
+    try {
+      const response = await getProductsFireStore();
+      const selectedProduct = response.find(
+        (product) => product.id.toString() === id
+      );
+
+      if (selectedProduct) {
+        setProduct(selectedProduct);
+        setModalIsOpen(true);
+      } else {
+        console.error("Product not found");
+        navigate("/exercise/fakeecommerce");
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      navigate("/exercise/fakeecommerce");
+    }
   };
 
   useEffect(() => {
     getProduct();
-  }, []);
+  }, [id]);
 
   const springProps = useSpring({
     opacity: modalIsOpen ? 1 : 0,
-    transform: modalIsOpen ? `scale(1)` : `scale(0.9)`,
+    transform: modalIsOpen ? "scale(1)" : "scale(0.9)",
     config: { tension: 300, friction: 20 },
   });
 
   const handleCloseModal = () => {
     setModalIsOpen(false);
-
     navigate("/exercise/fakeecommerce");
   };
 
   return (
-    <>
-      {product && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={handleCloseModal}
-          style={customStyles}
-          contentLabel="Product Details"
-          appElement={document.getElementById("root")}
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={handleCloseModal}
+      style={customStyles}
+      contentLabel="Product Details"
+      appElement={document.getElementById("root") || undefined}
+    >
+      {product ? (
+        <animated.div
+          style={springProps}
+          className="flex flex-col items-center"
         >
-          <animated.div
-            style={springProps}
-            className="flex flex-col justify-center items-center h-full"
+          <h1 className="text-rose-900 text-2xl font-bold mb-4">
+            {product.name}
+          </h1>
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-64 object-cover rounded border border-black mb-4"
+          />
+          <p className="text-green-600 text-lg mb-2">Price: ${product.price}</p>
+          <p className="text-rose-500 text-sm mb-2">
+            Category: {product.category}
+          </p>
+          <p className="text-gray-700 text-base mb-4">{product.description}</p>
+          <button
+            onClick={handleCloseModal}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
           >
-            <div className="flex flex-col gap-2 w-[320px] h-[450px] overflow-hidden p-2 text-center">
-              <h1 className="text-rose-900  text-2xl font-bold">
-                {" "}
-                {product.name}
-              </h1>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="rounded border border-black"
-              />
-              <p className="text-green-600 text-lg">Price: {product.price}$</p>
-              <p className="text-rose-500 text-sm">
-                Category: {product.category}
-              </p>
-            </div>
-            <button
-              onClick={handleCloseModal}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
-            >
-              Close
-            </button>
-          </animated.div>
-        </Modal>
+            Close
+          </button>
+        </animated.div>
+      ) : (
+        <p>Loading...</p>
       )}
-    </>
+    </Modal>
   );
 };
 
