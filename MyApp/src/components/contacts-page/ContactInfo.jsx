@@ -21,11 +21,11 @@ const socialLinksContact = [
     url: "https://github.com/LucaFerraresso/",
     color: "text-black",
   },
-  {
-    icon: FaFacebook,
-    url: "https://www.facebook.com/luca.ferraresso",
-    color: "text-blue-600",
-  },
+  //{
+  //  icon: FaFacebook,
+  //  url: "https://www.facebook.com/luca.ferraresso",
+  //  color: "text-blue-600",
+  //},
   {
     icon: FaMailBulk,
     url: "https://gmail.com",
