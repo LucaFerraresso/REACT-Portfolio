@@ -2,15 +2,42 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const InputField = ({ id, label, value, onChange, placeholder, error }) => (
+  <div className="mb-4">
+    <label htmlFor={id} className="block text-neutral-dark-grayish-violet mb-2">
+      {label}
+    </label>
+    <input
+      type="text"
+      id={id}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className={`w-full p-2 border rounded ${
+        error ? "border-red" : "border-gray-300"
+      } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
+    />
+    {error && <span className="text-red">{error}</span>}
+  </div>
+);
+
 const InteractiveForm = () => {
-  const [cardholderName, setCardholderName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryMonth, setExpiryMonth] = useState("");
-  const [expiryYear, setExpiryYear] = useState("");
-  const [cvc, setCvc] = useState("");
+  const [formData, setFormData] = useState({
+    cardholderName: "",
+    cardNumber: "",
+    expiryMonth: "",
+    expiryYear: "",
+    cvc: "",
+  });
   const [errors, setErrors] = useState({});
 
+  const handleChange = (field) => (value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
   const validateForm = () => {
+    const { cardholderName, cardNumber, expiryMonth, expiryYear, cvc } =
+      formData;
     const newErrors = {};
 
     if (!cardholderName)
@@ -38,16 +65,18 @@ const InteractiveForm = () => {
   };
 
   const resetForm = () => {
-    setCardholderName("");
-    setCardNumber("");
-    setExpiryMonth("");
-    setExpiryYear("");
-    setCvc("");
+    setFormData({
+      cardholderName: "",
+      cardNumber: "",
+      expiryMonth: "",
+      expiryYear: "",
+      cvc: "",
+    });
     setErrors({});
   };
 
   return (
-    <div className="min-h-screen bg-neutral-light-grayish-violet flex flex-col justify-center items-center font-spaceGrotesk p-4">
+    <div className="min-h-screen bg-dark-grayish-violet flex flex-col justify-center items-center font-spaceGrotesk p-4">
       <h1 className="text-4xl mb-8 text-neutral-very-dark-violet">
         Interactive Card Details Form
       </h1>
@@ -60,15 +89,15 @@ const InteractiveForm = () => {
           />
           <div className="absolute top-8 left-6">
             <span className="text-white text-lg">
-              {cardNumber || "0000 0000 0000 0000"}
+              {formData.cardNumber || "0000 0000 0000 0000"}
             </span>
           </div>
           <div className="absolute bottom-8 left-6">
             <span className="text-white text-lg">
-              {cardholderName || "Jane Appleseed"}
+              {formData.cardholderName || "Jane Appleseed"}
             </span>
             <span className="text-white text-lg ml-4">
-              {expiryMonth || "00"}
+              {formData.expiryMonth || "00"}
             </span>
           </div>
         </div>
@@ -79,7 +108,7 @@ const InteractiveForm = () => {
             className="w-80"
           />
           <div className="absolute top-16 right-8">
-            <span className="text-white text-lg">{cvc || "000"}</span>
+            <span className="text-white text-lg">{formData.cvc || "000"}</span>
           </div>
         </div>
       </div>
@@ -87,116 +116,48 @@ const InteractiveForm = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg space-y-6 mt-8"
       >
-        <div>
-          <label
-            htmlFor="cardholderName"
-            className="block text-neutral-dark-grayish-violet mb-2"
-          >
-            Cardholder Name
-          </label>
-          <input
-            type="text"
-            id="cardholderName"
-            value={cardholderName}
-            onChange={(e) => setCardholderName(e.target.value)}
-            placeholder="e.g. Jane Doe"
-            className={`w-full p-2 border rounded ${
-              errors.cardholderName ? "border-red" : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
-          />
-          {errors.cardholderName && (
-            <span className="text-red">{errors.cardholderName}</span>
-          )}
-        </div>
-
-        <div>
-          <label
-            htmlFor="cardNumber"
-            className="block text-neutral-dark-grayish-violet mb-2"
-          >
-            Card Number
-          </label>
-          <input
-            type="text"
-            id="cardNumber"
-            value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
-            placeholder="e.g. 1234 5678 9123 4567"
-            className={`w-full p-2 border rounded ${
-              errors.cardNumber ? "border-red" : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
-          />
-          {errors.cardNumber && (
-            <span className="text-red">{errors.cardNumber}</span>
-          )}
-        </div>
-
+        <InputField
+          id="cardholderName"
+          label="Cardholder Name"
+          value={formData.cardholderName}
+          onChange={handleChange("cardholderName")}
+          placeholder="e.g. Jane Doe"
+          error={errors.cardholderName}
+        />
+        <InputField
+          id="cardNumber"
+          label="Card Number"
+          value={formData.cardNumber}
+          onChange={handleChange("cardNumber")}
+          placeholder="e.g. 1234 5678 9123 4567"
+          error={errors.cardNumber}
+        />
         <div className="flex space-x-4">
-          <div>
-            <label
-              htmlFor="expiryMonth"
-              className="block text-neutral-dark-grayish-violet mb-2"
-            >
-              Expiry Month
-            </label>
-            <input
-              type="text"
-              id="expiryMonth"
-              value={expiryMonth}
-              onChange={(e) => setExpiryMonth(e.target.value)}
-              placeholder="MM"
-              className={`w-full p-2 border rounded ${
-                errors.expiryMonth ? "border-red" : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
-            />
-            {errors.expiryMonth && (
-              <span className="text-red">{errors.expiryMonth}</span>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="expiryYear"
-              className="block text-neutral-dark-grayish-violet mb-2"
-            >
-              Expiry Year
-            </label>
-            <input
-              type="text"
-              id="expiryYear"
-              value={expiryYear}
-              onChange={(e) => setExpiryYear(e.target.value)}
-              placeholder="YY"
-              className={`w-full p-2 border rounded ${
-                errors.expiryYear ? "border-red" : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
-            />
-            {errors.expiryYear && (
-              <span className="text-red">{errors.expiryYear}</span>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="cvc"
-              className="block text-neutral-dark-grayish-violet mb-2"
-            >
-              CVC
-            </label>
-            <input
-              type="text"
-              id="cvc"
-              value={cvc}
-              onChange={(e) => setCvc(e.target.value)}
-              placeholder="e.g. 123"
-              className={`w-full p-2 border rounded ${
-                errors.cvc ? "border-red" : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-primary-linear-gradient`}
-            />
-            {errors.cvc && <span className="text-red">{errors.cvc}</span>}
-          </div>
+          <InputField
+            id="expiryMonth"
+            label="Expiry Month"
+            value={formData.expiryMonth}
+            onChange={handleChange("expiryMonth")}
+            placeholder="MM"
+            error={errors.expiryMonth}
+          />
+          <InputField
+            id="expiryYear"
+            label="Expiry Year"
+            value={formData.expiryYear}
+            onChange={handleChange("expiryYear")}
+            placeholder="YY"
+            error={errors.expiryYear}
+          />
+          <InputField
+            id="cvc"
+            label="CVC"
+            value={formData.cvc}
+            onChange={handleChange("cvc")}
+            placeholder="e.g. 123"
+            error={errors.cvc}
+          />
         </div>
-
         <button
           type="submit"
           className="w-full py-2 px-4 bg-primary-input-border text-white rounded-lg hover:bg-primary-input-border transition-colors"

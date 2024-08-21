@@ -8,21 +8,52 @@ const TipCalculator = () => {
   const [tipPercentage, setTipPercentage] = useState("");
   const [customTip, setCustomTip] = useState("");
   const [people, setPeople] = useState("");
+  const [calculated, setCalculated] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleTipClick = (percentage) => {
     setTipPercentage(percentage);
     setCustomTip("");
   };
 
+  const validateInputs = () => {
+    const errors = {};
+    const billAmount = Number(bill);
+    const numberOfPeople = Number(people);
+    const customTipValue = Number(customTip);
+
+    // Validazione per il campo Bill
+    if (!bill) {
+      errors.bill = "Please enter a bill amount.";
+    } else if (isNaN(billAmount) || billAmount <= 0) {
+      errors.bill = "Please enter a valid numerical bill amount.";
+    }
+
+    // Validazione per il campo Custom Tip
+    if (customTip && (isNaN(customTipValue) || customTipValue < 0)) {
+      errors.customTip = "Please enter a valid numerical tip percentage.";
+    }
+
+    // Validazione per il campo Number of People
+    if (!people) {
+      errors.people = "Please enter the number of people.";
+    } else if (isNaN(numberOfPeople) || numberOfPeople <= 0) {
+      errors.people = "Please enter a valid number of people.";
+    }
+
+    // Validazione per il campo Tip Percentage
+    if (!tipPercentage && !customTip) {
+      errors.tip = "Please select or enter a tip percentage.";
+    }
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const calculateTip = () => {
     const billAmount = Number(bill);
     const numberOfPeople = Number(people);
     const tipPercent = tipPercentage || Number(customTip);
-
-    if (isNaN(billAmount) || isNaN(numberOfPeople) || isNaN(tipPercent)) {
-      toast.error("Please enter valid inputs.");
-      return { tipAmount: "0.00", totalAmount: "0.00" };
-    }
 
     const tipAmount = (billAmount * (tipPercent / 100)) / numberOfPeople;
     const totalAmount = billAmount / numberOfPeople + tipAmount;
@@ -33,7 +64,17 @@ const TipCalculator = () => {
     };
   };
 
-  const { tipAmount, totalAmount } = calculateTip();
+  const handleCalculate = () => {
+    if (validateInputs()) {
+      setCalculated(true);
+    } else {
+      setCalculated(false);
+    }
+  };
+
+  const { tipAmount, totalAmount } = calculated
+    ? calculateTip()
+    : { tipAmount: "--", totalAmount: "--" };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-very-light-grayish-cyan font-spaceMono">
@@ -54,8 +95,11 @@ const TipCalculator = () => {
                 value={bill}
                 onChange={(e) => setBill(e.target.value)}
                 placeholder="0.00"
-                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-strong-cyan"
+                className={`w-full p-2 border rounded focus:outline-none focus:ring-2 ${
+                  errors.bill ? "border-red" : "focus:ring-strong-cyan"
+                }`}
               />
+              {errors.bill && <p className="text-red text-sm">{errors.bill}</p>}
             </div>
             <div className="mb-4">
               <p className="block text-grayish-cyan mb-2">Select Tip %</p>
@@ -78,12 +122,18 @@ const TipCalculator = () => {
                   value={customTip}
                   onChange={(e) => {
                     setCustomTip(e.target.value);
-                    setTipPercentage(null);
+                    setTipPercentage("");
                   }}
                   placeholder="Custom"
-                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-strong-cyan text-center"
+                  className={`w-full p-2 border rounded focus:outline-none focus:ring-2 ${
+                    errors.customTip ? "border-red" : "focus:ring-strong-cyan"
+                  } text-center`}
                 />
               </div>
+              {errors.customTip && (
+                <p className="text-red text-sm">{errors.customTip}</p>
+              )}
+              {errors.tip && <p className="text-red text-sm">{errors.tip}</p>}
             </div>
             <div className="mb-4">
               <label htmlFor="people" className="block text-grayish-cyan mb-2">
@@ -95,9 +145,20 @@ const TipCalculator = () => {
                 value={people}
                 onChange={(e) => setPeople(e.target.value)}
                 placeholder="1"
-                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-strong-cyan"
+                className={`w-full p-2 border rounded focus:outline-none focus:ring-2 ${
+                  errors.people ? "border-red" : "focus:ring-strong-cyan"
+                }`}
               />
+              {errors.people && (
+                <p className="text-red text-sm">{errors.people}</p>
+              )}
             </div>
+            <button
+              onClick={handleCalculate}
+              className="w-full py-2 bg-strong-cyan text-white rounded-lg hover:bg-strong-cyan transition-colors"
+            >
+              CALCULATE
+            </button>
           </div>
           <div className="md:w-1/2 p-4 bg-very-dark-cyan text-white rounded-lg flex flex-col justify-between">
             <div>
@@ -116,6 +177,8 @@ const TipCalculator = () => {
                 setTipPercentage("");
                 setCustomTip("");
                 setPeople("");
+                setCalculated(false);
+                setErrors({});
                 toast.success("Reset successful!");
               }}
               className="w-full py-2 mt-4 bg-strong-cyan text-white rounded-lg hover:bg-strong-cyan transition-colors"

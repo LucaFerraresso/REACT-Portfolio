@@ -4,6 +4,29 @@ import listIcon from "/Exercises/newsletter-sign-up-with-success-message-main/as
 import desktopIllustration from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/illustration-sign-up-desktop.svg";
 import mobileIllustration from "/Exercises/newsletter-sign-up-with-success-message-main/assets/images/illustration-sign-up-mobile.svg";
 
+const validateEmail = (email) => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    return "Email field cannot be empty";
+  } else if (!emailPattern.test(email)) {
+    return "Please provide a valid email address";
+  }
+  return "";
+};
+
+const ErrorMessage = ({ message }) => {
+  return message ? <p className="text-red text-sm mb-2">{message}</p> : null;
+};
+
+const SuccessMessage = () => (
+  <div className="flex flex-col items-center">
+    <img src={successIcon} alt="Success" className="mb-4" />
+    <p className="text-green-600 text-lg">
+      Thanks for subscribing! You’ll hear from us soon.
+    </p>
+  </div>
+);
+
 const NewsletterSignUp = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -13,16 +36,14 @@ const NewsletterSignUp = () => {
     e.preventDefault();
     setError("");
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      setError("Email field cannot be empty");
-      return;
-    } else if (!emailPattern.test(email)) {
-      setError("Please provide a valid email address");
+    const validationError = validateEmail(email);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     setSubmitted(true);
+    setEmail(""); // Resetta l'email dopo il successo
   };
 
   return (
@@ -38,12 +59,7 @@ const NewsletterSignUp = () => {
           </p>
 
           {submitted ? (
-            <div className="flex flex-col items-center">
-              <img src={successIcon} alt="Success" className="mb-4" />
-              <p className="text-green-600 text-lg">
-                Thanks for subscribing! You’ll hear from us soon.
-              </p>
-            </div>
+            <SuccessMessage />
           ) : (
             <form onSubmit={handleSubmit} className="w-full mt-4">
               <input
@@ -54,8 +70,9 @@ const NewsletterSignUp = () => {
                 className={`border ${
                   error ? "border-red" : "border-gray-300"
                 } p-2 w-full rounded mb-2 focus:outline-none focus:ring-2 focus:ring-primary-input-border transition duration-200`}
+                aria-label="Email Address"
               />
-              {error && <p className="text-red text-sm mb-2">{error}</p>}
+              <ErrorMessage message={error} />
               <button
                 type="submit"
                 className="bg-red mb-2 text-white font-bold py-2 px-4 rounded w-full hover:bg-opacity-90 transition duration-200"

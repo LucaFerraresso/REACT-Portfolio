@@ -12,6 +12,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Determine if we are on a project page
+  const isOnProjectPage = location.pathname.startsWith("/exercise/");
+
+  // Determine if we are on one of the main pages
   const isHomepageOrAbout = [
     "/homepage",
     "/aboutme",
@@ -50,6 +54,19 @@ const Navbar = () => {
             </NavLink>
           </li>
         ))}
+        {/* Conditionally render the "Progetti" link */}
+        {isOnProjectPage && (
+          <li>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "font-bold text-green underline" : ""
+              }
+              to="/projects"
+            >
+              Projects
+            </NavLink>
+          </li>
+        )}
       </ul>
       <div className="flex items-center space-x-4">
         {!loading && user ? (
