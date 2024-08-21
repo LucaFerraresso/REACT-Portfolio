@@ -58,13 +58,38 @@ const Cart = () => {
     );
   }, [products, cart]);
 
+  // Calcolo delle quantità totali e dei prodotti unici
+  const totalItems = useMemo(() => {
+    return Object.values(cart).reduce((total, qty) => total + qty, 0);
+  }, [cart]);
+
+  const totalProducts = useMemo(() => {
+    localStorage.getItem("cart");
+    return Object.keys(cart).length;
+  }, [cart]);
+  const empty = () => {
+    localStorage.removeItem("cart");
+    toast.error("Cart emptied", { position: "top-right" });
+    setProducts([]);
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row p-4 items-center justify-between gap-4 mt-4 mb-4 bg-blue-50 shadow-md rounded-lg">
         <h1 className="text-3xl font-extrabold text-gray-800">Cart</h1>
         <p className="text-lg text-gray-600">
-          Items in cart: {Object.keys(cart).length}
+          Items in cart: {totalItems} {/* Quantità totale di articoli */}
         </p>
+        <p className="text-lg text-gray-600">
+          Number of Products: {totalProducts} {/* Numero di prodotti unici */}
+        </p>
+        <button
+          onClick={empty}
+          className="bg-red text-white px-6 py-2 rounded-lg hover:bg-rose-700 transition transform hover:scale-105 shadow-md"
+        >
+          Svuota carrello
+        </button>
         <p className="text-lg text-gray-600">Total: ${totalCost.toFixed(2)}</p>
         <Link to="/exercise/fakeecommerce">
           <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition transform hover:scale-105 shadow-md">

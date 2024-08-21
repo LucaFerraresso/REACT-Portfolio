@@ -1,458 +1,181 @@
-//miglioriamo gli esercizi,uno ad uno
+//risolvo il conteggio nel carello dell'ecommerce
+//cambio il cart.jsx e il cart.context.jsx
 
-export const Exercises = [
-  {
-    id: "advice-generator",
-    title: "Advice Generator",
-    description:
-      "The perfect project if you're learning how to interact with 3rd-party APIs. This challenge uses the Advice Slip API to generate random quotes of advice.",
-    link: "/exercise/advicegenerator",
-    backgroundImage:
-      "/Exercises/advice-generator-app-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "age-calculator",
-    title: "Age Calculator",
-    description:
-      "This challenge is designed to sharpen your JavaScript and form validation skills. Working with dates in JavaScript can be tricky, so this will be a nice test!",
-    link: "/exercise/agecalculator",
-    backgroundImage:
-      "/Exercises/age-calculator-app-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "contact-form",
-    title: "Contact Form",
-    description:
-      "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice building a form with several input types and validation.",
-    link: "/exercise/contactform",
-    backgroundImage: "/Exercises/contact-form-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "mortgage-calculator",
-    title: "Mortgage Calculator",
-    description:
-      "This mortgage calculator is an excellent project for practicing working with forms, client-side validation, and updating the DOM. Remember to focus on accessibility, too!",
-    link: "/exercise/mortgagecalculator",
-    backgroundImage:
-      "/Exercises/mortgage-repayment-calculator-main/design/desktop-design-completed.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "product-list-with-cart",
-    title: "Product List with Cart",
-    description:
-      "Practice updating the UI in multiple places based on user actions. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
-    link: "/exercise/fakeecommerce",
-    backgroundImage:
-      "/Exercises/product-list-with-cart-main/design/desktop-design-selected.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "interactive-card-details-form",
-    title: "Interactive Credit Card Details Form",
-    description:
-      "This fun project will be an excellent way to practice DOM manipulation and form validation while also putting your HTML and CSS skills to the test.",
-    link: "/exercise/interactivecardform",
-    backgroundImage:
-      "/Exercises/interactive-card-details-form-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "tip-calculator",
-    title: "Tip Calculator",
-    description:
-      "This small app is perfect for anyone starting to get to grips with JavaScript. The calculator functionality will be a nice test!",
-    link: "/exercise/tipcalculator",
-    backgroundImage:
-      "/Exercises/tip-calculator-app-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "interactive-pricing-components",
-    title: "Interactive Pricing Components",
-    description:
-      "In this project, you'll build out an interactive pricing component complete with custom range input slider and pricing toggle. A perfect way to test your JS skills!",
-    link: "/exercise/pricingslider",
-    backgroundImage:
-      "/Exercises/interactive-pricing-component-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "news-letter-sign-up",
-    title: "NewsLetter Sign Up",
-    description:
-      "This will test your skills with basic form structure, validation, and submission. The success state will also be an excellent opportunity to work with DOM manipulation.",
-    link: "/exercise/newslettersignup",
-    backgroundImage:
-      "/Exercises/newsletter-sign-up-with-success-message-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "launch-countdown-timer",
-    title: "Launch Countdown Timer",
-    description:
-      "This will be a fun one! Your challenge is to build this countdown timer. There are lots of small CSS tests in the design as well. So it should keep you busy!",
-    link: "/exercise/launchcountdowntimer",
-    backgroundImage:
-      "/Exercises/launch-countdown-timer-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "expenses-chart-component",
-    title: "Expenses Chart Component",
-    description:
-      "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
-    link: "/exercise/expenseschartcomponent",
-    backgroundImage:
-      "/Exercises/expenses-chart-component-main/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "rock-paper-scissors-master",
-    title: "Rock Paper Scissors Master",
-    description:
-      "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
-    link: "/exercise/rockpaperscissorsmaster",
-    backgroundImage:
-      "/Exercises/rock-paper-scissors-master/design/desktop-preview.jpg",
-    initialRating: 0,
-  },
-  {
-    id: "Three.js-Project",
-    title: "Three.js Mini Project",
-    description:
-      "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls.  ",
-    link: "/exercise/threejsproject",
-    backgroundImage: "/Exercises/threejs-project/images/desktop-preview.jpg",
-    initialRating: 0,
-  },
-];
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { useCart } from "../useContext/CartContext";
+import { getProductsFireStore } from "../API/firestore.js";
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-backup tutti i componenti 3js e il progetto 3js.
+const Cart = () => {
+  const { cart, updateCart } = useCart();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { useNavigate } from "react-router-dom";
-import Button3D from "../components/threejs-project-page/Button3D";
-import StripedSphere from "../components/threejs-project-page/StripedSphere";
-import RotatingText from "../components/threejs-project-page/RotatingText";
-import GroundPlane from "../components/threejs-project-page/GroundPlane";
-
-const ThreeJsProject = () => {
-  const navigate = useNavigate();
-
-  const navigateTo = (path) => {
-    navigate(path); // Reindirizzamento dinamico
-  };
-
-  return (
-    <div className="w-full h-screen bg-slate-500">
-      <Canvas camera={{ position: [0, 10, 20], fov: 60 }} shadows={true}>
-        {/* Luce ambientale e direzionale */}
-        <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[0, 10, 5]}
-          intensity={1.5}
-          color={"#fff"}
-          castShadow={true}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-
-        {/* Controlli di rotazione */}
-        <OrbitControls enableZoom={false} />
-
-        {/* Sfera */}
-        <StripedSphere position={[0, 4, 0]} castShadow={true} />
-
-        {/* Testo rotante attorno alla sfera */}
-        <RotatingText radius={6} speed={0.01} castShadow={true} />
-
-        {/* Bottoni 3D posizionati a semicerchio */}
-        <Button3D
-          label="Home"
-          onClick={() => setTimeout(() => navigateTo("/homepage"), 500)}
-          position={[-4, -1, 2]}
-          rotation={[0, 0.3, 0]}
-          color="hsl(207, 90%, 54%)" // Blu accattivante
-        />
-        <Button3D
-          label="Projects"
-          onClick={() => setTimeout(() => navigateTo("/projects"), 500)}
-          position={[-2, -1, 3]}
-          rotation={[0, 0.1, 0]}
-          color="hsl(120, 73%, 48%)" // Verde brillante
-        />
-        <Button3D
-          label="Contacts"
-          onClick={() => setTimeout(() => navigateTo("/contacts"), 500)}
-          position={[2, -1, 3]}
-          rotation={[0, -0.1, 0]}
-          color="hsl(341, 92%, 63%)" // Rosso vivace
-        />
-        <Button3D
-          label="About Me"
-          onClick={() => setTimeout(() => navigateTo("/aboutme"), 500)}
-          position={[4, -1, 2]}
-          rotation={[0, -0.3, 0]}
-          color="hsl(30, 100%, 66%)" // Arancione intenso
-        />
-        {/* Terreno e muri */}
-        <GroundPlane position={[0, -2, 0]} />
-      </Canvas>
-    </div>
-  );
-};
-
-export default ThreeJsProject;
-//////////////////////////////////////////////////////////////////////////////////////////////
-import React, { useRef } from "react";
-
-import { Box, Cylinder, Cone } from "@react-three/drei";
-
-const Building = () => {
-  return (
-    <>
-      {/* Edificio: combinazione di cilindro e parallelepipedo */}
-      <Box args={[3, 5, 3]} position={[5, 2.5, -5]}>
-        <meshStandardMaterial color="hsl(202, 55%, 16%)" /> {/* Colore scuro */}
-      </Box>
-      <Cylinder args={[1.5, 1.5, 4, 32]} position={[5, 5, -5]}>
-        <meshStandardMaterial color="hsl(193, 38%, 86%)" />{" "}
-        {/* Colore chiaro */}
-      </Cylinder>
-      <Cone args={[2, 3, 32]} position={[5, 8, -5]}>
-        <meshStandardMaterial color="hsl(30, 100%, 60%)" />{" "}
-        {/* Colore giallo */}
-      </Cone>
-    </>
-  );
-};
-
-export default Building;
-////////////////////////////////////////////////////////////////////////////////////////
-import React, { useState } from "react";
-import { Text3D } from "@react-three/drei";
-import { useSpring, animated } from "@react-spring/three";
-
-const Button3D = ({ onClick, label, position, rotation, color }) => {
-  const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
-
-  // Animazioni per il cilindro superiore
-  const { scale, positionSpring } = useSpring({
-    scale: clicked ? 1 : hovered ? 1.1 : 1,
-    position: clicked ? [0, -0.05, 0] : [0, 0, 0],
-    config: { tension: 300, friction: 15 },
-  });
-
-  const handlePointerDown = () => setClicked(true);
-  const handlePointerUp = () => {
-    setClicked(false);
-    // Simula un breve ritardo prima di eseguire l'azione del clic
-    setTimeout(onClick, 150);
-  };
-
-  return (
-    <animated.group
-      position={position}
-      rotation={rotation}
-      onClick={handlePointerUp}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      onPointerDown={handlePointerDown}
-    >
-      {/* Base del pulsante */}
-      <mesh position={[0, -0.25, 0]} scale={[1.2, 1.2, 1.2]}>
-        <cylinderGeometry args={[1.2, 1.2, 0.1, 32]} />
-        <meshStandardMaterial color="lightgrey" />{" "}
-        {/* Colore grigio chiaro per la base */}
-      </mesh>
-
-      {/* Corpo del pulsante */}
-      <animated.mesh
-        scale={scale}
-        position={positionSpring}
-        receiveShadow={true}
-      >
-        <cylinderGeometry args={[1, 1, 0.4, 32]} />{" "}
-        {/* Cilindro con altezza media */}
-        <meshStandardMaterial color={color} />
-        <Text3D
-          font="/fonts-3D/helvetiker_regular.typeface.json"
-          size={0.3}
-          height={0.05}
-          position={[-0.8, 0.5, 0.26]}
-        >
-          {label}
-          <meshStandardMaterial color="black" />
-        </Text3D>
-      </animated.mesh>
-    </animated.group>
-  );
-};
-
-export default Button3D;
-////////////////////////////////////////////////////////////////////////////////
-import React, { useRef } from "react";
-import { Plane } from "@react-three/drei";
-
-const GroundPlane = () => {
-  return (
-    <>
-      <Plane
-        args={[22, 22]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -1.35, 0]}
-        receiveShadow={true}
-      >
-        <meshStandardMaterial color="hsl(140, 40%, 50%)" side={2} />{" "}
-      </Plane>
-      {/* laterale d sinistra */}
-      <Plane
-        args={[22, 10]}
-        rotation={[0, Math.PI / 2, 0]}
-        position={[-11, 3.65, 0]}
-        receiveShadow={true}
-      >
-        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
-      </Plane>
-      {/* laterale di destra */}
-      <Plane
-        args={[10, 22]}
-        rotation={[0, 0, Math.PI / 2]}
-        position={[0, 3.65, -11]}
-        receiveShadow={true}
-      >
-        <meshStandardMaterial color="hsl(193, 38%, 86%)" side={2} />{" "}
-        {/* Azzurro */}
-      </Plane>
-    </>
-  );
-};
-
-export default GroundPlane;
-/////////////////////////////////////////////////////////////////////////////////////////////////
-import React, { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Text3D, Float } from "@react-three/drei";
-
-const RotatingText = ({ radius = 4, speed = 0.05 }) => {
-  const textRef = useRef();
-  const angle = useRef(0);
-
-  useFrame(() => {
-    if (textRef.current) {
-      angle.current += speed;
-      const x = radius * Math.cos(angle.current);
-      const z = radius * Math.sin(angle.current);
-      textRef.current.position.set(x, 3, z);
-      textRef.current.rotation.y += 0.05; // Rotazione del testo attorno al proprio asse
-      //textRef.current.rotation.x += 0.05;
+  const getItems = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await getProductsFireStore();
+      const filteredCart = response.filter((product) =>
+        Object.keys(cart).includes(product.id.toString())
+      );
+      setProducts(filteredCart);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch cart items.");
+    } finally {
+      setLoading(false);
     }
-  });
+  }, [cart]);
 
-  return (
-    <Float speed={1} rotationIntensity={1} floatIntensity={1}>
-      <Text3D
-        ref={textRef}
-        font="/fonts-3D/helvetiker_regular.typeface.json"
-        size={1.4}
-        height={0.2}
-        curveSegments={12}
-        bevelEnabled
-        bevelThickness={0.1}
-        bevelSize={0.02}
-        bevelSegments={5}
-        castShadow={true}
-      >
-        Luca
-        <meshStandardMaterial color="hsl(32, 100%, 50%)" /> {/* Arancione */}
-      </Text3D>
-    </Float>
+  useEffect(() => {
+    getItems();
+  }, [getItems]);
+
+  const handleRemove = useCallback(
+    (productId) => {
+      updateCart(productId, -1);
+      toast.error("Item removed from cart", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    },
+    [updateCart]
   );
-};
 
-export default RotatingText;
-///////////////////////////////////////////////////////////////////////////////
-import React, { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Sphere } from "@react-three/drei";
-import * as THREE from "three";
-
-const StripedSphere = ({ position }) => {
-  const sphereRef = useRef();
-
-  useFrame(() => {
-    if (sphereRef.current) {
-      // Rotazione continua attorno agli assi X e Y
-      sphereRef.current.rotation.y += 0.1;
-      sphereRef.current.rotation.x += 0.1;
-    }
-  });
-
-  // Crea un materiale con due colori usando un gradiente radiale
-  const createGradientMaterial = () => {
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const size = 512; // Dimensioni della texture
-    canvas.width = size;
-    canvas.height = size;
-
-    // Crea un gradiente radiale
-    const gradient = context.createRadialGradient(
-      size / 2,
-      size / 2,
-      0,
-      size / 2,
-      size / 2,
-      size / 2
+  const totalCost = useMemo(() => {
+    return products.reduce(
+      (total, product) => total + product.price * (cart[product.id] || 0),
+      0
     );
-    gradient.addColorStop(0, "hsl(200, 100%, 50%)");
-    gradient.addColorStop(1, "hsl(120, 100%, 50%)");
-
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, size, size);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
-
-    return new THREE.MeshStandardMaterial({
-      map: texture,
-      emissive: new THREE.Color("hsl(0, 100%, 66%)"),
-      emissiveIntensity: 0.5,
-      roughness: 0.6,
-      metalness: 0.2,
-    });
-  };
-
-  const gradientMaterial = createGradientMaterial();
+  }, [products, cart]);
 
   return (
-    <Sphere
-      ref={sphereRef}
-      args={[1.5, 32, 32]}
-      position={position}
-      castShadow={true}
-    >
-      <primitive attach="material" object={gradientMaterial} />
-    </Sphere>
+    <>
+      <div className="flex flex-col sm:flex-row p-4 items-center justify-between gap-4 mt-4 mb-4 bg-blue-50 shadow-md rounded-lg">
+        <h1 className="text-3xl font-extrabold text-gray-800">Cart</h1>
+        <p className="text-lg text-gray-600">
+          Items in cart: {Object.keys(cart).length}
+        </p>
+        <p className="text-lg text-gray-600">Total: ${totalCost.toFixed(2)}</p>
+        <Link to="/exercise/fakeecommerce">
+          <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition transform hover:scale-105 shadow-md">
+            Back to Shop
+          </button>
+        </Link>
+      </div>
+      <div className="flex flex-wrap justify-center gap-6 p-4">
+        {error && <p className="text-red-500">{error}</p>}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="flex flex-wrap gap-6 p-4 justify-center">
+            {products
+              .filter((product) => cart[product.id] > 0) // Filtriamo i prodotti con quantità maggiore di zero
+              .map((product) => (
+                <motion.div
+                  key={product.id}
+                  className="relative w-full sm:w-60"
+                >
+                  <EcommerceCard
+                    product={product}
+                    quantity={cart[product.id]}
+                    onIncrease={() => updateCart(product.id, 1)}
+                    onDecrease={() => handleRemove(product.id)}
+                    onAddToCart={(product, quantity) =>
+                      updateCart(product.id, quantity)
+                    }
+                  />
+                </motion.div>
+              ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 p-4 bg-gray-200 rounded shadow-md w-full max-w-md mx-auto">
+        <h2 className="text-xl font-bold">Summary</h2>
+        <ul className="list-disc list-inside">
+          {products.map((product) => (
+            <li key={product.id} className="truncate">
+              {product.name} - {cart[product.id]} x ${product.price} = $
+              {cart[product.id] * product.price}
+            </li>
+          ))}
+        </ul>
+        <h3 className="text-lg font-bold mt-2">
+          Total Cost: ${totalCost.toFixed(2)}
+        </h3>
+      </div>
+      <ToastContainer />
+    </>
   );
 };
 
-export default StripedSphere;
+export default Cart;
+////////////////////////////////////////////////////////////////////////////////
+e il cart context
 
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+
+const CartContext = createContext();
+
+export const useCart = () => useContext(CartContext);
+
+export const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = useCallback((productId, quantity) => {
+    setCart((prev) => ({
+      ...prev,
+      [productId]: (prev[productId] || 0) + quantity,
+    }));
+  }, []);
+
+  const updateCart = useCallback((productId, quantityChange) => {
+    setCart((prev) => {
+      const newQuantity = (prev[productId] || 0) + quantityChange;
+      if (newQuantity <= 0) {
+        const { [productId]: _, ...newCart } = prev; // Rest operator to omit the key
+        return newCart;
+      }
+      return { ...prev, [productId]: newQuantity };
+    });
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setCart({});
+  }, []);
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, updateCart, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
 
 
 
