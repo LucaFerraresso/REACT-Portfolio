@@ -1,7 +1,7 @@
 import React from "react";
 //animazioni
 import { motion } from "framer-motion";
-import { staggerContainer } from "../assets/animations/motions";
+import { staggerContainer } from "../animations/motions";
 //componente
 import Section from "../components/aboutme-page/Section";
 //array mappato

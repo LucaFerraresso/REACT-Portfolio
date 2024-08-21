@@ -1,44 +1,46 @@
-//backup fake ecommmerce conn ogni suo componente 
-//cart context // fakeecommerce.jsx // productpage.jsx // cart.jsx // ecommercecard.jsx 
+//backup cart.jsx 
+//aggiornati tutti i componenti e il design
 
-import React, { useEffect, useState } from "react";
-import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useCart } from "../useContext/CartContext";
-import { getProductsFireStore } from "../API/firestore";
+import { getProductsFireStore } from "../API/firestore.js";
+import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
-const FakeEcommerce = () => {
+const Cart = () => {
+  const { cart, updateCart } = useCart();
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [quantities, setQuantities] = useState({});
-  const { cart, addToCart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const getItems = async () => {
+  const getItems = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
-      const data = await getProductsFireStore();
-      setProducts(data);
+      const response = await getProductsFireStore();
+      const filteredCart = response.filter((product) =>
+        Object.keys(cart).includes(product.id.toString())
+      );
+      setProducts(filteredCart);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError("Failed to fetch cart items.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [cart]);
 
-  const handleAddToCart = (product, quantity) => {
-    if (quantity > 0) {
-      addToCart(product.id, quantity);
-      setQuantities((prev) => ({ ...prev, [product.id]: 1 }));
+  useEffect(() => {
+    getItems();
+  }, [getItems]);
 
-      // Toast management here
-      const message =
-        quantity > 1
-          ? `${quantity} ${product.name} added to cart!`
-          : `${product.name} added to cart!`;
-
-      toast.success(message, {
+  const handleRemove = useCallback(
+    (productId) => {
+      updateCart(productId, -1);
+      toast.error("Item removed from cart", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -48,283 +50,54 @@ const FakeEcommerce = () => {
         progress: undefined,
         theme: "light",
       });
-    }
-  };
-
-  useEffect(() => {
-    getItems();
-  }, []);
-
-  const handleQuantityChange = (productId, change) => {
-    setQuantities((prev) => {
-      const currentQuantity = prev[productId] || 1;
-      const newQuantity = Math.max(1, currentQuantity + change);
-      return { ...prev, [productId]: newQuantity };
-    });
-  };
-
-  const totalItemsInCart = Object.values(cart).reduce(
-    (total, quantity) => total + quantity,
-    0
+    },
+    [updateCart]
   );
 
-  return (
-    <div className="min-h-screen bg-rose-50 p-4 text-center items-center font-red-hat">
-      <h1 className="text-center text-3xl font-bold text-rose-900 mb-6 flex justify-between items-center">
-        Fake Ecommerce
-        <Link to="/exercise/fakeecommerce/cart" className="relative">
-          <svg
-            className="w-8 h-8 text-rose-900"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 3h18l-1.5 9H6L3 3zm3 14h12a3 3 0 003-3H6a3 3 0 003 3z"
-            />
-          </svg>
-          {totalItemsInCart > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red text-white rounded-full text-xs px-1">
-              {totalItemsInCart}
-            </span>
-          )}
-        </Link>
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {loading
-          ? Array.from({ length: 9 }).map((_, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-md">
-                <div className="w-full h-48 bg-gray-300 animate-pulse rounded-t-lg"></div>
-                <div className="p-4">
-                  <div className="h-4 bg-gray-300 animate-pulse rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 animate-pulse rounded mb-2"></div>
-                  <div className="h-6 bg-gray-300 animate-pulse rounded"></div>
-                </div>
-              </div>
-            ))
-          : products.map((product) => {
-              const productQuantity = quantities[product.id] || 1;
-
-              return (
-                <EcommerceCard
-                  key={product.id}
-                  product={product}
-                  quantity={productQuantity}
-                  onIncrease={() => handleQuantityChange(product.id, 1)}
-                  onDecrease={() => handleQuantityChange(product.id, -1)}
-                  onAddToCart={(product, quantity) =>
-                    handleAddToCart(product, quantity)
-                  }
-                />
-              );
-            })}
-      </div>
-      <ToastContainer />
-    </div>
-  );
-};
-
-export default FakeEcommerce;
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import Modal from "react-modal";
-import { useSpring, animated } from "@react-spring/web";
-
-import { getProductsFireStore } from "../API/firestore";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    padding: "20px",
-    background: "white",
-    borderRadius: "10px",
-    outline: "none",
-    width: "90%",
-    maxWidth: "500px",
-    height: "auto",
-    maxHeight: "80vh",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    borderWidth: "1px",
-    borderColor: "#ddd",
-  },
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-  },
-};
-
-const ProductPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const getProduct = async () => {
-    const response = await getProductsFireStore();
-    const product = response.find((product) => product.id == id);
-    const productWithImage = { ...product, image: product.image };
-
-    setProduct(productWithImage);
-    setModalIsOpen(true);
-  };
-
-  useEffect(() => {
-    getProduct();
-  }, []);
-
-  const springProps = useSpring({
-    opacity: modalIsOpen ? 1 : 0,
-    transform: modalIsOpen ? `scale(1)` : `scale(0.9)`,
-    config: { tension: 300, friction: 20 },
-  });
-
-  const handleCloseModal = () => {
-    setModalIsOpen(false);
-
-    navigate("/exercise/fakeecommerce");
-  };
+  const totalCost = useMemo(() => {
+    return products.reduce(
+      (total, product) => total + product.price * (cart[product.id] || 0),
+      0
+    );
+  }, [products, cart]);
 
   return (
     <>
-      {product && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={handleCloseModal}
-          style={customStyles}
-          contentLabel="Product Details"
-          appElement={document.getElementById("root")}
-        >
-          <animated.div
-            style={springProps}
-            className="flex flex-col justify-center items-center h-full"
-          >
-            <div className="flex flex-col gap-2 w-[320px] h-[450px] overflow-hidden p-2 text-center">
-              <h1 className="text-rose-900  text-2xl font-bold">
-                {" "}
-                {product.name}
-              </h1>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="rounded border border-black"
-              />
-              <p className="text-green-600 text-lg">Price: {product.price}$</p>
-              <p className="text-rose-500 text-sm">
-                Category: {product.category}
-              </p>
-            </div>
-            <button
-              onClick={handleCloseModal}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
-            >
-              Close
-            </button>
-          </animated.div>
-        </Modal>
-      )}
-    </>
-  );
-};
-
-export default ProductPage;
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-import React, { useEffect, useState } from "react";
-import { useCart } from "../useContext/CartContext";
-import { getProductsFireStore } from "../API/firestore.js";
-
-import EcommerceCard from "../components/ecommerce-page/EcommerceCard";
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-const Cart = () => {
-  const { cart, updateCart } = useCart();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const getItem = async () => {
-    setLoading(true);
-    try {
-      const response = await getProductsFireStore();
-      const filteredCart = response.filter((product) =>
-        Object.keys(cart).includes(product.id.toString())
-      );
-      setProducts(filteredCart);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getItem();
-  }, [cart]);
-
-  const handleRemove = (productId) => {
-    updateCart(productId, -1);
-    toast.error("Item removed from cart", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
-  const totalCost = products.reduce(
-    (total, product) => total + product.price * (cart[product.id] || 0),
-    0
-  );
-
-  return (
-    <>
-      <div className="flex flex-col sm:flex-row p-4 items-center text-center justify-center gap-4 mt-4 mb-4 bg-white shadow-md rounded-lg">
+      <div className="flex flex-col sm:flex-row p-4 items-center justify-between gap-4 mt-4 mb-4 bg-blue-50 shadow-md rounded-lg">
         <h1 className="text-3xl font-extrabold text-gray-800">Cart</h1>
         <p className="text-lg text-gray-600">
           Items in cart: {Object.keys(cart).length}
         </p>
-        <p className="text-lg text-gray-600">
-          Total:{" "}
-          {Object.values(cart).reduce((total, quantity) => total + quantity, 0)}
-        </p>
+        <p className="text-lg text-gray-600">Total: ${totalCost.toFixed(2)}</p>
         <Link to="/exercise/fakeecommerce">
           <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition transform hover:scale-105 shadow-md">
             Back to Shop
           </button>
         </Link>
       </div>
-      <div className="flex flex-wrap justify-center">
+      <div className="flex flex-wrap justify-center gap-6 p-4">
+        {error && <p className="text-red-500">{error}</p>}
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div className="flex flex-wrap gap-6 p-4 justify-center">
-            {products &&
-              products.map((product) => (
-                <div key={product.id} className="relative w-full sm:w-60">
-                  <EcommerceCard
-                    product={product}
-                    quantity={cart[product.id]}
-                    onIncrease={() => updateCart(product.id, 1)}
-                    onDecrease={() => handleRemove(product.id)}
-                    onAddToCart={(product, quantity) =>
-                      updateCart(product.id, quantity)
-                    }
-                  />
-                </div>
-              ))}
+            {products.map((product) => (
+              <motion.div
+                key={product.id}
+                className="relative w-full sm:w-60"
+                whileHover={{ scale: 1.05 }}
+              >
+                <EcommerceCard
+                  product={product}
+                  quantity={cart[product.id]}
+                  onIncrease={() => updateCart(product.id, 1)}
+                  onDecrease={() => handleRemove(product.id)}
+                  onAddToCart={(product, quantity) =>
+                    updateCart(product.id, quantity)
+                  }
+                />
+              </motion.div>
+            ))}
           </div>
         )}
       </div>
@@ -334,12 +107,14 @@ const Cart = () => {
         <ul className="list-disc list-inside">
           {products.map((product) => (
             <li key={product.id} className="truncate">
-              {product.title} - {cart[product.id]} x ${product.price} = $
+              {product.name} - {cart[product.id]} x ${product.price} = $
               {cart[product.id] * product.price}
             </li>
           ))}
         </ul>
-        <h3 className="text-lg font-bold mt-2">Total Cost: ${totalCost}</h3>
+        <h3 className="text-lg font-bold mt-2">
+          Total Cost: ${totalCost.toFixed(2)}
+        </h3>
       </div>
       <ToastContainer />
     </>
@@ -347,101 +122,78 @@ const Cart = () => {
 };
 
 export default Cart;
-//////////////////////////////////////////////////////////////////////////////////////////
-import React, { createContext, useContext, useState, useEffect } from "react";
 
-const CartContext = createContext();
+///////////////////////////////////////////////////////////////////////////////////////
 
-export const useCart = () => {
-  return useContext(CartContext);
-};
+ecommercecard.jsx backup
 
-export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState(() => {
-    const storedCart = localStorage.getItem("cart");
-    return storedCart ? JSON.parse(storedCart) : {};
-  });
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = (productId, quantity) => {
-    setCart((prev) => ({
-      ...prev,
-      [productId]: (prev[productId] || 0) + quantity,
-    }));
-  };
-
-  const updateCart = (productId, quantityChange) => {
-    setCart((prev) => {
-      const newQuantity = (prev[productId] || 0) + quantityChange;
-      if (newQuantity <= 0) {
-        const newCart = { ...prev };
-        delete newCart[productId];
-        return newCart;
-      }
-      return { ...prev, [productId]: newQuantity };
-    });
-  };
-
-  return (
-    <CartContext.Provider value={{ cart, addToCart, updateCart }}>
-      {children}
-    </CartContext.Provider>
-  );
-};
-///////////////////////////////////////////////////////////////////////////////////////////////////////7
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const EcommerceCard = ({
   product,
   quantity,
+  onAddToCart,
   onIncrease,
   onDecrease,
-  onAddToCart,
 }) => {
+  const [localQuantity, setLocalQuantity] = useState(quantity || 1);
+
+  const handleIncrease = () => {
+    setLocalQuantity((prev) => prev + 1);
+    onIncrease && onIncrease();
+  };
+
+  const handleDecrease = () => {
+    if (localQuantity > 1) {
+      setLocalQuantity((prev) => prev - 1);
+      onDecrease && onDecrease();
+    }
+  };
+
+  const handleAddToCart = () => {
+    onAddToCart && onAddToCart(localQuantity);
+  };
+
   return (
     <motion.div
-      className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-black hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 mx-auto w-full sm:w-60 h-auto"
+      className="bg-white p-4 rounded-lg shadow-lg flex flex-col gap-2 justify-between border border-gray-200 hover:shadow-2xl transition-shadow duration-300  mx-auto w-full sm:w-60 h-auto"
       whileHover={{ scale: 1.05 }}
     >
       <Link to={`/exercise/fakeecommerce/${product.id}`}>
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-48 object-cover mb-4 border border-black rounded-t-lg"
-          style={{ borderRadius: "0.5rem 0.5rem 0 0", marginBottom: "-1px" }}
+          className="w-full h-48 object-cover mb-4 rounded-t-lg"
         />
       </Link>
-      <div className="p-2 flex flex-col items-center justify-center">
-        <h2 className="text-rose-900 text-lg font-semibold mb-1 border-b border-black pb-2 transition-colors duration-300 hover:text-rose-700">
+      <div className="p-2 flex flex-col items-center">
+        <h2 className="text-gray-900 text-lg font-semibold mb-1 border-b border-gray-300 pb-2 transition-colors duration-300 hover:text-gray-700">
           {product.name}
         </h2>
-        <p className="text-rose-500 mb-2">Category: {product.category}</p>
+        <p className="text-gray-600 mb-2">Category: {product.category}</p>
         <p className="text-green-600 text-xl font-bold mb-4">
           Price: ${product.price}
         </p>
         <div className="flex items-center mb-4">
           <button
-            onClick={onDecrease}
-            className="bg-rose-500 text-white px-3 py-1 rounded-l border border-black hover:bg-rose-600 transition"
+            onClick={handleDecrease}
+            className="bg-red text-white px-3 py-1 rounded-l border border-gray-300 hover:bg-rose-800 transition transform hover:scale-105"
           >
             -
           </button>
-          <span className="mx-2 text-lg font-medium">{quantity}</span>
+          <span className="mx-2 text-lg font-medium">{localQuantity}</span>
           <button
-            onClick={onIncrease}
-            className="bg-rose-500 text-white px-3 py-1 rounded-r border border-black hover:bg-rose-600 transition"
+            onClick={handleIncrease}
+            className="bg-green text-white px-3 py-1 rounded-r border border-gray-300 hover:bg-green-600 transition transform hover:scale-105"
           >
             +
           </button>
         </div>
         <button
-          onClick={() => onAddToCart(product, quantity)}
-          className="w-full py-2 rounded-lg transition text-white font-bold border border-black bg-green-500 hover:bg-green-600"
-          style={{ textShadow: "1px 1px 2px black" }}
+          onClick={handleAddToCart}
+          className="w-full py-2 rounded-lg bg-blue-500 text-white font-bold border border-gray-300 hover:bg-blue-600 transition transform hover:scale-105"
         >
           Add to Cart
         </button>
@@ -451,5 +203,60 @@ const EcommerceCard = ({
 };
 
 export default EcommerceCard;
+
+//////////////////////////////////////////////////////////////////////////////
+cartcontext funzionante , ma rimane a 1
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+
+const CartContext = createContext();
+
+export const useCart = () => useContext(CartContext);
+
+export const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : {};
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = useCallback((productId, quantity) => {
+    setCart((prev) => ({
+      ...prev,
+      [productId]: (prev[productId] || 0) + quantity,
+    }));
+  }, []);
+
+  const updateCart = useCallback((productId, quantityChange) => {
+    setCart((prev) => {
+      const newQuantity = (prev[productId] || 0) + quantityChange;
+      if (newQuantity <= 0) {
+        const { [productId]: _, ...newCart } = prev; // Rest operator to omit the key
+        return newCart;
+      }
+      return { ...prev, [productId]: newQuantity };
+    });
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setCart({});
+  }, []);
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, updateCart, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
 
 

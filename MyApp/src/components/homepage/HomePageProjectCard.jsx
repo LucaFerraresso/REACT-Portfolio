@@ -1,15 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { fadeIn } from "../../animations/motions";
 
 // Varianti di animazione
-const fadeIn = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
-  },
-};
 
 const HomePageProjectCard = ({ title, image, description, github, vercel }) => {
   return (

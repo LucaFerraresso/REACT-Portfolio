@@ -1,7 +1,7 @@
 import React from "react";
 //animazioni
 import { motion } from "framer-motion";
-import { fadeIn } from "../../assets/animations/motions";
+import { fadeIn } from "../../animations/motions";
 
 const Section = ({ imageSrc, altText, paragraph, reverse }) => {
   return (

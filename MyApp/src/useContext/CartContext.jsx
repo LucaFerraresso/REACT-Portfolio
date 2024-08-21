@@ -31,16 +31,19 @@ export const CartProvider = ({ children }) => {
     setCart((prev) => {
       const newQuantity = (prev[productId] || 0) + quantityChange;
       if (newQuantity <= 0) {
-        const newCart = { ...prev };
-        delete newCart[productId];
+        const { [productId]: _, ...newCart } = prev; // Rest operator to omit the key
         return newCart;
       }
       return { ...prev, [productId]: newQuantity };
     });
   }, []);
 
+  const clearCart = useCallback(() => {
+    setCart({});
+  }, []);
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { motionContainer, motionIcon } from "../../assets/animations/motions";
+import { motionContainer, motionIcon } from "../../animations/motions";
 
 const SkillsSection = ({ techIcons }) => {
   return (

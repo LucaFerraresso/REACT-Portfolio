@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import ContactInfo from "../components/contacts-page/ContactInfo";
 import ContactForm from "../components/contacts-page/ContactPageForm";
-import { staggerContainer } from "../assets/animations/motions";
+import { staggerContainer } from "../animations/motions";
 
 const ContactPage = () => {
   return (

@@ -12,12 +12,12 @@ const customStyles = {
     bottom: "auto",
     transform: "translate(-50%, -50%)",
     padding: "20px",
-    background: "white",
+    background: "#ffffff",
     borderRadius: "10px",
     outline: "none",
     width: "90%",
-    maxWidth: "500px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    maxWidth: "600px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -78,22 +78,24 @@ const ProductPage = () => {
           style={springProps}
           className="flex flex-col items-center"
         >
-          <h1 className="text-rose-900 text-2xl font-bold mb-4">
+          <h1 className="text-rose-900 text-3xl font-bold mb-4">
             {product.name}
           </h1>
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-64 object-cover rounded border border-black mb-4"
+            className="w-full h-64 object-cover rounded border border-gray-300 mb-4"
           />
-          <p className="text-green-600 text-lg mb-2">Price: ${product.price}</p>
-          <p className="text-rose-500 text-sm mb-2">
+          <p className="text-green-600 text-xl font-semibold mb-2">
+            Price: ${product.price}
+          </p>
+          <p className="text-rose-500 text-md mb-2">
             Category: {product.category}
           </p>
           <p className="text-gray-700 text-base mb-4">{product.description}</p>
           <button
             onClick={handleCloseModal}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+            className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
           >
             Close
           </button>

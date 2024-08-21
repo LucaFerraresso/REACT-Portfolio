@@ -7,11 +7,7 @@ import {
   FaFacebook,
   FaMailBulk,
 } from "react-icons/fa";
-import {
-  motionContainer,
-  fadeIn,
-  motionIcon,
-} from "../../assets/animations/motions";
+import { motionContainer, fadeIn, motionIcon } from "../../animations/motions";
 
 // Array di social links con icone e colori
 const socialLinksContact = [

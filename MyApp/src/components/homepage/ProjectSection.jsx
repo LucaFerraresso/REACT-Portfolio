@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { fadeIn, motionIcon } from "../../assets/animations/motions";
+import { fadeIn, motionIcon } from "../../animations/motions";
 import HomePageProjectCard from "../homepage/HomePageProjectCard";
 
 const ProjectsSection = ({ projects }) => {

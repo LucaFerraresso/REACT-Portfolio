@@ -1,10 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  motionContainer,
-  fadeIn,
-  motionIcon,
-} from "../../assets/animations/motions";
+import { motionContainer, fadeIn, motionIcon } from "../../animations/motions";
 
 const HeroSection = ({ imgPath, socialLinks }) => {
   return (

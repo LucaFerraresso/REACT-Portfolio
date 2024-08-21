@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import { fadeIn } from "../../assets/animations/motions";
+import { fadeIn } from "../../animations/motions";
 
 const ContactForm = () => {
   const handleSubmit = (e) => {

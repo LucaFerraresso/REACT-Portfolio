@@ -2,7 +2,7 @@ import React from "react";
 import ProjectCard from "../components/projects-page/ProjectCard";
 import { motion } from "framer-motion";
 import { Exercises } from "../components/projects-page/exercisesList";
-import { fadeIn, motionContainer } from "../assets/animations/motions";
+import { fadeIn, motionContainer } from "../animations/motions";
 
 const Projects = () => {
   return (
