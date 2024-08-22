@@ -10,12 +10,12 @@ import {
   FaFacebook,
 } from "react-icons/fa";
 
-import HeroSection from "../components/homepage/HeroSection";
-import HeroSectionSkeleton from "../components/homepage/HeroSectionSkeleton";
-import SkillsSection from "../components/homepage/SkillSection";
-import SkillSectionSkeleton from "../components/homepage/SkillSectionSkeleton";
-import ProjectsSection from "../components/homepage/ProjectSection";
-import ProjectSectionSkeleton from "../components/homepage/ProjectSectionSkeleton";
+import HeroSection from "../components/HeroSection";
+import HeroSectionSkeleton from "../components/HeroSectionSkeleton";
+import SkillsSection from "../components/SkillSection";
+import SkillSectionSkeleton from "../components/SkillSectionSkeleton";
+import ProjectsSection from "../components/ProjectSection";
+import ProjectSectionSkeleton from "../components/ProjectSectionSkeleton";
 
 const socialLinks = [
   {
