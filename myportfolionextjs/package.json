@@ -1,0 +1,28 @@
+{
+  "name": "myportfolionextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.2.0",
+    "@typescript-eslint/typescript-estree": "^8.2.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "fast-glob": "^3.3.2",
+    "globby": "^14.0.2",
+    "micromatch": "^4.0.7",
+    "next": "14.2.6",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "^14.2.6",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
