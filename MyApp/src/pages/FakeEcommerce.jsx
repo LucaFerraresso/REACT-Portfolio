@@ -48,9 +48,10 @@ const FakeEcommerce = () => {
   }, [getItems]);
 
   return (
-    <div className=" flex  flex-col  justify-center min-h-screen bg-gradient-to-r from-yellow-50 via-green-50 to-blue-50 p-6 text-center items-center font-red-hat">
-      {error && <p className="text-red-500">{error}</p>}
-      <h1 className="text-center text-4xl font-bold text-blue-900 mb-6 flex justify-between items-center">
+    <div className="     min-h-screen bg-gradient-to-r from-yellow-50 via-green-50 to-blue-50 p-6 font-red-hat">
+      {error && <p className="text-red">{error}</p>}
+
+      <h1 className="text-center text-4xl font-bold text-blue-900 mb-6 flex justify-between items-center ">
         Fake Ecommerce
         <Link to="/exercise/fakeecommerce/cart" className="relative">
           <svg
@@ -74,7 +75,9 @@ const FakeEcommerce = () => {
           )}
         </Link>
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      {/* Product Grid */}
+      <div className="items-center justify-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8  ">
         {loading
           ? Array.from({ length: 9 }).map((_, index) => (
               <div
