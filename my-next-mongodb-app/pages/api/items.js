@@ -11,10 +11,12 @@ export default async function handler(req, res) {
       const result = await db.collection("items").insertOne(newItem);
       res.json({ _id: result.insertedId, ...newItem });
       break;
+
     case "GET":
       const items = await db.collection("items").find({}).toArray();
       res.json(items);
       break;
+
     case "DELETE":
       const { id } = req.query;
       if (id) {
@@ -25,6 +27,23 @@ export default async function handler(req, res) {
       } else {
         res.status(400).end();
       }
+      break;
+
+    case "PUT":
+      const updatedItem = req.body;
+      const { updateId } = req.query;
+
+      if (updateId) {
+        const updateResult = await db
+          .collection("items")
+          .updateOne({ _id: new ObjectId(updateId) }, { $set: updatedItem });
+        res.json(updateResult);
+      } else {
+        res.status(400).end();
+      }
+      break;
+    default:
+      res.status(405).end(); // Metodo non supportato
       break;
   }
 }

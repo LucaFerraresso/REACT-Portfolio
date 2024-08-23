@@ -11,6 +11,8 @@ const HomePage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [editItemId, setEditItemId] = useState(null); // Stato per l'elemento da modificare
   const [animatingItems, setAnimatingItems] = useState({});
 
   // Fetch items on component mount
@@ -58,6 +60,44 @@ const HomePage = () => {
     }, 1500); // Simulate fade-in duration
   };
 
+  // Update item in the database
+  const updateItem = async () => {
+    setIsUpdating(true);
+    setAnimatingItems((prev) => ({
+      ...prev,
+      [editItemId]: "pulse",
+    }));
+
+    if (!newItem.title.trim() || !newItem.category.trim()) return;
+
+    const response = await fetch(`/api/items?updateId=${editItemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    });
+
+    await response.json();
+    setItems((prev) =>
+      prev.map((item) =>
+        item._id === editItemId ? { ...item, ...newItem } : item
+      )
+    );
+
+    setNewItem({ title: "", description: "", category: "" });
+    setEditItemId(null); // Resetta l'ID dell'elemento in modifica
+
+    setTimeout(() => {
+      setIsUpdating(false);
+
+      setAnimatingItems((prev) => ({
+        ...prev,
+        [editItemId]: "",
+      }));
+    }, 1500); // Delay for pulse effect before applying fadeIn
+  };
+
   // Delete item from the database
   const deleteItem = async (id) => {
     setAnimatingItems((prev) => ({
@@ -79,6 +119,16 @@ const HomePage = () => {
     }, 1500); // Simulate fade-out duration
   };
 
+  // Handle edit button click
+  const handleEditClick = (item) => {
+    setEditItemId(item._id);
+    setNewItem({
+      title: item.title,
+      description: item.description,
+      category: item.category,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
       <div className="p-8 rounded shadow-md w-full max-w-md bg-white border border-black">
@@ -86,10 +136,10 @@ const HomePage = () => {
           MongoDB App
         </h1>
 
-        {/* Add Item Section */}
+        {/* Add/Edit Item Section */}
         <div className="mb-6">
           <h2 className="text-xl font-medium mb-2 text-gray-700">
-            Add New Item
+            {editItemId ? "Edit Item" : "Add New Item"}
           </h2>
           <div className="space-y-2">
             <input
@@ -120,10 +170,16 @@ const HomePage = () => {
               className="w-full p-2 border border-gray-300 rounded text-black"
             />
             <button
-              onClick={addItem}
+              onClick={editItemId ? updateItem : addItem}
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-transform transform hover:scale-105"
             >
-              {isAdding ? "Adding..." : "Add Item"}
+              {isAdding
+                ? "Adding..."
+                : isUpdating
+                ? "Updating..."
+                : editItemId
+                ? "Update Item"
+                : "Add Item"}
             </button>
           </div>
         </div>
@@ -151,23 +207,37 @@ const HomePage = () => {
                       ? "animate-fadeOut"
                       : animatingItems[item._id] === "fadeIn"
                       ? "animate-fadeIn"
+                      : animatingItems[item._id] === "pulse"
+                      ? "animate-pulse opacity-80"
                       : ""
                   }`}
                 >
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="text-lg font-bold text-gray-800">
-                        {item.title}
+                        title: {item.title}
                       </h3>
+                      <p className="text-gray-600">
+                        description: {item.description}
+                      </p>
+                      <p className="text-gray-600">category: {item.category}</p>
                     </div>
-                    <button
-                      onClick={() => deleteItem(item._id)}
-                      className="bg-red-500 text-white p-1 rounded hover:bg-red-600 transition-transform transform hover:scale-105"
-                    >
-                      {animatingItems[item._id] === "fadeOut"
-                        ? "Deleting..."
-                        : "Delete"}
-                    </button>
+                    <div className="space-x-2">
+                      <button
+                        onClick={() => handleEditClick(item)}
+                        className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-600 transition-transform transform hover:scale-105"
+                      >
+                        {editItemId === item._id ? "Editing..." : "Edit"}
+                      </button>
+                      <button
+                        onClick={() => deleteItem(item._id)}
+                        className="bg-red-500 text-white p-1 rounded hover:bg-red-600 transition-transform transform hover:scale-105"
+                      >
+                        {animatingItems[item._id] === "fadeOut"
+                          ? "Deleting..."
+                          : "Delete"}
+                      </button>
+                    </div>
                   </div>
                 </li>
               ))}
