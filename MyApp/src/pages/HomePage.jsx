@@ -62,6 +62,15 @@ const projects = [
       "https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER",
     vercel: "https://icescream-menu-app.vercel.app/",
   },
+  {
+    title: "MongoDB database operations",
+    image: "/assets/images/homepage/mongodb-app-preview.png",
+    description:
+      "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list of items, editing existing ones, and deleting items.",
+    github:
+      "https://github.com/LucaFerraresso/REACT-Portfolio/tree/main/my-next-mongodb-app",
+    vercel: "https://mongodb-crud-operations.vercel.app/",
+  },
 ];
 
 const imgPath = "/assets/images/homepage/myFoto.jpg";
