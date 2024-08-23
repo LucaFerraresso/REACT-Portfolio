@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
@@ -12,7 +11,7 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [editItemId, setEditItemId] = useState(null); // Stato per l'elemento da modificare
+  const [editItemId, setEditItemId] = useState(null);
   const [animatingItems, setAnimatingItems] = useState({});
 
   // Fetch items on component mount
@@ -22,104 +21,125 @@ const HomePage = () => {
 
   const fetchItems = async () => {
     setIsLoading(true);
-    setTimeout(async () => {
+    try {
       const response = await fetch("/api/items");
+      if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setItems(data);
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+      alert("Failed to fetch items. Please try again later.");
+    } finally {
       setIsLoading(false);
-    }, 1500); // Delay to simulate loading
+    }
   };
 
-  // Add new item to the database
+  const isValidNewItem = () => {
+    // Return true if all fields are filled, otherwise false
+    return (
+      newItem.title.trim() &&
+      newItem.category.trim() &&
+      newItem.description.trim()
+    );
+  };
+
   const addItem = async () => {
+    if (!isValidNewItem()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
     setIsAdding(true);
-    if (!newItem.title.trim() || !newItem.category.trim()) return;
-
-    const response = await fetch("/api/items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newItem),
-    });
-
-    const addedItem = await response.json();
-    setNewItem({ title: "", description: "", category: "" });
-    setAnimatingItems((prev) => ({
-      ...prev,
-      [addedItem._id]: "fadeIn",
-    }));
-    setItems((prev) => [...prev, addedItem]);
-
-    setTimeout(() => {
-      setIsAdding(false);
+    try {
+      const response = await fetch("/api/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newItem),
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
+      const addedItem = await response.json();
+      setNewItem({ title: "", description: "", category: "" });
       setAnimatingItems((prev) => ({
         ...prev,
-        [addedItem._id]: "",
+        [addedItem._id]: "fadeIn",
       }));
-    }, 1500); // Simulate fade-in duration
+      setItems((prev) => [...prev, addedItem]);
+      setTimeout(() => {
+        setIsAdding(false);
+        setAnimatingItems((prev) => ({
+          ...prev,
+          [addedItem._id]: "",
+        }));
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to add item:", error);
+      alert("Failed to add item. Please try again later.");
+    }
   };
 
-  // Update item in the database
   const updateItem = async () => {
+    if (!newItem.title.trim() && !newItem.category.trim()) {
+      alert("Please fill in at least one required field.");
+      return;
+    }
     setIsUpdating(true);
     setAnimatingItems((prev) => ({
       ...prev,
       [editItemId]: "pulse",
     }));
-
-    if (!newItem.title.trim() || !newItem.category.trim()) return;
-
-    const response = await fetch(`/api/items?updateId=${editItemId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newItem),
-    });
-
-    await response.json();
-    setItems((prev) =>
-      prev.map((item) =>
-        item._id === editItemId ? { ...item, ...newItem } : item
-      )
-    );
-
-    setNewItem({ title: "", description: "", category: "" });
-    setEditItemId(null); // Resetta l'ID dell'elemento in modifica
-
-    setTimeout(() => {
-      setIsUpdating(false);
-
-      setAnimatingItems((prev) => ({
-        ...prev,
-        [editItemId]: "",
-      }));
-    }, 1500); // Delay for pulse effect before applying fadeIn
+    try {
+      const response = await fetch(`/api/items?updateId=${editItemId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newItem),
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
+      await response.json();
+      setItems((prev) =>
+        prev.map((item) =>
+          item._id === editItemId ? { ...item, ...newItem } : item
+        )
+      );
+      setNewItem({ title: "", description: "", category: "" });
+      setEditItemId(null);
+      setTimeout(() => {
+        setIsUpdating(false);
+        setAnimatingItems((prev) => ({
+          ...prev,
+          [editItemId]: "",
+        }));
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to update item:", error);
+      alert("Failed to update item. Please try again later.");
+    }
   };
 
-  // Delete item from the database
   const deleteItem = async (id) => {
     setAnimatingItems((prev) => ({
       ...prev,
       [id]: "fadeOut",
     }));
     setTimeout(async () => {
-      const response = await fetch(`/api/items?id=${id}`, {
-        method: "DELETE",
-      });
-      const deleteResult = await response.json();
-      if (deleteResult.deletedCount > 0) {
-        setItems((prev) => prev.filter((item) => item._id !== id));
+      try {
+        const response = await fetch(`/api/items?id=${id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        const deleteResult = await response.json();
+        if (deleteResult.deletedCount > 0) {
+          setItems((prev) => prev.filter((item) => item._id !== id));
+        }
+        setAnimatingItems((prev) => ({
+          ...prev,
+          [id]: "",
+        }));
+      } catch (error) {
+        console.error("Failed to delete item:", error);
+        alert("Failed to delete item. Please try again later.");
       }
-      setAnimatingItems((prev) => ({
-        ...prev,
-        [id]: "",
-      }));
-    }, 1500); // Simulate fade-out duration
+    }, 1500);
   };
 
-  // Handle edit button click
   const handleEditClick = (item) => {
     setEditItemId(item._id);
     setNewItem({
@@ -169,9 +189,17 @@ const HomePage = () => {
               placeholder="Category"
               className="w-full p-2 border border-gray-300 rounded text-black"
             />
+
             <button
               onClick={editItemId ? updateItem : addItem}
-              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-transform transform hover:scale-105"
+              disabled={isAdding || isUpdating || !isValidNewItem()}
+              className={`w-full p-2 rounded transition-transform transform ${
+                isAdding || isUpdating
+                  ? "bg-blue-300 text-white"
+                  : !isValidNewItem()
+                  ? "bg-gray-600 text-white cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700 transition-transform hover:scale-105"
+              }`}
             >
               {isAdding
                 ? "Adding..."
@@ -215,17 +243,21 @@ const HomePage = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="text-lg font-bold text-gray-800">
-                        title: {item.title}
+                        Title: {item.title}
                       </h3>
                       <p className="text-gray-600">
-                        description: {item.description}
+                        Description: {item.description}
                       </p>
-                      <p className="text-gray-600">category: {item.category}</p>
+                      <p className="text-gray-600">Category: {item.category}</p>
                     </div>
                     <div className="space-x-2">
                       <button
                         onClick={() => handleEditClick(item)}
-                        className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-600 transition-transform transform hover:scale-105"
+                        className={`bg-yellow-500 text-white p-1 rounded transition-transform transform ${
+                          editItemId === item._id
+                            ? "bg-yellow-600"
+                            : "hover:bg-yellow-600"
+                        }`}
                       >
                         {editItemId === item._id ? "Editing..." : "Edit"}
                       </button>

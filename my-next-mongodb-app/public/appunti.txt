@@ -1,7 +1,10 @@
- ////////////////////////////////////////////////////////////////////////////////////////////////
-logica crud + animazioni + delay (put: pulsa durante l'editing), quella attiva lampegga solo alla fine
+//home page + imes.js prims dell'error handler
+"use client";
 
-const [items, setItems] = useState([]);
+import { useEffect, useState } from "react";
+
+const HomePage = () => {
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
     title: "",
     description: "",
@@ -60,8 +63,13 @@ const [items, setItems] = useState([]);
 
   // Update item in the database
   const updateItem = async () => {
-    if (!newItem.title.trim() || !newItem.category.trim()) return;
     setIsUpdating(true);
+    setAnimatingItems((prev) => ({
+      ...prev,
+      [editItemId]: "pulse",
+    }));
+
+    if (!newItem.title.trim() || !newItem.category.trim()) return;
 
     const response = await fetch(`/api/items?updateId=${editItemId}`, {
       method: "PUT",
@@ -120,10 +128,176 @@ const [items, setItems] = useState([]);
       description: item.description,
       category: item.category,
     });
-    setAnimatingItems((prev) => ({
-      ...prev,
-      [item._id]: "pulse",
-    }));
   };
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
+      <div className="p-8 rounded shadow-md w-full max-w-md bg-white border border-black">
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          MongoDB App
+        </h1>
+
+        {/* Add/Edit Item Section */}
+        <div className="mb-6">
+          <h2 className="text-xl font-medium mb-2 text-gray-700">
+            {editItemId ? "Edit Item" : "Add New Item"}
+          </h2>
+          <div className="space-y-2">
+            <input
+              type="text"
+              value={newItem.title}
+              onChange={(e) =>
+                setNewItem({ ...newItem, title: e.target.value })
+              }
+              placeholder="Title"
+              className="w-full p-2 border border-gray-300 rounded text-black"
+            />
+            <input
+              type="text"
+              value={newItem.description}
+              onChange={(e) =>
+                setNewItem({ ...newItem, description: e.target.value })
+              }
+              placeholder="Description"
+              className="w-full p-2 border border-gray-300 rounded text-black"
+            />
+            <input
+              type="text"
+              value={newItem.category}
+              onChange={(e) =>
+                setNewItem({ ...newItem, category: e.target.value })
+              }
+              placeholder="Category"
+              className="w-full p-2 border border-gray-300 rounded text-black"
+            />
+            <button
+              onClick={editItemId ? updateItem : addItem}
+              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-transform transform hover:scale-105"
+            >
+              {isAdding
+                ? "Adding..."
+                : isUpdating
+                ? "Updating..."
+                : editItemId
+                ? "Update Item"
+                : "Add Item"}
+            </button>
+          </div>
+        </div>
+
+        {/* Items List Section */}
+        <div className="mb-6">
+          <h2 className="text-xl font-medium mb-4 text-gray-700">
+            Items in Database
+          </h2>
+          {isLoading ? (
+            <div className="space-y-4">
+              {/* Skeleton loading */}
+              <div className="p-4 bg-gray-200 rounded border border-gray-300 shadow-md animate-pulse">
+                <div className="h-6 bg-gray-400 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-400 rounded w-1/2"></div>
+              </div>
+            </div>
+          ) : (
+            <ul className="space-y-4">
+              {items.map((item) => (
+                <li
+                  key={item._id}
+                  className={`p-4 bg-white rounded border border-black shadow-md transition-opacity duration-500 ease-in-out ${
+                    animatingItems[item._id] === "fadeOut"
+                      ? "animate-fadeOut"
+                      : animatingItems[item._id] === "fadeIn"
+                      ? "animate-fadeIn"
+                      : animatingItems[item._id] === "pulse"
+                      ? "animate-pulse opacity-80"
+                      : ""
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">
+                        title: {item.title}
+                      </h3>
+                      <p className="text-gray-600">
+                        description: {item.description}
+                      </p>
+                      <p className="text-gray-600">category: {item.category}</p>
+                    </div>
+                    <div className="space-x-2">
+                      <button
+                        onClick={() => handleEditClick(item)}
+                        className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-600 transition-transform transform hover:scale-105"
+                      >
+                        {editItemId === item._id ? "Editing..." : "Edit"}
+                      </button>
+                      <button
+                        onClick={() => deleteItem(item._id)}
+                        className="bg-red-500 text-white p-1 rounded hover:bg-red-600 transition-transform transform hover:scale-105"
+                      >
+                        {animatingItems[item._id] === "fadeOut"
+                          ? "Deleting..."
+                          : "Delete"}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
+
+import clientPromise from "../../lib/mongodb";
+import { ObjectId } from "mongodb";
+
+export default async function handler(req, res) {
+  const client = await clientPromise;
+  const db = client.db("mydatabase");
+
+  switch (req.method) {
+    case "POST":
+      const newItem = req.body;
+      const result = await db.collection("items").insertOne(newItem);
+      res.json({ _id: result.insertedId, ...newItem });
+      break;
+
+    case "GET":
+      const items = await db.collection("items").find({}).toArray();
+      res.json(items);
+      break;
+
+    case "DELETE":
+      const { id } = req.query;
+      if (id) {
+        const deleteResult = await db
+          .collection("items")
+          .deleteOne({ _id: new ObjectId(id) });
+        res.json(deleteResult);
+      } else {
+        res.status(400).end();
+      }
+      break;
+
+    case "PUT":
+      const updatedItem = req.body;
+      const { updateId } = req.query;
+
+      if (updateId) {
+        const updateResult = await db
+          .collection("items")
+          .updateOne({ _id: new ObjectId(updateId) }, { $set: updatedItem });
+        res.json(updateResult);
+      } else {
+        res.status(400).end();
+      }
+      break;
+    default:
+      res.status(405).end(); // Metodo non supportato
+      break;
+  }
+}
