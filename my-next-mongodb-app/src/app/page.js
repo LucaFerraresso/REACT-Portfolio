@@ -1,54 +1,67 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import React, { useState, useEffect, useCallback } from "react";
+// Stato iniziale per un nuovo elemento
+const initialNewItem = { title: "", description: "", category: "" };
 
 const HomePage = () => {
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({
-    title: "",
-    description: "",
-    category: "",
+  const [newItem, setNewItem] = useState(initialNewItem);
+  const [loadingState, setLoadingState] = useState({
+    isLoading: false,
+    isAdding: false,
+    isUpdating: false,
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
   const [animatingItems, setAnimatingItems] = useState({});
 
-  // Fetch items on component mount
   useEffect(() => {
     fetchItems();
   }, []);
 
-  const fetchItems = async () => {
-    setIsLoading(true);
+  const fetchItems = useCallback(async () => {
+    setLoadingState((prev) => ({ ...prev, isLoading: true }));
+    // Simula il ritardo per lo skeleton loading
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     try {
       const response = await fetch("/api/items");
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setItems(data);
     } catch (error) {
-      console.error("Failed to fetch items:", error);
-      alert("Failed to fetch items. Please try again later.");
+      handleError("Failed to fetch items.");
     } finally {
-      setIsLoading(false);
+      setLoadingState((prev) => ({ ...prev, isLoading: false }));
     }
-  };
+  }, []);
 
-  const isValidNewItem = () => {
-    // Return true if all fields are filled, otherwise false
-    return (
-      newItem.title.trim() &&
-      newItem.category.trim() &&
-      newItem.description.trim()
-    );
-  };
+  const handleError = useCallback((message) => {
+    console.error(message);
+    alert(message);
+  }, []);
 
-  const addItem = async () => {
+  const isValidNewItem = useCallback(() => {
+    return Object.values(newItem).every((field) => field.trim());
+  }, [newItem]);
+
+  const resetNewItem = useCallback(() => {
+    setNewItem(initialNewItem);
+  }, []);
+
+  const animateItem = useCallback((id, animation) => {
+    setAnimatingItems((prev) => ({ ...prev, [id]: animation }));
+    // Pulisce l'animazione dopo 1500ms
+    setTimeout(() => {
+      setAnimatingItems((prev) => ({ ...prev, [id]: "" }));
+    }, 1500);
+  }, []);
+
+  const addItem = useCallback(async () => {
     if (!isValidNewItem()) {
       alert("Please fill in all required fields.");
       return;
     }
-    setIsAdding(true);
+    setLoadingState((prev) => ({ ...prev, isAdding: true }));
     try {
       const response = await fetch("/api/items", {
         method: "POST",
@@ -57,35 +70,23 @@ const HomePage = () => {
       });
       if (!response.ok) throw new Error("Network response was not ok");
       const addedItem = await response.json();
-      setNewItem({ title: "", description: "", category: "" });
-      setAnimatingItems((prev) => ({
-        ...prev,
-        [addedItem._id]: "fadeIn",
-      }));
+      resetNewItem();
+      animateItem(addedItem._id, "fadeIn");
       setItems((prev) => [...prev, addedItem]);
-      setTimeout(() => {
-        setIsAdding(false);
-        setAnimatingItems((prev) => ({
-          ...prev,
-          [addedItem._id]: "",
-        }));
-      }, 1500);
     } catch (error) {
-      console.error("Failed to add item:", error);
-      alert("Failed to add item. Please try again later.");
+      handleError("Failed to add item.");
+    } finally {
+      setLoadingState((prev) => ({ ...prev, isAdding: false }));
     }
-  };
+  }, [newItem, isValidNewItem, animateItem, resetNewItem, handleError]);
 
-  const updateItem = async () => {
+  const updateItem = useCallback(async () => {
     if (!newItem.title.trim() && !newItem.category.trim()) {
       alert("Please fill in at least one required field.");
       return;
     }
-    setIsUpdating(true);
-    setAnimatingItems((prev) => ({
-      ...prev,
-      [editItemId]: "pulse",
-    }));
+    setLoadingState((prev) => ({ ...prev, isUpdating: true }));
+    animateItem(editItemId, "pulse");
     try {
       const response = await fetch(`/api/items?updateId=${editItemId}`, {
         method: "PUT",
@@ -93,70 +94,60 @@ const HomePage = () => {
         body: JSON.stringify(newItem),
       });
       if (!response.ok) throw new Error("Network response was not ok");
-      await response.json();
+      const updatedItem = await response.json();
       setItems((prev) =>
         prev.map((item) =>
           item._id === editItemId ? { ...item, ...newItem } : item
         )
       );
-      setNewItem({ title: "", description: "", category: "" });
+      resetNewItem();
       setEditItemId(null);
-      setTimeout(() => {
-        setIsUpdating(false);
-        setAnimatingItems((prev) => ({
-          ...prev,
-          [editItemId]: "",
-        }));
-      }, 1500);
     } catch (error) {
-      console.error("Failed to update item:", error);
-      alert("Failed to update item. Please try again later.");
+      handleError("Failed to update item.");
+    } finally {
+      setLoadingState((prev) => ({ ...prev, isUpdating: false }));
     }
-  };
+  }, [newItem, editItemId, animateItem, resetNewItem, handleError]);
 
-  const deleteItem = async (id) => {
-    setAnimatingItems((prev) => ({
-      ...prev,
-      [id]: "fadeOut",
-    }));
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/items?id=${id}`, {
-          method: "DELETE",
-        });
-        if (!response.ok) throw new Error("Network response was not ok");
-        const deleteResult = await response.json();
-        if (deleteResult.deletedCount > 0) {
-          setItems((prev) => prev.filter((item) => item._id !== id));
+  const deleteItem = useCallback(
+    async (id) => {
+      animateItem(id, "fadeOut");
+      // Pulisce l'elemento dopo il ritardo per l'animazione
+      setTimeout(async () => {
+        try {
+          const response = await fetch(`/api/items?id=${id}`, {
+            method: "DELETE",
+          });
+          if (!response.ok) throw new Error("Network response was not ok");
+          const deleteResult = await response.json();
+          if (deleteResult.deletedCount > 0) {
+            setItems((prev) => prev.filter((item) => item._id !== id));
+          }
+        } catch (error) {
+          handleError("Failed to delete item.");
         }
-        setAnimatingItems((prev) => ({
-          ...prev,
-          [id]: "",
-        }));
-      } catch (error) {
-        console.error("Failed to delete item:", error);
-        alert("Failed to delete item. Please try again later.");
-      }
-    }, 1500);
-  };
+      }, 1500); // Ritardo deve corrispondere alla durata dell'animazione
+    },
+    [animateItem, handleError]
+  );
 
-  const handleEditClick = (item) => {
+  const handleEditClick = useCallback((item) => {
     setEditItemId(item._id);
     setNewItem({
       title: item.title,
       description: item.description,
       category: item.category,
     });
-  };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
+    <div className="min-h-screen bg-primary-color flex flex-col items-center justify-center py-10">
       <div className="p-8 rounded shadow-md w-full max-w-md bg-white border border-black">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
           MongoDB App
         </h1>
 
-        {/* Add/Edit Item Section */}
+        {/* Sezione Aggiungi/Modifica Item */}
         <div className="mb-6">
           <h2 className="text-xl font-medium mb-2 text-gray-700">
             {editItemId ? "Edit Item" : "Add New Item"}
@@ -192,18 +183,18 @@ const HomePage = () => {
 
             <button
               onClick={editItemId ? updateItem : addItem}
-              disabled={isAdding || isUpdating || !isValidNewItem()}
+              disabled={loadingState.isAdding || !isValidNewItem()}
               className={`w-full p-2 rounded transition-transform transform ${
-                isAdding || isUpdating
+                loadingState.isAdding || loadingState.isUpdating
                   ? "bg-blue-300 text-white"
                   : !isValidNewItem()
                   ? "bg-gray-600 text-white cursor-not-allowed"
                   : "bg-blue-600 text-white hover:bg-blue-700 transition-transform hover:scale-105"
               }`}
             >
-              {isAdding
+              {loadingState.isAdding
                 ? "Adding..."
-                : isUpdating
+                : loadingState.isUpdating
                 ? "Updating..."
                 : editItemId
                 ? "Update Item"
@@ -212,12 +203,12 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Items List Section */}
+        {/* Sezione Lista Item */}
         <div className="mb-6">
           <h2 className="text-xl font-medium mb-4 text-gray-700">
             Items in Database
           </h2>
-          {isLoading ? (
+          {loadingState.isLoading ? (
             <div className="space-y-4">
               {/* Skeleton loading */}
               <div className="p-4 bg-gray-200 rounded border border-gray-300 shadow-md animate-pulse">

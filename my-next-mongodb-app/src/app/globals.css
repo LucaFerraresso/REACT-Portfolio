@@ -41,7 +41,7 @@ body {
   }
 }
 .animate-fadeIn {
-  animation: fadeIn 1.5s ease-in-out forwards;
+  animation: fadeIn 1.5s forwards;
 }
 
 @keyframes fadeOut {
@@ -53,7 +53,7 @@ body {
   }
 }
 .animate-fadeOut {
-  animation: fadeOut 1.5s ease-in-out forwards;
+  animation: fadeOut 1.5s forwards;
 }
 
 @keyframes pulse {
