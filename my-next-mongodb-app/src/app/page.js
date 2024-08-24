@@ -126,7 +126,7 @@ const HomePage = () => {
         } catch (error) {
           handleError("Failed to delete item.");
         }
-      }, 1500); // Ritardo deve corrispondere alla durata dell'animazione
+      }, 1400); // Ritardo deve corrispondere alla durata dell'animazione
     },
     [animateItem, handleError]
   );
