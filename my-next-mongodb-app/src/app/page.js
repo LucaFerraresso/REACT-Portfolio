@@ -48,12 +48,12 @@ const HomePage = () => {
     setNewItem(initialNewItem);
   }, []);
 
-  const animateItem = useCallback((id, animation) => {
+  const animateItem = useCallback((id, animation, duration = 1500) => {
     setAnimatingItems((prev) => ({ ...prev, [id]: animation }));
     // Pulisce l'animazione dopo 1500ms
     setTimeout(() => {
       setAnimatingItems((prev) => ({ ...prev, [id]: "" }));
-    }, 1500);
+    }, duration);
   }, []);
 
   const addItem = useCallback(async () => {
@@ -112,21 +112,24 @@ const HomePage = () => {
   const deleteItem = useCallback(
     async (id) => {
       animateItem(id, "fadeOut");
+
       // Pulisce l'elemento dopo il ritardo per l'animazione
-      setTimeout(async () => {
-        try {
-          const response = await fetch(`/api/items?id=${id}`, {
-            method: "DELETE",
-          });
-          if (!response.ok) throw new Error("Network response was not ok");
-          const deleteResult = await response.json();
-          if (deleteResult.deletedCount > 0) {
+
+      try {
+        const response = await fetch(`/api/items?id=${id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        const deleteResult = await response.json();
+        if (deleteResult.deletedCount > 0) {
+          setTimeout(() => {
             setItems((prev) => prev.filter((item) => item._id !== id));
-          }
-        } catch (error) {
-          handleError("Failed to delete item.");
+          }, 1500);
         }
-      }, 1500); // Ritardo deve corrispondere alla durata dell'animazione
+      } catch (error) {
+        handleError("Failed to delete item.");
+      }
+      // Ritardo deve corrispondere alla durata dell'animazione
     },
     [animateItem, handleError]
   );
