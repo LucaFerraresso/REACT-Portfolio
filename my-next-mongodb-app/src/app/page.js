@@ -126,7 +126,7 @@ const HomePage = () => {
         } catch (error) {
           handleError("Failed to delete item.");
         }
-      }, 1400); // Ritardo deve corrispondere alla durata dell'animazione
+      }, 1500); // Ritardo deve corrispondere alla durata dell'animazione
     },
     [animateItem, handleError]
   );
@@ -141,7 +141,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-primary-color flex flex-col items-center justify-center py-10">
+    <div className="min-h-screen bg-gray-200 flex flex-col items-center justify-center py-10">
       <div className="p-8 rounded shadow-md w-full max-w-md bg-white border border-black">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
           MongoDB App

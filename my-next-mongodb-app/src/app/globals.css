@@ -53,7 +53,7 @@ body {
   }
 }
 .animate-fadeOut {
-  animation: fadeOut 1.5s ease-in-out forwards;
+  animation: fadeOut 3s forwards;
 }
 
 @keyframes pulse {
