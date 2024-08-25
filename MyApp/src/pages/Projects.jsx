@@ -3,47 +3,43 @@ import ProjectCard from "../components/projects-page/ProjectCard";
 import { motion } from "framer-motion";
 import { Exercises } from "../components/projects-page/exercisesList";
 import { fadeIn, motionContainer } from "../animations/motions";
+import { useTranslation } from "react-i18next";
 
 const Projects = () => {
+  const { t, i18n } = useTranslation();
+
   return (
-    <>
-      {" "}
+    <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+      <motion.h1
+        className="text-4xl font-bold text-off-black text-center py-6"
+        variants={fadeIn}
+      >
+        {t("projects")}
+      </motion.h1>
       <motion.div
+        className="min-h-screen flex flex-wrap p-4 gap-6 justify-center"
+        variants={motionContainer}
         initial="hidden"
         animate="visible"
-        variants={fadeIn} // Applica l'animazione fadeIn al div principale
       >
-        <motion.h1
-          className="text-4xl font-bold text-off-black text-center py-6"
-          variants={fadeIn} // Applica l'animazione fadeIn all'intestazione
-        >
-          Projects
-        </motion.h1>
-        <motion.div
-          className="min-h-screen flex flex-wrap p-4 gap-6 justify-center"
-          variants={motionContainer} // Applica l'animazione di tipo stagger al contenitore delle card
-          initial="hidden"
-          animate="visible"
-        >
-          {Exercises.map((exercise, index) => (
-            <motion.div
-              key={exercise.id}
-              variants={fadeIn} // Applica l'animazione fadeIn a ciascuna card
-              transition={{ delay: index * 0.2 }} // Aggiunge un piccolo delay per ogni card
-            >
-              <ProjectCard
-                title={exercise.title}
-                description={exercise.description}
-                link={exercise.link}
-                backgroundImage={exercise.backgroundImage}
-                initialRating={exercise.initialRating}
-                projectId={exercise.id}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        {Exercises.map((exercise, index) => (
+          <motion.div
+            key={exercise.id}
+            variants={fadeIn}
+            transition={{ delay: index * 0.2 }}
+          >
+            <ProjectCard
+              title={t(`title.${exercise.id}`)}
+              description={t(`description.${exercise.id}`)} // Utilizza la traduzione
+              link={exercise.link}
+              backgroundImage={exercise.backgroundImage}
+              initialRating={exercise.initialRating}
+              projectId={exercise.id}
+            />
+          </motion.div>
+        ))}
       </motion.div>
-    </>
+    </motion.div>
   );
 };
 

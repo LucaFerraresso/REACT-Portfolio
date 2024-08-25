@@ -40,5 +40,52 @@
 
   "project.mongodb": "Un'interfaccia CRUD (Create, Read, Update, Delete) basata sul web costruita con Next.js e connessa a un database MongoDB. Permette agli utenti di gestire una collezione di elementi eseguendo operazioni di base come aggiungere nuovi elementi, visualizzare l'elenco degli elementi, modificare quelli esistenti ed eliminare gli elementi.",
   "project.todoapp": "Il sito web è una elegante e intuitiva app per la gestione delle attività quotidiane. Gli utenti possono organizzare le attività in categorie come 'Sport', 'Cibo', 'Famiglia' e 'Altro' con pulsanti interattivi. Perfetto per mantenere la tua vita organizzata e sotto controllo.",
-  "project.icecream": "Il sito web presenta un menù di gelati con un design accattivante, offrendo un'esperienza utente fluida perfetta per la consultazione dei diversi gusti di gelato. Trasmette un'atmosfera divertente e estiva, ideale per gli amanti del gelato."
+  "project.icecream": "Il sito web presenta un menù di gelati con un design accattivante, offrendo un'esperienza utente fluida perfetta per la consultazione dei diversi gusti di gelato. Trasmette un'atmosfera divertente e estiva, ideale per gli amanti del gelato.",
+
+  "Password": "Password",
+  "Inserisci la tua email": "Inserisci la tua email",
+  "Inserisci la tua password": "Inserisci la tua password",
+  "Registrati": "Registrati",
+  "Accedi": "Accedi",
+  "Hai già un account? Accedi": "Hai già un account? Accedi",
+  "Non hai un account? Registrati": "Non hai un account? Registrati",
+  "Registrazione effettuata con successo! (LOGIN AUTOMATICO)": "Registrazione effettuata con successo! (LOGIN AUTOMATICO)",
+  "Login effettuato con successo!": "Login effettuato con successo!",
+  "Login fallito. Controlla le tue credenziali.": "Login fallito. Controlla le tue credenziali.",
+  "Registrazione fallita. Riprova.": "Registrazione fallita. Riprova.",
+  "Errore durante l'operazione. Riprova.": "Errore durante l'operazione. Riprova.",
+  "Errore durante il logout: ": "Errore durante il logout: ",
+  "Logout effettuato con successo!": "Logout effettuato con successo!",
+
+  "projects": "progetti",
+  "description": {
+    "advice-generator": "Il progetto perfetto se stai imparando a interagire con API di terze parti. Questa sfida utilizza l'API Advice Slip per generare citazioni casuali di consigli.",
+    "age-calculator": "Questa sfida è progettata per affinare le tue competenze in JavaScript e validazione dei moduli. Lavorare con le date in JavaScript può essere complicato, quindi sarà una bella prova!",
+    "contact-form": "Costruire moduli accessibili è un compito cruciale per gli sviluppatori front-end. Questa sfida ti aiuterà a esercitarti nella costruzione di un modulo con diversi tipi di input e validazione.",
+    "mortgage-calculator": "Questo calcolatore di mutui è un eccellente progetto per praticare il lavoro con i moduli, la validazione lato client e l'aggiornamento del DOM. Ricorda di concentrarti anche sull'accessibilità!",
+    "product-list-with-cart": "Pratica l'aggiornamento dell'interfaccia utente in più posti basati sulle azioni dell'utente. Il download iniziale include anche un file JSON per aiutarti a praticare la popolazione dinamica del DOM.",
+    "interactive-card-details-form": "Questo divertente progetto sarà un'eccellente occasione per praticare la manipolazione del DOM e la validazione dei moduli, mettendo anche alla prova le tue competenze in HTML e CSS.",
+    "tip-calculator": "Questa piccola app è perfetta per chi inizia a prendere confidenza con JavaScript. La funzionalità del calcolatore sarà una bella prova!",
+    "interactive-pricing-components": "In questo progetto, costruirai un componente di pricing interattivo completo di slider per l'input e toggle per i prezzi. Un modo perfetto per mettere alla prova le tue competenze in JS!",
+    "news-letter-sign-up": "Questo metterà alla prova le tue competenze con la struttura di base dei moduli, la validazione e l'invio. Lo stato di successo sarà anche un'eccellente opportunità per lavorare con la manipolazione del DOM.",
+    "launch-countdown-timer": "Questo sarà un progetto divertente! La tua sfida è costruire questo timer conto alla rovescia. Ci sono anche molti piccoli test CSS nel design. Quindi ti terrà occupato!",
+    "expenses-chart-component": "In questa sfida, creerai un componente per grafici a barre da zero. Forniamo un file JSON locale, così puoi aggiungere i dati del grafico dinamicamente se lo desideri.",
+    "rock-paper-scissors-master": "Questa sfida metterà alla prova le tue competenze in HTML, CSS e JavaScript. C'è anche una versione Rock, Paper, Scissors, Lizard, Spock se vuoi davvero metterti alla prova.",
+    "three-js-project": "Un'esperienza interattiva 3D costruita utilizzando Three.js e React, con rendering in tempo reale e controlli dinamici."
+  },
+  "title": {
+    "advice-generator": "Generatore di Consigli",
+    "age-calculator": "Calcolatore di Età",
+    "contact-form": "Modulo di Contatto",
+    "mortgage-calculator": "Calcolatore di Mutui",
+    "product-list-with-cart": "Elenco Prodotti con Carrello",
+    "interactive-card-details-form": "Modulo Interattivo per Dettagli Carta di Credito",
+    "tip-calculator": "Calcolatore di Mance",
+    "interactive-pricing-components": "Componenti di Prezzo Interattivi",
+    "news-letter-sign-up": "Iscrizione alla Newsletter",
+    "launch-countdown-timer": "Timer del Conto alla Rovescia",
+    "expenses-chart-component": "Componente Grafico delle Spese",
+    "rock-paper-scissors-master": "Maestro Carta Forbice Sasso",
+    "three-js-project": "Progetto Mini Three.js"
+  }
 }

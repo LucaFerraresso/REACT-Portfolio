@@ -119,7 +119,7 @@ export const Exercises = [
     initialRating: 0,
   },
   {
-    id: "Three.js-Project",
+    id: "three-js-project",
     title: "Three.js Mini Project",
     description:
       "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls.  ",
