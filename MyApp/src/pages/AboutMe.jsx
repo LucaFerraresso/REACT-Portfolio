@@ -1,10 +1,7 @@
 import React from "react";
-//animazioni
 import { motion } from "framer-motion";
 import { staggerContainer } from "../animations/motions";
-//componente
 import Section from "../components/aboutme-page/Section";
-//array mappato
 import { sectionsData } from "../components/aboutme-page/sectionData";
 
 const AboutMe = () => {
@@ -22,7 +19,7 @@ const AboutMe = () => {
             key={index}
             imageSrc={section.imageSrc}
             altText={section.altText}
-            paragraph={section.paragraph}
+            paragraphKey={section.paragraphKey} // Passiamo la chiave di traduzione
             reverse={index % 2 !== 0}
           />
         ))}

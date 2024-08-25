@@ -1,13 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  FaLinkedin,
-  FaGithub,
-  FaTwitter,
-  FaFacebook,
-  FaMailBulk,
-} from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaTwitter, FaMailBulk } from "react-icons/fa";
 import { motionContainer, fadeIn, motionIcon } from "../../animations/motions";
+import { useTranslation } from "react-i18next";
 
 // Array di social links con icone e colori
 const socialLinksContact = [
@@ -21,11 +16,6 @@ const socialLinksContact = [
     url: "https://github.com/LucaFerraresso/",
     color: "text-black",
   },
-  //{
-  //  icon: FaFacebook,
-  //  url: "https://www.facebook.com/luca.ferraresso",
-  //  color: "text-blue-600",
-  //},
   {
     icon: FaMailBulk,
     url: "https://gmail.com",
@@ -39,23 +29,25 @@ const socialLinksContact = [
 ];
 
 const ContactInfo = () => {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       className="flex flex-col w-full lg:w-1/2 mb-8 lg:mb-0"
       variants={fadeIn}
     >
       <h2 className="text-2xl font-bold text-text-dark-desaturated-blue mb-4">
-        Mettiti in contatto con me!
+        {t("Get in touch with me!")}
       </h2>
       <p className="text-lg mb-4">
-        Compila il modulo qui sotto per inviare un messaggio:
+        {t("Fill out the form below to send a message:")}
       </p>
       <div className="flex flex-col space-y-2 mb-4">
         <p>
-          <strong>Feat. Luca Ferraresso</strong>
+          <strong>{t("Feat. Luca Ferraresso")}</strong>
         </p>
-        <p>Via Caxias ## ### ##</p>
-        <p>Tel: 334 83 66 ###</p>
+        <p>{t("Via Caxias ## ### ##")}</p>
+        <p>{t("Tel: 334 83 66 ###")}</p>
         <p>Email: lucaferraresso96@gmail.com</p>
       </div>
       <motion.div

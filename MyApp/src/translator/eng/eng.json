@@ -1,0 +1,44 @@
+{
+  "Home": "Home",
+  "Projects": "Projects",
+  "Welcome": "Welcome, {{name}}",
+  "Logout": "Logout",
+  "Login": "Login",
+
+  "Hi, I'm Luca Ferraresso.": "Hi, I'm Luca Ferraresso.",
+  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.",
+  "Tech Stack": "Tech Stack",
+
+  "Recent Projects": "Recent Projects",
+  "View All Projects": "View All Projects",
+  "MongoDB database operations": "MongoDB database operations",
+  "ToDo-App": "ToDo-App",
+  "Ice-Cream menù App": "Ice-Cream menù App",
+
+  "Contacts": "Contacts",
+  "About me": "About me",
+  "All Rights Reserved.": "All Rights Reserved.",
+  "Get in touch with me!": "Get in touch with me!",
+  "Fill out the form below to send a message:": "Fill out the form below to send a message:",
+  "Feat. Luca Ferraresso": "Feat. Luca Ferraresso",
+  "Via Caxias ## ### ##": "Via Caxias ## ### ##",
+  "Tel: 334 83 66 ###": "Tel: 334 83 66 ###",
+
+  "Message sent successfully": "Message sent successfully",
+  "Name": "Name",
+  "Email": "Email",
+  "Phone (optional)": "Phone (optional)",
+  "Message": "Message",
+  "Send Message": "Send Message",
+
+  "aboutme": {
+    "paragraph1": "Hello, I'm Ferraresso Luca, and I've been working as a Frontend Developer for the past six months. Although I'm relatively new to the field, my passion for technology and design drives me to continuously learn and improve every day.",
+    "paragraph2": "From the moment I wrote my first line of code, I was captivated by the power of technology to create engaging and intuitive user experiences. I enjoy taking on the challenge of turning complex ideas into visually appealing, functional websites that users love to interact with.",
+    "paragraph3": "I have a strong interest in the intersection of design and development, where creativity meets functionality. Whether it's through crafting responsive layouts, experimenting with animations, or optimizing performance, I'm dedicated to bringing design concepts to life on the web.",
+    "paragraph4": "I'm excited about the journey ahead, eager to contribute to innovative projects, and committed to growing as a developer. I'm looking forward to building more amazing things and connecting with others who share my enthusiasm for technology and design."
+  },
+
+  "project.mongodb": "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list of items, editing existing ones, and deleting items.",
+  "project.todoapp": "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
+  "project.icecream": "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers."
+}

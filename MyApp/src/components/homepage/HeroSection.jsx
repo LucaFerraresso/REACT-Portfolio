@@ -1,8 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { motionContainer, fadeIn, motionIcon } from "../../animations/motions";
+import { useTranslation } from "react-i18next";
 
 const HeroSection = ({ imgPath, socialLinks }) => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16  bg-gray-100">
       <motion.div
@@ -28,17 +31,15 @@ const HeroSection = ({ imgPath, socialLinks }) => {
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark-blue"
             variants={fadeIn}
           >
-            Hi, I'm Luca Ferraresso.
+            {t("Hi, I'm Luca Ferraresso.")}
           </motion.h2>
           <motion.p
             className="text-md sm:text-lg md:text-xl mt-4 text-grayish-blue"
             variants={fadeIn}
           >
-            I’m an enthusiastic Front-End Developer based in Venice, Italy. My
-            expertise lies in React and JavaScript, and I'm dedicated to
-            crafting responsive, engaging web experiences. I thrive on turning
-            complex challenges into intuitive, user-friendly solutions and am
-            always excited to explore new technologies and techniques.
+            {t(
+              "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques."
+            )}
           </motion.p>
 
           {/* Link ai Social Media */}
@@ -54,7 +55,7 @@ const HeroSection = ({ imgPath, socialLinks }) => {
                 rel="noopener noreferrer"
                 variants={motionIcon}
                 custom={index}
-                className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color} `}
+                className={`w-10 h-10 sm:w-12 sm:h-12 flex justify-center items-center rounded-full ${color}`}
               >
                 <Icon className=" w-6 h-6 sm:w-8 sm:h-8 hover:scale-150 transition:scale-150 duration-300" />
               </motion.a>

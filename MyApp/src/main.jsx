@@ -41,6 +41,8 @@ import { getFirestore } from "firebase/firestore";
 import firebaseConfig from "./firebaseConfig.js";
 //authContext
 export { AuthContext } from "./useContext/AuthContext.jsx";
+//traduttore
+import "./i18n.js";
 
 //inizio app
 

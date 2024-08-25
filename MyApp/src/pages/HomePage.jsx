@@ -47,8 +47,7 @@ const projects = [
   {
     title: "MongoDB database operations",
     image: "/assets/images/homepage/mongodb-app-preview.png",
-    description:
-      "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list of items, editing existing ones, and deleting items.",
+    descriptionKey: "project.mongodb", // Modifica qui
     github:
       "https://github.com/LucaFerraresso/REACT-Portfolio/tree/main/my-next-mongodb-app",
     vercel: "https://mongodb-crud-operations.vercel.app/",
@@ -56,8 +55,7 @@ const projects = [
   {
     title: "ToDo-App",
     image: "/assets/images/homepage/todoapp-preview1.png",
-    description:
-      "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
+    descriptionKey: "project.todoapp", // Modifica qui
     github:
       "https://github.com/LucaFerraresso/Edgemony/tree/main/HTML%20CSS%20JAVA-SCRIPT/Javascript%20Project",
     vercel: "https://todoapp-bice-two.vercel.app/",
@@ -65,8 +63,7 @@ const projects = [
   {
     title: "Ice-Cream menù App",
     image: "/assets/images/homepage/ice-cream-menu-preview1.png",
-    description:
-      "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
+    descriptionKey: "project.icecream", // Modifica qui
     github:
       "https://github.com/LucaFerraresso/Edgemony/tree/main/CODE-WEEK-ACTIVITY-SUPER",
     vercel: "https://icescream-menu-app.vercel.app/",

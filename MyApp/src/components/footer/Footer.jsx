@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const menuFooter = [
   { name: "Contacts", path: "/contacts" },
@@ -6,6 +7,7 @@ const menuFooter = [
 ];
 
 const Footer = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const isHomepageOrAbout = [
     "/homepage",
@@ -23,7 +25,7 @@ const Footer = () => {
       } p-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0`}
     >
       <p className="text-sm text-center md:text-left">
-        &copy; 2024 MyPortfolio. All Rights Reserved.
+        &copy; 2024 MyPortfolio. {t("All Rights Reserved.")}
       </p>
       <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
         {menuFooter.map((item, index) => (
@@ -34,7 +36,7 @@ const Footer = () => {
               }
               to={item.path}
             >
-              {item.name}
+              {t(item.name)}
             </NavLink>
           </li>
         ))}

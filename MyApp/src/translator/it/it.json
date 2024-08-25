@@ -1,0 +1,44 @@
+{
+  "Home": "Home",
+  "Projects": "Progetti",
+  "Welcome": "Benvenuto, {{name}}",
+  "Logout": "Logout",
+  "Login": "Accedi",
+
+  "Hi, I'm Luca Ferraresso.": "Ciao, sono Luca Ferraresso.",
+  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "Sono un entusiasta sviluppatore front-end di Venezia, Italia. La mia esperienza risiede in React e JavaScript, e sono dedicato a creare esperienze web responsive e coinvolgenti. Amo trasformare sfide complesse in soluzioni intuitive e user-friendly, e sono sempre entusiasta di esplorare nuove tecnologie e tecniche.",
+  "Tech Stack": "Stack Tecnologico",
+  "Recent Projects": "Progetti Recenti",
+  "View All Projects": "Visualizza Tutti i Progetti",
+  "MongoDB database operations": "Operazioni su database MongoDB",
+  "ToDo-App": "ToDo-App",
+  "Ice-Cream menù App": "Menù di Gelati",
+
+  "Contacts": "Contatti",
+  "About me": "Chi sono",
+  "All Rights Reserved.": "Tutti i diritti riservati.",
+
+  "Get in touch with me!": "Mettiti in contatto con me!",
+  "Fill out the form below to send a message:": "Compila il modulo qui sotto per inviare un messaggio:",
+  "Feat. Luca Ferraresso": "Feat. Luca Ferraresso",
+  "Via Caxias ## ### ##": "Via Caxias ## ### ##",
+  "Tel: 334 83 66 ###": "Tel: 334 83 66 ###",
+
+  "Message sent successfully": "Messaggio inviato con successo",
+  "Name": "Nome",
+  "Email": "Email",
+  "Phone (optional)": "Telefono (opzionale)",
+  "Message": "Messaggio",
+  "Send Message": "Invia il messaggio",
+
+  "aboutme": {
+    "paragraph1": "Ciao, sono Ferraresso Luca e lavoro come Frontend Developer da sei mesi. Anche se sono relativamente nuovo nel campo, la mia passione per la tecnologia e il design mi spinge a imparare e migliorare continuamente ogni giorno.",
+    "paragraph2": "Dal momento in cui ho scritto la mia prima riga di codice, sono stato catturato dal potere della tecnologia di creare esperienze utente coinvolgenti e intuitive. Mi piace affrontare la sfida di trasformare idee complesse in siti web visivamente attraenti e funzionali che gli utenti amano utilizzare.",
+    "paragraph3": "Ho un forte interesse per l'intersezione tra design e sviluppo, dove la creatività incontra la funzionalità. Che si tratti di creare layout responsive, sperimentare con le animazioni o ottimizzare le performance, mi dedico a dare vita ai concetti di design sul web.",
+    "paragraph4": "Sono entusiasta del viaggio che mi aspetta, desideroso di contribuire a progetti innovativi e determinato a crescere come sviluppatore. Non vedo l'ora di costruire altre cose straordinarie e connettermi con altri che condividono il mio entusiasmo per la tecnologia e il design."
+  },
+
+  "project.mongodb": "Un'interfaccia CRUD (Create, Read, Update, Delete) basata sul web costruita con Next.js e connessa a un database MongoDB. Permette agli utenti di gestire una collezione di elementi eseguendo operazioni di base come aggiungere nuovi elementi, visualizzare l'elenco degli elementi, modificare quelli esistenti ed eliminare gli elementi.",
+  "project.todoapp": "Il sito web è una elegante e intuitiva app per la gestione delle attività quotidiane. Gli utenti possono organizzare le attività in categorie come 'Sport', 'Cibo', 'Famiglia' e 'Altro' con pulsanti interattivi. Perfetto per mantenere la tua vita organizzata e sotto controllo.",
+  "project.icecream": "Il sito web presenta un menù di gelati con un design accattivante, offrendo un'esperienza utente fluida perfetta per la consultazione dei diversi gusti di gelato. Trasmette un'atmosfera divertente e estiva, ideale per gli amanti del gelato."
+}
