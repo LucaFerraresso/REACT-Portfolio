@@ -6,41 +6,42 @@
   "Login": "Login",
 
   "Hi, I'm Luca Ferraresso.": "Hi, I'm Luca Ferraresso.",
-  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.",
-  "Tech Stack": "Tech Stack",
+  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "I’m a passionete front-end developer based near Venice, (ITA). My expertise is focused on React and JavaScript, with the goal always being to create responsive and engaging web experiences. I love tacking complex challenges to transform them into intuitive and user-friendly solutions",
 
+  "Tech Stack": "Tech Stack",
   "Recent Projects": "Recent Projects",
   "View All Projects": "View All Projects",
   "MongoDB database operations": "MongoDB database operations",
   "ToDo-App": "ToDo-App",
-  "Ice-Cream menù App": "Ice-Cream menù App",
+  "Ice-Cream menù App": "Ice-Cream Menu App",
 
   "Contacts": "Contacts",
-  "About me": "About me",
+  "About me": "About Me",
   "All Rights Reserved.": "All Rights Reserved.",
-  "Get in touch with me!": "Get in touch with me!",
-  "Fill out the form below to send a message:": "Fill out the form below to send a message:",
+
+  "Get in touch with me!": "Get in Touch!",
+  "Fill out the form below to send a message:": "Fill out the form below to send me a message:",
   "Feat. Luca Ferraresso": "Feat. Luca Ferraresso",
   "Via Caxias ## ### ##": "Via Caxias ## ### ##",
   "Tel: 334 83 66 ###": "Tel: 334 83 66 ###",
 
-  "Message sent successfully": "Message sent successfully",
+  "Message sent successfully": "Message Sent Successfully",
   "Name": "Name",
   "Email": "Email",
-  "Phone (optional)": "Phone (optional)",
+  "Phone (optional)": "Phone (Optional)",
   "Message": "Message",
   "Send Message": "Send Message",
 
   "aboutme": {
-    "paragraph1": "Hello, I'm Ferraresso Luca, and I've been working as a Frontend Developer for the past six months. Although I'm relatively new to the field, my passion for technology and design drives me to continuously learn and improve every day.",
-    "paragraph2": "From the moment I wrote my first line of code, I was captivated by the power of technology to create engaging and intuitive user experiences. I enjoy taking on the challenge of turning complex ideas into visually appealing, functional websites that users love to interact with.",
-    "paragraph3": "I have a strong interest in the intersection of design and development, where creativity meets functionality. Whether it's through crafting responsive layouts, experimenting with animations, or optimizing performance, I'm dedicated to bringing design concepts to life on the web.",
-    "paragraph4": "I'm excited about the journey ahead, eager to contribute to innovative projects, and committed to growing as a developer. I'm looking forward to building more amazing things and connecting with others who share my enthusiasm for technology and design."
+    "paragraph1": "Hello, I'm Luca Ferraresso, and I've been working as a Frontend Developer for the past six months. Although I'm relatively new to the field, my passion for technology and design drives me to continuously learn and improve.",
+    "paragraph2": "From the moment I wrote my first line of code, I was captivated by technology's ability to create engaging and intuitive user experiences. I enjoy the challenge of turning complex ideas into visually appealing, functional websites that users love to interact with.",
+    "paragraph3": "I have a strong interest in the intersection of design and development, where creativity meets functionality. Whether it's crafting responsive layouts, experimenting with animations, or optimizing performance, I'm dedicated to bringing design concepts to life on the web.",
+    "paragraph4": "I'm excited about the journey ahead, eager to contribute to innovative projects, and committed to growing as a developer. I look forward to building more amazing things and connecting with others who share my enthusiasm for technology and design."
   },
 
-  "project.mongodb": "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list of items, editing existing ones, and deleting items.",
-  "project.todoapp": "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
-  "project.icecream": "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
+  "project.mongodb": "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list, editing existing items, and deleting items.",
+  "project.todoapp": "A sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize tasks into categories like 'Sport', 'Food', 'Family', and 'Other' using interactive buttons. Perfect for keeping your life organized and on track.",
+  "project.icecream": "A website showcasing an ice cream menu with an appealing design, offering a smooth user experience for browsing different flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
 
   "Password": "Password",
   "Inserisci la tua email": "Enter your email",
@@ -57,21 +58,21 @@
   "Errore durante il logout: ": "Error during logout: ",
   "Logout effettuato con successo!": "Logout successful!",
 
-  "projects": "projects",
+  "projects": "Projects",
   "description": {
-    "advice-generator": "The perfect project if you're learning how to interact with 3rd-party APIs. This challenge uses the Advice Slip API to generate random quotes of advice.",
-    "age-calculator": "This challenge is designed to sharpen your JavaScript and form validation skills. Working with dates in JavaScript can be tricky, so this will be a nice test!",
-    "contact-form": "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice building a form with several input types and validation.",
-    "mortgage-calculator": "This mortgage calculator is an excellent project for practicing working with forms, client-side validation, and updating the DOM. Remember to focus on accessibility, too!",
-    "product-list-with-cart": "Practice updating the UI in multiple places based on user actions. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
-    "interactive-card-details-form": "This fun project will be an excellent way to practice DOM manipulation and form validation while also putting your HTML and CSS skills to the test.",
-    "tip-calculator": "This small app is perfect for anyone starting to get to grips with JavaScript. The calculator functionality will be a nice test!",
-    "interactive-pricing-components": "In this project, you'll build out an interactive pricing component complete with custom range input slider and pricing toggle. A perfect way to test your JS skills!",
-    "news-letter-sign-up": "This will test your skills with basic form structure, validation, and submission. The success state will also be an excellent opportunity to work with DOM manipulation.",
-    "launch-countdown-timer": "This will be a fun one! Your challenge is to build this countdown timer. There are lots of small CSS tests in the design as well. So it should keep you busy!",
-    "expenses-chart-component": "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
-    "rock-paper-scissors-master": "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
-    "three-js-project": "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls."
+    "advice-generator": "The perfect project if you're learning to interact with third-party APIs. This challenge uses the Advice Slip API to generate random quotes of advice.",
+    "age-calculator": "This challenge is designed to sharpen your JavaScript and form validation skills. Working with dates in JavaScript can be tricky, so this will be a good test!",
+    "contact-form": "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice creating a form with various input types and validation.",
+    "mortgage-calculator": "This mortgage calculator is an excellent project for practicing working with forms, client-side validation, and DOM updates. Remember to also focus on accessibility!",
+    "product-list-with-cart": "Practice updating the UI in multiple locations based on user actions. The starter package includes a JSON file to help you practice dynamically populating the DOM.",
+    "interactive-card-details-form": "This fun project will be a great way to practice DOM manipulation and form validation, while also testing your HTML and CSS skills.",
+    "tip-calculator": "This small app is perfect for anyone starting to get comfortable with JavaScript. The calculator functionality will be a good challenge!",
+    "interactive-pricing-components": "In this project, you'll build an interactive pricing component with a custom range slider and pricing toggle. A great way to test your JavaScript skills!",
+    "news-letter-sign-up": "This challenge will test your skills with basic form structure, validation, and submission. The success state will also be a great opportunity to work on DOM manipulation.",
+    "launch-countdown-timer": "This will be a fun project! Your challenge is to build a countdown timer. There are also several small CSS tests in the design, so it should keep you busy!",
+    "expenses-chart-component": "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file so you can dynamically add chart data if you wish.",
+    "rock-paper-scissors-master": "This challenge will test your HTML, CSS, and JavaScript skills. There’s even a Rock, Paper, Scissors, Lizard, Spock version if you really want to test yourself.",
+    "three-js-project": "A 3D interactive experience built with Three.js and React, featuring real-time rendering and dynamic controls."
   },
   "title": {
     "advice-generator": "Advice Generator",

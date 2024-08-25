@@ -1,149 +1,192 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../API/firebaseAuth"; // Import delle funzioni per login e registrazione
-import { toast } from "react-toastify";
-import { useAuth } from "../useContext/AuthContext"; // Import del contesto di autenticazione
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
-  const navigate = useNavigate();
-  const { user, logout } = useAuth(); // Hook per ottenere lo stato utente e il logout
+//json multilingua ingelse e italiano
 
-  // Funzione per gestire l'autenticazione
-  const handleAuth = async (e) => {
-    e.preventDefault(); // Previene il comportamento predefinito del form
+//italiano
 
-    // Regex per validare l'email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+{
+  "Home": "Home",
+  "Projects": "Progetti",
+  "Welcome": "Benvenuto, {{name}}",
+  "Logout": "Logout",
+  "Login": "Accedi",
 
-    // Regex per validare la password (minimo 6 caratteri, almeno una lettera, un numero e un carattere speciale)
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  "Hi, I'm Luca Ferraresso.": "Ciao, sono Luca Ferraresso.",
+  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "Sono un entusiasta sviluppatore front-end di Venezia, Italia. La mia esperienza risiede in React e JavaScript, e sono dedicato a creare esperienze web responsive e coinvolgenti. Amo trasformare sfide complesse in soluzioni intuitive e user-friendly, e sono sempre entusiasta di esplorare nuove tecnologie e tecniche.",
+  "Tech Stack": "Stack Tecnologico",
+  "Recent Projects": "Progetti Recenti",
+  "View All Projects": "Visualizza Tutti i Progetti",
+  "MongoDB database operations": "Operazioni su database MongoDB",
+  "ToDo-App": "ToDo-App",
+  "Ice-Cream menù App": "Menù di Gelati",
 
-    // Validazione email
-    if (!emailRegex.test(email)) {
-      toast.error("Email non valida, inserisci una email valida.");
-      return;
-    }
+  "Contacts": "Contatti",
+  "About me": "Chi sono",
+  "All Rights Reserved.": "Tutti i diritti riservati.",
 
-    // Validazione password
-    if (!passwordRegex.test(password)) {
-      toast.error(
-        "Password non valida! Deve contenere almeno 6 caratteri, un numero e un carattere speciale."
-      );
-      return;
-    }
+  "Get in touch with me!": "Mettiti in contatto con me!",
+  "Fill out the form below to send a message:": "Compila il modulo qui sotto per inviare un messaggio:",
+  "Feat. Luca Ferraresso": "Feat. Luca Ferraresso",
+  "Via Caxias ## ### ##": "Via Caxias ## ### ##",
+  "Tel: 334 83 66 ###": "Tel: 334 83 66 ###",
 
-    try {
-      // Logica di autenticazione
-      if (isRegistering) {
-        const authenticatedUser = await registerUser(email, password);
-        if (authenticatedUser) {
-          toast.success(
-            "Registrazione effettuata con successo! (LOGIN AUTOMATICO) "
-          );
-          setEmail("");
-          setPassword("");
-          setIsRegistering(false);
-        } else {
-          toast.error("Registrazione fallita. Riprova.");
-        }
-      } else {
-        const authenticatedUser = await loginUser(email, password);
-        if (authenticatedUser) {
-          toast.success("Login effettuato con successo!");
-          navigate("/homepage");
-        } else {
-          toast.error("Login fallito. Controlla le tue credenziali.");
-        }
-      }
-      navigate("/homepage");
-    } catch (error) {
-      toast.error("Errore durante l'operazione. Riprova.");
-      console.error("Errore:", error.message); // Logga l'errore
-    }
-  };
+  "Message sent successfully": "Messaggio inviato con successo",
+  "Name": "Nome",
+  "Email": "Email",
+  "Phone (optional)": "Telefono (opzionale)",
+  "Message": "Messaggio",
+  "Send Message": "Invia il messaggio",
 
-  // Funzione per gestire il logout
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast.success("Logout effettuato con successo!");
-      navigate("/login"); // Naviga alla pagina di login dopo il logout
-    } catch (error) {
-      toast.error("Errore durante il logout: " + error.message);
-      console.error("Errore durante il logout:", error);
-    }
-  };
+  "aboutme": {
+    "paragraph1": "Ciao, sono Ferraresso Luca e lavoro come Frontend Developer da sei mesi. Anche se sono relativamente nuovo nel campo, la mia passione per la tecnologia e il design mi spinge a imparare e migliorare continuamente ogni giorno.",
+    "paragraph2": "Dal momento in cui ho scritto la mia prima riga di codice, sono stato catturato dal potere della tecnologia di creare esperienze utente coinvolgenti e intuitive. Mi piace affrontare la sfida di trasformare idee complesse in siti web visivamente attraenti e funzionali che gli utenti amano utilizzare.",
+    "paragraph3": "Ho un forte interesse per l'intersezione tra design e sviluppo, dove la creatività incontra la funzionalità. Che si tratti di creare layout responsive, sperimentare con le animazioni o ottimizzare le performance, mi dedico a dare vita ai concetti di design sul web.",
+    "paragraph4": "Sono entusiasta del viaggio che mi aspetta, desideroso di contribuire a progetti innovativi e determinato a crescere come sviluppatore. Non vedo l'ora di costruire altre cose straordinarie e connettermi con altri che condividono il mio entusiasmo per la tecnologia e il design."
+  },
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {!user ? ( // Se l'utente non è loggato, mostra il form
-        <div className="bg-white p-8 rounded shadow-md w-80">
-          <form onSubmit={handleAuth}>
-            <h2 className="text-2xl font-bold mb-4">
-              {isRegistering ? "Registrati" : "Login"}
-            </h2>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Inserisci la tua email"
-                className="border border-gray-300 rounded p-2 w-full"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Inserisci la tua password"
-                className="border border-gray-300 rounded p-2 w-full"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-600"
-            >
-              {isRegistering ? "Registrati" : "Accedi"}{" "}
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsRegistering(!isRegistering)}
-              className="text-blue-500 mt-2"
-            >
-              {isRegistering
-                ? "Hai già un account? Accedi"
-                : "Non hai un account? Registrati"}
-            </button>
-          </form>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4">
-            Benvenuto, {user.email.split("@")[0]}
-          </h2>
-          <button
-            onClick={handleLogout}
-            className="bg-red text-white py-2 px-4 rounded hover:bg-red"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
+  "project.mongodb": "Un'interfaccia CRUD (Create, Read, Update, Delete) basata sul web costruita con Next.js e connessa a un database MongoDB. Permette agli utenti di gestire una collezione di elementi eseguendo operazioni di base come aggiungere nuovi elementi, visualizzare l'elenco degli elementi, modificare quelli esistenti ed eliminare gli elementi.",
+  "project.todoapp": "Il sito web è una elegante e intuitiva app per la gestione delle attività quotidiane. Gli utenti possono organizzare le attività in categorie come 'Sport', 'Cibo', 'Famiglia' e 'Altro' con pulsanti interattivi. Perfetto per mantenere la tua vita organizzata e sotto controllo.",
+  "project.icecream": "Il sito web presenta un menù di gelati con un design accattivante, offrendo un'esperienza utente fluida perfetta per la consultazione dei diversi gusti di gelato. Trasmette un'atmosfera divertente e estiva, ideale per gli amanti del gelato.",
 
-export default Login;
+  "Password": "Password",
+  "Inserisci la tua email": "Inserisci la tua email",
+  "Inserisci la tua password": "Inserisci la tua password",
+  "Registrati": "Registrati",
+  "Accedi": "Accedi",
+  "Hai già un account? Accedi": "Hai già un account? Accedi",
+  "Non hai un account? Registrati": "Non hai un account? Registrati",
+  "Registrazione effettuata con successo! (LOGIN AUTOMATICO)": "Registrazione effettuata con successo! (LOGIN AUTOMATICO)",
+  "Login effettuato con successo!": "Login effettuato con successo!",
+  "Login fallito. Controlla le tue credenziali.": "Login fallito. Controlla le tue credenziali.",
+  "Registrazione fallita. Riprova.": "Registrazione fallita. Riprova.",
+  "Errore durante l'operazione. Riprova.": "Errore durante l'operazione. Riprova.",
+  "Errore durante il logout: ": "Errore durante il logout: ",
+  "Logout effettuato con successo!": "Logout effettuato con successo!",
 
+  "projects": "Progetti",
+  "description": {
+    "advice-generator": "Il progetto perfetto se stai imparando a interagire con API di terze parti. Questa sfida utilizza l'API Advice Slip per generare citazioni casuali di consigli.",
+    "age-calculator": "Questa sfida è progettata per affinare le tue competenze in JavaScript e validazione dei moduli. Lavorare con le date in JavaScript può essere complicato, quindi sarà una bella prova!",
+    "contact-form": "Costruire moduli accessibili è un compito cruciale per gli sviluppatori front-end. Questa sfida ti aiuterà a esercitarti nella costruzione di un modulo con diversi tipi di input e validazione.",
+    "mortgage-calculator": "Questo calcolatore di mutui è un eccellente progetto per praticare il lavoro con i moduli, la validazione lato client e l'aggiornamento del DOM. Ricorda di concentrarti anche sull'accessibilità!",
+    "product-list-with-cart": "Pratica l'aggiornamento dell'interfaccia utente in più posti basati sulle azioni dell'utente. Il download iniziale include anche un file JSON per aiutarti a praticare la popolazione dinamica del DOM.",
+    "interactive-card-details-form": "Questo divertente progetto sarà un'eccellente occasione per praticare la manipolazione del DOM e la validazione dei moduli, mettendo anche alla prova le tue competenze in HTML e CSS.",
+    "tip-calculator": "Questa piccola app è perfetta per chi inizia a prendere confidenza con JavaScript. La funzionalità del calcolatore sarà una bella prova!",
+    "interactive-pricing-components": "In questo progetto, costruirai un componente di pricing interattivo completo di slider per l'input e toggle per i prezzi. Un modo perfetto per mettere alla prova le tue competenze in JS!",
+    "news-letter-sign-up": "Questo metterà alla prova le tue competenze con la struttura di base dei moduli, la validazione e l'invio. Lo stato di successo sarà anche un'eccellente opportunità per lavorare con la manipolazione del DOM.",
+    "launch-countdown-timer": "Questo sarà un progetto divertente! La tua sfida è costruire questo timer conto alla rovescia. Ci sono anche molti piccoli test CSS nel design. Quindi ti terrà occupato!",
+    "expenses-chart-component": "In questa sfida, creerai un componente per grafici a barre da zero. Forniamo un file JSON locale, così puoi aggiungere i dati del grafico dinamicamente se lo desideri.",
+    "rock-paper-scissors-master": "Questa sfida metterà alla prova le tue competenze in HTML, CSS e JavaScript. C'è anche una versione Rock, Paper, Scissors, Lizard, Spock se vuoi davvero metterti alla prova.",
+    "three-js-project": "Un'esperienza interattiva 3D costruita utilizzando Three.js e React, con rendering in tempo reale e controlli dinamici."
+  },
+  "title": {
+    "advice-generator": "Generatore di Consigli",
+    "age-calculator": "Calcolatore di Età",
+    "contact-form": "Modulo di Contatto",
+    "mortgage-calculator": "Calcolatore di Mutui",
+    "product-list-with-cart": "Elenco Prodotti con Carrello",
+    "interactive-card-details-form": "Modulo Interattivo per Dettagli Carta di Credito",
+    "tip-calculator": "Calcolatore di Mance",
+    "interactive-pricing-components": "Componenti di Prezzo Interattivi",
+    "news-letter-sign-up": "Iscrizione alla Newsletter",
+    "launch-countdown-timer": "Timer del Conto alla Rovescia",
+    "expenses-chart-component": "Componente Grafico delle Spese",
+    "rock-paper-scissors-master": "Maestro Carta Forbice Sasso",
+    "three-js-project": "Progetto Mini Three.js"
+  }
+}
 
+/////inglese:
+
+{
+  "Home": "Home",
+  "Projects": "Projects",
+  "Welcome": "Welcome, {{name}}",
+  "Logout": "Logout",
+  "Login": "Login",
+
+  "Hi, I'm Luca Ferraresso.": "Hi, I'm Luca Ferraresso.",
+  "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.": "I’m an enthusiastic Front-End Developer based in Venice, Italy. My expertise lies in React and JavaScript, and I'm dedicated to crafting responsive, engaging web experiences. I thrive on turning complex challenges into intuitive, user-friendly solutions and am always excited to explore new technologies and techniques.",
+  "Tech Stack": "Tech Stack",
+
+  "Recent Projects": "Recent Projects",
+  "View All Projects": "View All Projects",
+  "MongoDB database operations": "MongoDB database operations",
+  "ToDo-App": "ToDo-App",
+  "Ice-Cream menù App": "Ice-Cream menù App",
+
+  "Contacts": "Contacts",
+  "About me": "About me",
+  "All Rights Reserved.": "All Rights Reserved.",
+  "Get in touch with me!": "Get in touch with me!",
+  "Fill out the form below to send a message:": "Fill out the form below to send a message:",
+  "Feat. Luca Ferraresso": "Feat. Luca Ferraresso",
+  "Via Caxias ## ### ##": "Via Caxias ## ### ##",
+  "Tel: 334 83 66 ###": "Tel: 334 83 66 ###",
+
+  "Message sent successfully": "Message sent successfully",
+  "Name": "Name",
+  "Email": "Email",
+  "Phone (optional)": "Phone (optional)",
+  "Message": "Message",
+  "Send Message": "Send Message",
+
+  "aboutme": {
+    "paragraph1": "Hello, I'm Ferraresso Luca, and I've been working as a Frontend Developer for the past six months. Although I'm relatively new to the field, my passion for technology and design drives me to continuously learn and improve every day.",
+    "paragraph2": "From the moment I wrote my first line of code, I was captivated by the power of technology to create engaging and intuitive user experiences. I enjoy taking on the challenge of turning complex ideas into visually appealing, functional websites that users love to interact with.",
+    "paragraph3": "I have a strong interest in the intersection of design and development, where creativity meets functionality. Whether it's through crafting responsive layouts, experimenting with animations, or optimizing performance, I'm dedicated to bringing design concepts to life on the web.",
+    "paragraph4": "I'm excited about the journey ahead, eager to contribute to innovative projects, and committed to growing as a developer. I'm looking forward to building more amazing things and connecting with others who share my enthusiasm for technology and design."
+  },
+
+  "project.mongodb": "A web-based CRUD (Create, Read, Update, Delete) interface built with Next.js and connected to a MongoDB database. It allows users to manage a collection of items by performing basic operations such as adding new items, viewing the list of items, editing existing ones, and deleting items.",
+  "project.todoapp": "The website is a sleek and intuitive to-do app designed for managing daily tasks effortlessly. Users can organize activities into categories like 'Sport', 'Food', 'Family', and 'Other' with interactive buttons. Perfect for keeping your life organized and on track.",
+  "project.icecream": "The website showcases an ice cream menu with an appealing design, offering a smooth user experience perfect for browsing different ice cream flavors. It gives off a fun, summery vibe, ideal for ice cream lovers.",
+
+  "Password": "Password",
+  "Inserisci la tua email": "Enter your email",
+  "Inserisci la tua password": "Enter your password",
+  "Registrati": "Register",
+  "Accedi": "Login",
+  "Hai già un account? Accedi": "Already have an account? Login",
+  "Non hai un account? Registrati": "Don't have an account? Register",
+  "Registrazione effettuata con successo! (LOGIN AUTOMATICO)": "Registration successful! (AUTO LOGIN)",
+  "Login effettuato con successo!": "Login successful!",
+  "Login fallito. Controlla le tue credenziali.": "Login failed. Check your credentials.",
+  "Registrazione fallita. Riprova.": "Registration failed. Please try again.",
+  "Errore durante l'operazione. Riprova.": "Error during the operation. Please try again.",
+  "Errore durante il logout: ": "Error during logout: ",
+  "Logout effettuato con successo!": "Logout successful!",
+
+  "projects": "Projects",
+  "description": {
+    "advice-generator": "The perfect project if you're learning how to interact with 3rd-party APIs. This challenge uses the Advice Slip API to generate random quotes of advice.",
+    "age-calculator": "This challenge is designed to sharpen your JavaScript and form validation skills. Working with dates in JavaScript can be tricky, so this will be a nice test!",
+    "contact-form": "Building accessible forms is a crucial task for front-end developers. This challenge will help you practice building a form with several input types and validation.",
+    "mortgage-calculator": "This mortgage calculator is an excellent project for practicing working with forms, client-side validation, and updating the DOM. Remember to focus on accessibility, too!",
+    "product-list-with-cart": "Practice updating the UI in multiple places based on user actions. The starter download also includes a JSON file to help you practice populating the DOM dynamically.",
+    "interactive-card-details-form": "This fun project will be an excellent way to practice DOM manipulation and form validation while also putting your HTML and CSS skills to the test.",
+    "tip-calculator": "This small app is perfect for anyone starting to get to grips with JavaScript. The calculator functionality will be a nice test!",
+    "interactive-pricing-components": "In this project, you'll build out an interactive pricing component complete with custom range input slider and pricing toggle. A perfect way to test your JS skills!",
+    "news-letter-sign-up": "This will test your skills with basic form structure, validation, and submission. The success state will also be an excellent opportunity to work with DOM manipulation.",
+    "launch-countdown-timer": "This will be a fun one! Your challenge is to build this countdown timer. There are lots of small CSS tests in the design as well. So it should keep you busy!",
+    "expenses-chart-component": "In this challenge, you'll create a bar chart component from scratch. We provide a local JSON file, so you can add the chart data dynamically if you choose.",
+    "rock-paper-scissors-master": "This challenge will test your HTML, CSS and JavaScript skills. There's even a Rock, Paper, Scissors, Lizard, Spock version if you really want to challenge yourself.",
+    "three-js-project": "A 3D interactive experience built using Three.js and React, featuring real-time rendering and dynamic controls."
+  },
+  "title": {
+    "advice-generator": "Advice Generator",
+    "age-calculator": "Age Calculator",
+    "contact-form": "Contact Form",
+    "mortgage-calculator": "Mortgage Calculator",
+    "product-list-with-cart": "Product List with Cart",
+    "interactive-card-details-form": "Interactive Credit Card Details Form",
+    "tip-calculator": "Tip Calculator",
+    "interactive-pricing-components": "Interactive Pricing Components",
+    "news-letter-sign-up": "NewsLetter Sign Up",
+    "launch-countdown-timer": "Launch Countdown Timer",
+    "expenses-chart-component": "Expenses Chart Component",
+    "rock-paper-scissors-master": "Rock Paper Scissors Master",
+    "three-js-project": "Three.js Mini Project"
+  }
+}
 
 
