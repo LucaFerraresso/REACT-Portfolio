@@ -244,7 +244,7 @@ const HomePage = () => {
                       </p>
                       <p className="text-gray-600">Category: {item.category}</p>
                     </div>
-                    <div className="space-x-2">
+                    <div className="space-x-2 flex ">
                       <button
                         onClick={() => handleEditClick(item)}
                         className={`bg-yellow-500 text-white p-1 rounded transition-transform transform ${
